@@ -1,0 +1,2 @@
+
+export let mock = true;

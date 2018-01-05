@@ -1,0 +1,3 @@
+--reporter spec
+--watch-extensions js,jsx
+out/test/**/*.js
