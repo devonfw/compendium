@@ -1,13 +1,14 @@
 
-import {Result} from 'result.ts';
-
-export type errorinfo = string;
-
 //String enum https://blog.mariusschulz.com/2017/10/27/typescript-2-4-string-enums
 export type ScriptType = 'super' | 'sub' | 'normal';
 
 export type ElementType = 'title' | 'h1' | 'h2' | 'h3' | 'h4';
 
+export type TextInSource = 'asciidoc' | 'jira';
+
+export interface TextInSources {
+    [key: string]: TextIn;
+}
 export interface TextAttributes {
     strong?: boolean;  // "bold"
     cursive?: boolean;   // "italic"
@@ -51,19 +52,19 @@ export interface Transcript {
 
 export interface Merger {
 
-    merge(cfg: DocConfig, out: TextOut): Result<errorinfo, void>;
+    merge(textinSources: TextInSources, index: Index, textout: TextOut): Promise<void>;
 
 }
 
 export interface IndexSource{
 
-    id: string;
+    kind: TextInSource;
     source: string;
 }
 
 export interface IndexNode {
 
-    id: string;
+    kind: TextInSource;
     index: string;
 }
 
@@ -71,15 +72,15 @@ export type Index = [Array<IndexSource>, Array<IndexNode>];
 
 export interface DocConfig {
 
-    getIndices(): Result<errorinfo, Index>;  // puede ser un Iterator tambien
+    getIndex(): Promise<Index>;
 }
 
 export interface TextIn {
 
-    getTranscript(id: string): Result<errorinfo, Transcript>;
+    getTranscript(id: string): Promise<Transcript>;
 }
 
 export interface TextOut {
 
-    generate(data: Transcript): Result<errorinfo, void>;
+    generate(data: Array<Transcript>): Promise<void>;
 }

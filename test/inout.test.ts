@@ -14,7 +14,7 @@ const should = chai.should();
 if (config.mock) {
     docconfig = new DocConfigMock();
     textout = new TextOutMock();
-    textin = new TextInMock();
+    textin = new TextInMock('path');
 
 } else {
     throw new Error('Not implemented');
@@ -27,21 +27,19 @@ describe('Testing the Input of Text and doc generation', () => {
 
     describe('TextIn', () => {
         it('should return the Transcript from the external source', (done) => {
-            const transcript = textin.getTranscript('test-data/brownfox.md');
-            if (transcript.isOk){
-                const h1 = transcript.value.segments[0];
-                const p = transcript.value.segments[1];
-                if (h1.kind === 'textelement'){
-                    expect(h1.element).equals('h1');
-                    expect(h1.text).equals('The fox');
-                } else {
-                    throw new Error('Not a valid h1 element');
-                }
-            } else {
-
-                throw new Error('Not a valid transcript');
-            }
-            done();
+            textin.getTranscript('test-data/brownfox.md').then((transcript) => {
+                    const h1 = transcript.segments[0];
+                    const p = transcript.segments[1];
+                    if (h1.kind === 'textelement'){
+                        expect(h1.element).equals('h1');
+                        expect(h1.text).equals('The fox');
+                        done();
+                    } else {
+                        done(new Error('Not a valid h1 element'));
+                    }
+            }).catch((error) => {
+                done(error);
+            });
         });
     });
 

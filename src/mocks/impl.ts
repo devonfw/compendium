@@ -1,44 +1,43 @@
-import * as result from 'result.ts';
-import {Result} from 'result.ts';
-import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, errorinfo, Paragraph } from '../types';
-
-const empty = undefined;
+//import * as result from 'result.ts';
+//import {Result} from 'result.ts';
+import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph } from '../types';
 
 export class DocConfigMock implements DocConfig {
 
-    public getIndices(): Result<errorinfo, Index> {
+    public async getIndex(): Promise<Index> {
 
-        const index: Index =  [[{id: 'asciidoc',
-                               source: 'c:\\temp'}],
-        [{
-            id: 'asciidoc',
-            index: 'docs/frontpage.md',
-        },
-        {
-            id: 'asciidoc',
-            index: 'docs/secondpage.md',
-        }]];
-
-        return result.ok(index);
+        const index: Index =  [[{kind: 'asciidoc', source: 'c:\\temp'}],
+            [{
+                kind: 'asciidoc',
+                index: 'test-data/brownfox.md',
+            }]];
+        return index;
     }
-
 }
 
 export class TextOutMock implements TextOut{
+    public done: boolean = false;
 
-    public generate(data: Transcript): Result<errorinfo, void> {
-        if (data.segments.length < 1){
-            return result.error('No Text instances passed');
+    public async generate(data: Array<Transcript>): Promise<void> {
+
+        if (data.length < 1){
+            throw new Error('No Text instances passed');
+        }else {
+            console.log(data);
+            console.log('generate done');
+            this.done = true;
+            return;
         }
-
-        console.log(data);
-        return result.ok(empty);
     }
 }
 
 export class TextInMock implements TextIn {
+    public constructor(basepath: string){
 
-    public getTranscript(id: string): Result<errorinfo, Transcript> {
+    }
+
+    public async getTranscript(id: string): Promise<Transcript> {
+
         if (id === 'test-data/brownfox.md'){
             //The quick *brown fox _jumps_ over* the lazy dog.
             const paragraph: Paragraph =  {
@@ -74,9 +73,9 @@ export class TextInMock implements TextIn {
                 },
                 paragraph,
             ]};
-            return result.ok(transcript);
+            return transcript;
         } else {
-            return result.error('no such markdown file exits');
+            throw new Error('No Transcript available');
         }
     }
 }
