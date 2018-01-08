@@ -16,12 +16,11 @@
     "devDependencies": {
         "@types/chai": "^4.1.0",
         "@types/mocha": "^2.2.46",
+        "@types/node": "^8.5.7",
         "chai": "^4.1.2",
         "mocha": "^4.1.0",
         "nodemon": "^1.14.7",
         "typescript": "^2.6.2"
     },
-    "optionalDependencies": {
-        "@types/node": "^8.5.7"
-    }
+    "optionalDependencies": {}
 }

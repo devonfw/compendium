@@ -38,7 +38,7 @@ export class TextInMock implements TextIn {
 
     public async getTranscript(id: string): Promise<Transcript> {
 
-        if (id === 'test-data/brownfox.md'){
+        if (id === 'test-data/brownfox.adoc'){
             //The quick *brown fox _jumps_ over* the lazy dog.
             const paragraph: Paragraph =  {
                 kind: 'paragraph',
@@ -46,15 +46,15 @@ export class TextInMock implements TextIn {
             };
             paragraph.text.push({
                 attrs: {script: 'normal'},
-                text: 'The quick ',
+                text: 'The quick',
             });
             paragraph.text.push({
                 attrs: {script: 'normal', strong: true},
-                text: 'brown fox ',
+                text: 'brown fox',
             });
             paragraph.text.push({
                 attrs: {script: 'normal', strong: true, cursive: true},
-                text: 'jumps ',
+                text: 'jumps',
             });
             paragraph.text.push({
                 attrs: {script: 'normal', strong: true},
