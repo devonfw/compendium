@@ -1,4 +1,4 @@
-import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextElement, InlineImage } from './types';
+import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources } from './types';
 import * as fs from 'fs';
 
 export class AsciiDocFileTextOut implements TextOut {
@@ -62,6 +62,124 @@ export class AsciiDocFileTextOut implements TextOut {
 
     private imageParsed(myText: InlineImage){
         return 'image::' + myText.img + '[' + myText.title + ']';
+    }
+
+}
+
+class IR {
+    public symbol: string;
+    public value: string;
+}
+
+export class AsciiDocFileTextIn implements TextIn {
+
+    public  base: string;
+    public asciidoctor = require('asciidoctor.js')();
+
+    public constructor(basepath: string) {
+        this.base = basepath;
+    }
+
+    public async getTranscript(id: string): Promise<Transcript> {
+        const dir = this.base + '/' + id;
+        const doc = fs.readFileSync(dir, 'utf-8');
+        console.log(doc + '\n\r');
+        let html = this.asciidoctor.convert(doc);
+
+        //let transcript: Transcript;
+
+        let segments: Array<TextSegment>;
+
+        html = html.split('<span class="underline">').join('<u>');
+        html = html.split('</span>').join('</u>');
+
+        html = html.split('>').join('> ');
+        html = html.split('<').join(' <');
+        html = html.split('   ').join(' ');
+        html = html.split('  ').join(' ');
+        html = html.split(' \n ').join('\n');
+        html = html.split('</div>').join('');
+
+        console.log(html);
+        const resource = html.split('\n');
+
+        for (const line of resource){
+
+            let ir: Array<IR> = [];
+
+            if (line.substring(0, 4) === '<div' || line === '</div>'){
+                // nothing to do here
+            } else {
+
+                const splitLine = line.split(' ');
+                // console.log(JSON.stringify(splitLine));
+                for (const block of splitLine) {
+                    if (block.substring(0, 3) === 'id=') {
+                        // nothing to do
+                    }else if (block.substring(0, 3) === '<h1') {
+                        ir.push(this.createSymbol('title_op', block));
+                    } else if (block.substring(0, 3) === '<h2') {
+                        ir.push(this.createSymbol('h1_op', block));
+                    } else if (block.substring(0, 3) === '<h3') {
+                        ir.push(this.createSymbol('h2_op', block));
+                    } else if (block.substring(0, 3) === '<h4') {
+                        ir.push(this.createSymbol('h3_op', block));
+                    } else if (block.substring(0, 3) === '<h5') {
+                        ir.push(this.createSymbol('h4_op', block));
+                    } else if (block === '</h1>') {
+                        ir.push(this.createSymbol('title_end', block));
+                    } else if (block === '</h2>') {
+                        ir.push(this.createSymbol('h1_end', block));
+                    } else if (block === '</h3>') {
+                        ir.push(this.createSymbol('h2_end', block));
+                    } else if (block === '</h4>') {
+                        ir.push(this.createSymbol('h3_end', block));
+                    } else if (block === '</h5>') {
+                        ir.push(this.createSymbol('h4_end', block));
+                    } else if (block === '<strong>') {
+                        ir.push(this.createSymbol('strong_op', block));
+                    } else if (block === '</strong>') {
+                        ir.push(this.createSymbol('strong_end', block));
+                    } else if (block === '<em>') {
+                        ir.push(this.createSymbol('cursive_op', block));
+                    } else if (block === '</em>') {
+                        ir.push(this.createSymbol('cursive_end', block));
+                    } else if (block === '<u>') {
+                        ir.push(this.createSymbol('underline_op', block));
+                    } else if (block === '</u>') {
+                        ir.push(this.createSymbol('underline_end', block));
+                    } else if (block === '<sub>') {
+                        ir.push(this.createSymbol('sub_op', block));
+                    } else if (block === '</sub>') {
+                        ir.push(this.createSymbol('sub_end', block));
+                    } else if (block === '<p>') {
+                        ir.push(this.createSymbol('p_op', block));
+                    } else if (block === '</p>') {
+                        ir.push(this.createSymbol('p_end', block));
+                    } else {
+                        ir.push(this.createSymbol('text', block));
+                        console.log(block);
+                    }
+                }
+                console.log(JSON.stringify(ir) + '\n');
+            }
+        }
+        const transcript: Transcript = {
+            segments: [
+                {
+                    kind: 'textelement',
+                    element: 'h1',
+                    text: 'The fox',
+                },
+            ]};
+        return transcript;
+    }
+    private createSymbol(symbol: string, value: string): IR {
+        let obj: IR = new IR();
+        obj.symbol = symbol;
+        obj.value = value;
+
+        return obj;
     }
 
 }

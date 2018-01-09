@@ -2,13 +2,14 @@
 import * as config from '../src/config';
 import {DocConfig, TextOut, TextIn} from '../src/types';
 import {DocConfigMock, TextOutMock, TextInMock} from '../src/mocks/impl';
-import { AsciiDocFileTextOut } from '../src/asciidoc';
+import { AsciiDocFileTextOut, AsciiDocFileTextIn } from '../src/asciidoc';
 import * as fs from 'fs';
 import * as chai from 'chai';
 
 let docconfig: DocConfig;
 let textout: TextOut;
 let textin: TextIn;
+let textinAsciidoc: TextIn;
 
 const expect = chai.expect;
 const should = chai.should();
@@ -18,6 +19,7 @@ if (config.mock) {
     // textout = new TextOutMock();
     textout = new AsciiDocFileTextOut();
     textin = new TextInMock('path');
+    textinAsciidoc = new AsciiDocFileTextIn('test-data');
 
 } else {
     throw new Error('Not implemented');
@@ -56,7 +58,7 @@ describe('Testing the Output stream and the file creation ', () => {
         //setup fixture
     });
 
-    describe('TextOut', () => {
+    describe('AsciidocFileTextOut', () => {
         it('should show the content of the output file', (done) => {
             textin.getTranscript('test-data/brownfox.adoc').then((transcript) => {
                 let arrayTranscript = [];
@@ -68,6 +70,26 @@ describe('Testing the Output stream and the file creation ', () => {
                 } else {
                     done(new Error('File was not created'));
                 }
+            }).catch((error) => {
+                done(error);
+            });
+        });
+    });
+
+    after(() => {
+        // clean fixture
+    });
+});
+
+describe('Testing the read stream of the source file ', () => {
+    before(() => {
+        //setup fixture
+    });
+
+    describe('AsciidocFileTextIn', () => {
+        it('should show asciidoc and html parse of source file', (done) => {
+            textinAsciidoc.getTranscript('brownfox2.adoc').then((transcript) => {
+                    done();
             }).catch((error) => {
                 done(error);
             });
