@@ -1,7 +1,7 @@
 == The fox
 
-=== *The real _fox_*
+=== The real fox
 
 image::fox.jpg[Red Fox]
 
-The ~quick~ *brown fox _jumps_ over* the lazy [underline]#dog#.
+The ~quick~ *brown fox _jumps_ over* the lazy [.underline]#dog#.

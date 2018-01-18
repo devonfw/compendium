@@ -10,7 +10,7 @@ let textin = new AsciiDocFileTextIn('test-data');
 //const should = chai.should();
 
 
-describe('Testing AsciiDocFileTextIn', () => {
+xdescribe('Testing AsciiDocFileTextIn', () => {
     before(() => {
         //setup fixture
         console.log('Testing AsciiDocFileTextIn');

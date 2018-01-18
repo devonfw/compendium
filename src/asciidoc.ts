@@ -1,4 +1,4 @@
-import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources } from './types';
+import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes } from './types';
 import * as fs from 'fs';
 
 export class AsciiDocFileTextOut implements TextOut {
@@ -16,16 +16,16 @@ export class AsciiDocFileTextOut implements TextOut {
                 for (const segment of node.segments) {
 
                     if (segment.kind === 'textelement') {
-                        outputString = outputString + this.textElementParsed(segment) + '\r\n';
+                        outputString = outputString + this.textElementParsed(segment) + '\n\n';
                     } else if (segment.kind === 'paragraph') {
-                        outputString = outputString + this.paragraphParsed(segment) + '\r\n';
+                        outputString = outputString + this.paragraphParsed(segment) + '\n\n';
                     } else if (segment.kind === 'inlineimage') {
-                        outputString = outputString + this.imageParsed(segment) + '\r\n';
+                        outputString = outputString + this.imageParsed(segment) + '\n\n';
                     }
                 }
             }
             console.log(outputString);
-            fs.writeFile('result.asciidoc', outputString, (err) => { if (err) throw err; console.log('File created'); });
+            fs.writeFile('result.adoc', outputString, (err) => { if (err) throw err; console.log('File created'); });
         }
 
         this.done = true;
@@ -34,28 +34,52 @@ export class AsciiDocFileTextOut implements TextOut {
     private textElementParsed(myText: TextElement) {
         const textelement = myText.element;
         if (textelement === 'title') { return '= ' + myText.text; }
-        if (textelement === 'h1') { return '== ' + myText.text; }
-        if (textelement === 'h2') { return '=== ' + myText.text; }
-        if (textelement === 'h3') { return '==== ' + myText.text; }
-        if (textelement === 'h4') { return '===== ' + myText.text; }
+        if (textelement === 'h1') { return '= ' + myText.text; }
+        if (textelement === 'h2') { return '== ' + myText.text; }
+        if (textelement === 'h3') { return '=== ' + myText.text; }
+        if (textelement === 'h4') { return '==== ' + myText.text; }
     }
     private paragraphParsed(myText: Paragraph) {
         let output: string = '';
         for (const content of myText.text) {
             const attrs = content.attrs;
             let text = content.text;
-            if (attrs.underline) { text = ':[underline]#' + text + '#'; }
+            let blankFirst = false, blankLast = false;
+
+            if (text.charAt(text.length - 1) === ' '){
+                blankLast = true;
+            }
+            if (text.charAt(0) === ' ') {
+                blankFirst = true;
+            }
+            text = text.trim();
+
+            if (attrs.underline) { text = '[.underline]#' + text + '#'; }
             if (attrs.cursive) { text = '_' + text + '_'; }
             if (attrs.strong) { text = '*' + text + '*'; }
             if (attrs.script === 'normal') {
-                text = ' ' + text + ' ';
+                text = text;
             } else if (attrs.script === 'sub') {
-                text = ' ~' + text + '~ ';
+                text = '~' + text + '~';
             } else if (attrs.script === 'super') {
-                text = ' ^' + text + '^ ';
-            } else {  }
+                text = '^' + text + '^';
+            }
 
-            output = output + text;
+            if (blankLast) {
+                text = text + ' ';
+            }
+            if (blankFirst) {
+                text = ' ' + text;
+            }
+            if (output === '') {
+                output = text;
+            } else {
+                if (output.charAt(output.length - 1) !== ' ' && text.charAt(0) !== ' ') {
+                    output = output + ' ';
+                }
+                output = output + text;
+            }
+
         }
         return output;
     }
@@ -66,120 +90,174 @@ export class AsciiDocFileTextOut implements TextOut {
 
 }
 
-class IR {
-    public symbol: string;
-    public value: string;
-}
-
 export class AsciiDocFileTextIn implements TextIn {
 
     public  base: string;
     public asciidoctor = require('asciidoctor.js')();
+    public htmlparse = require('html-parse');
 
     public constructor(basepath: string) {
         this.base = basepath;
     }
 
     public async getTranscript(id: string): Promise<Transcript> {
+
         const dir = this.base + '/' + id;
+
         const doc = fs.readFileSync(dir, 'utf-8');
-        console.log(doc + '\n\r');
-        let html = this.asciidoctor.convert(doc);
 
-        //let transcript: Transcript;
+        const dochtml = this.asciidoctor.convert(doc);
+        //console.log(dochtml);
 
-        let segments: Array<TextSegment>;
+        const tree = this.htmlparse.parse(dochtml);
 
-        html = html.split('<span class="underline">').join('<u>');
-        html = html.split('</span>').join('</u>');
+        let transcript: Transcript = { segments: [] };
+        let end: Array<TextSegment> = [];
 
-        html = html.split('>').join('> ');
-        html = html.split('<').join(' <');
-        html = html.split('   ').join(' ');
-        html = html.split('  ').join(' ');
-        html = html.split(' \n ').join('\n');
-        html = html.split('</div>').join('');
-
-        console.log(html);
-        const resource = html.split('\n');
-
-        for (const line of resource){
-
-            let ir: Array<IR> = [];
-
-            if (line.substring(0, 4) === '<div' || line === '</div>'){
-                // nothing to do here
-            } else {
-
-                const splitLine = line.split(' ');
-                // console.log(JSON.stringify(splitLine));
-                for (const block of splitLine) {
-                    if (block.substring(0, 3) === 'id=') {
-                        // nothing to do
-                    }else if (block.substring(0, 3) === '<h1') {
-                        ir.push(this.createSymbol('title_op', block));
-                    } else if (block.substring(0, 3) === '<h2') {
-                        ir.push(this.createSymbol('h1_op', block));
-                    } else if (block.substring(0, 3) === '<h3') {
-                        ir.push(this.createSymbol('h2_op', block));
-                    } else if (block.substring(0, 3) === '<h4') {
-                        ir.push(this.createSymbol('h3_op', block));
-                    } else if (block.substring(0, 3) === '<h5') {
-                        ir.push(this.createSymbol('h4_op', block));
-                    } else if (block === '</h1>') {
-                        ir.push(this.createSymbol('title_end', block));
-                    } else if (block === '</h2>') {
-                        ir.push(this.createSymbol('h1_end', block));
-                    } else if (block === '</h3>') {
-                        ir.push(this.createSymbol('h2_end', block));
-                    } else if (block === '</h4>') {
-                        ir.push(this.createSymbol('h3_end', block));
-                    } else if (block === '</h5>') {
-                        ir.push(this.createSymbol('h4_end', block));
-                    } else if (block === '<strong>') {
-                        ir.push(this.createSymbol('strong_op', block));
-                    } else if (block === '</strong>') {
-                        ir.push(this.createSymbol('strong_end', block));
-                    } else if (block === '<em>') {
-                        ir.push(this.createSymbol('cursive_op', block));
-                    } else if (block === '</em>') {
-                        ir.push(this.createSymbol('cursive_end', block));
-                    } else if (block === '<u>') {
-                        ir.push(this.createSymbol('underline_op', block));
-                    } else if (block === '</u>') {
-                        ir.push(this.createSymbol('underline_end', block));
-                    } else if (block === '<sub>') {
-                        ir.push(this.createSymbol('sub_op', block));
-                    } else if (block === '</sub>') {
-                        ir.push(this.createSymbol('sub_end', block));
-                    } else if (block === '<p>') {
-                        ir.push(this.createSymbol('p_op', block));
-                    } else if (block === '</p>') {
-                        ir.push(this.createSymbol('p_end', block));
-                    } else {
-                        ir.push(this.createSymbol('text', block));
-                        console.log(block);
-                    }
-                }
-                console.log(JSON.stringify(ir) + '\n');
+        for (const branch of tree) {
+            let temp = this.recursive(branch);
+            for (const final of temp) {
+                end.push(final);
             }
         }
-        const transcript: Transcript = {
-            segments: [
-                {
-                    kind: 'textelement',
-                    element: 'h1',
-                    text: 'The fox',
-                },
-            ]};
-        return transcript;
-    }
-    private createSymbol(symbol: string, value: string): IR {
-        let obj: IR = new IR();
-        obj.symbol = symbol;
-        obj.value = value;
 
-        return obj;
+        transcript.segments = end;
+
+        // console.dir(JSON.stringify(transcript));
+
+        return transcript;
+
+    }
+
+    public recursive(node: any): Array<TextSegment> {
+        //console.log(params);
+        let result: Array<TextSegment> = [];
+        let out: TextSegment;
+        if (node.children) {
+            if (node.name === 'title') {
+
+                out = { kind: 'textelement', element: 'title', text: node.children[0].data };
+                result.push(out);
+
+            } else if (node.name === 'h1') {
+
+                out = { kind: 'textelement', element: 'h1', text: node.children[0].data };
+                result.push(out);
+
+            } else if (node.name === 'h2') {
+
+                out = { kind: 'textelement', element: 'h2', text: node.children[0].data };
+                result.push(out);
+
+            } else if (node.name === 'h3') {
+
+                out = { kind: 'textelement', element: 'h3', text: node.children[0].data };
+                result.push(out);
+
+            } else if (node.name === 'h4') {
+
+                out = { kind: 'textelement', element: 'h4', text: node.children[0].data };
+                result.push(out);
+
+            } else if (node.name === 'p') {
+                out = { kind: 'paragraph', text: this.pharagraphs(node.children) };
+                for (const temp of out.text) {
+                    // console.log(temp.text);
+                }
+                result.push(out);
+
+            } else if (node.name === 'img') {
+                let img: InlineImage = {
+                    kind: 'inlineimage',
+                    img: node.attribs.src,
+                    title: node.attribs.alt
+                };
+                result.push(img);
+
+            } else {
+                for (const child of node.children) {
+                    let inter = this.recursive(child);
+                    if (inter && inter.length > 0) {
+                        // console.log('Concat recursive: (Node length: ' + node.children.length + ')'); // OK? NO! Concat the same value for
+                        // console.dir(inter[0], { depth: null });
+                        for (const temp of inter) {
+                            result.push(temp);
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public pharagraphs( node: Array<any>): RichText {
+
+        let result: RichText = [];
+        //console.log('My params ' + myParams + '\n');
+        //console.dir(node, { depth: null });
+        for (const child of node) {
+            if (child.children) {
+                let para = this.pharagraphs(child.children);
+
+                if (child.name) {
+                    let newParam = child;
+
+                    if (child.name === 'span' && child.attribs.class === 'underline') {
+                        newParam.name = 'underline';
+                    }
+                    para = this.putMyAttribute(para, newParam.name);
+                }
+                if (para && para.length > 0) {
+                    //console.log('Concat paragraph: (Node length: ' + para.length + ')'); // OK
+                    // console.dir(para, { depth: null });
+                    for (const temp of para) {
+                        result.push(temp);
+                    }
+                }
+
+            } else if (child.data !== '\n' && child.data !== '' && child.data !== ' ') {
+                let attrs: TextAttributes = {
+                    strong: false,  // "bold"
+                    cursive: false,   // "italic"
+                    underline: false,
+                    script: 'normal'
+                };
+                let out: RichString = {
+                    text: '',
+                    attrs: attrs
+                };
+
+                out.text = child.data;
+                out.attrs = attrs;
+                // console.dir(out, { depth: null });  // <------
+                result.push(out);
+
+            }
+        }
+        return result;
+
+    }
+    public putMyAttribute(para: RichText, myParam: string): RichText {
+        let paragraph: RichText = [];
+        // console.log(myParam);
+        // tslint:disable-next-line:forin
+        for (const par of para) {
+            if (myParam === 'strong') {
+                par.attrs.strong = true;
+            } else if (myParam === 'em') {
+                par.attrs.cursive = true;
+            } else if (myParam === 'underline') {
+                par.attrs.underline = true;
+            } else if (myParam === 'sub') {
+                par.attrs.script = 'sub';
+            } else if (myParam === 'sup') {
+                par.attrs.script = 'super';
+            }
+            paragraph.push(par);
+        }
+
+        return paragraph;
     }
 
 }

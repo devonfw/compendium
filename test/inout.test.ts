@@ -25,7 +25,7 @@ if (config.mock) {
     throw new Error('Not implemented');
 }
 
-describe('Testing the Input of Text and doc generation', () => {
+xdescribe('Testing the Input of Text and doc generation', () => {
     before(() => {
         //setup fixture
     });
@@ -60,12 +60,11 @@ describe('Testing the Output stream and the file creation ', () => {
 
     describe('AsciidocFileTextOut', () => {
         it('should show the content of the output file', (done) => {
-            textin.getTranscript('test-data/brownfox.adoc').then((transcript) => {
+            textinAsciidoc.getTranscript('brownfox2.adoc').then((transcript) => {
                 let arrayTranscript = [];
                 arrayTranscript.push(transcript);
                 textout.generate(arrayTranscript);
-                if (expect(fs.existsSync('result.asciidoc'))) {
-
+                if (expect(fs.existsSync('result.adoc'))) {
                     done();
                 } else {
                     done(new Error('File was not created'));
@@ -81,14 +80,14 @@ describe('Testing the Output stream and the file creation ', () => {
     });
 });
 
-describe('Testing the read stream of the source file ', () => {
+xdescribe('Testing the read stream of the source file ', () => {
     before(() => {
         //setup fixture
     });
 
     describe('AsciidocFileTextIn', () => {
         it('should show asciidoc and html parse of source file', (done) => {
-            textinAsciidoc.getTranscript('brownfox2.adoc').then((transcript) => {
+            textinAsciidoc.getTranscript('brownfox.adoc').then((transcript) => {
                     done();
             }).catch((error) => {
                 done(error);
