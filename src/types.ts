@@ -77,7 +77,7 @@ export interface DocConfig {
 
 export interface TextIn {
 
-    getTranscript(id: string): Promise<Transcript>;
+    getTranscript(id: string, sections?: string[]): Promise<Transcript>;
 }
 
 export interface TextOut {

@@ -4,10 +4,15 @@ import * as fs from 'fs';
 export class AsciiDocFileTextOut implements TextOut {
 
     public done: boolean = false;
+    private outputFile: string;
+
+    public constructor(file: string) {
+        this.outputFile = file;
+    }
 
     public async generate(data: Array<Transcript>): Promise<void> {
 
-        let outputString = '';
+        let outputString = ':toc: macro\ntoc::[]\n\n';
 
         if (data.length < 1) {
             throw new Error('No Text instances passed');
@@ -24,8 +29,8 @@ export class AsciiDocFileTextOut implements TextOut {
                     }
                 }
             }
-            console.log(outputString);
-            fs.writeFile('result.adoc', outputString, (err) => { if (err) throw err; console.log('File created'); });
+            // console.log(outputString);
+            fs.writeFile(this.outputFile + '.adoc', outputString, (err) => { if (err) throw err; console.log('File created'); });
         }
 
         this.done = true;
@@ -100,7 +105,7 @@ export class AsciiDocFileTextIn implements TextIn {
         this.base = basepath;
     }
 
-    public async getTranscript(id: string): Promise<Transcript> {
+    public async getTranscript(id: string, sections?: string[]): Promise<Transcript> {
 
         const dir = this.base + '/' + id;
 
@@ -115,7 +120,7 @@ export class AsciiDocFileTextIn implements TextIn {
         let end: Array<TextSegment> = [];
 
         for (const branch of tree) {
-            let temp = this.recursive(branch);
+            let temp = this.recursive(branch, sections);
             for (const final of temp) {
                 end.push(final);
             }
@@ -129,7 +134,7 @@ export class AsciiDocFileTextIn implements TextIn {
 
     }
 
-    public recursive(node: any): Array<TextSegment> {
+    public recursive(node: any, filter?: string[]): Array<TextSegment> {
         //console.log(params);
         let result: Array<TextSegment> = [];
         let out: TextSegment;
@@ -159,29 +164,60 @@ export class AsciiDocFileTextIn implements TextIn {
                 out = { kind: 'textelement', element: 'h4', text: node.children[0].data };
                 result.push(out);
 
-            } else if (node.name === 'p') {
-                out = { kind: 'paragraph', text: this.pharagraphs(node.children) };
-                for (const temp of out.text) {
-                    // console.log(temp.text);
+            }
+            if (filter !== [] && filter !== null && filter !== undefined) {
+                let sectionFound = false;
+                for (const section of filter) {
+                    if (node.children[0].data === section) {
+                        sectionFound = true;
+                    }
                 }
-                result.push(out);
 
-            } else if (node.name === 'img') {
-                let img: InlineImage = {
-                    kind: 'inlineimage',
-                    img: node.attribs.src,
-                    title: node.attribs.alt
-                };
-                result.push(img);
-
-            } else {
-                for (const child of node.children) {
-                    let inter = this.recursive(child);
+                if (sectionFound) {
+                    result.pop();
+                    let inter = this.recursive(node.parent);
                     if (inter && inter.length > 0) {
-                        // console.log('Concat recursive: (Node length: ' + node.children.length + ')'); // OK? NO! Concat the same value for
-                        // console.dir(inter[0], { depth: null });
                         for (const temp of inter) {
                             result.push(temp);
+                        }
+                    }
+
+                } else {
+                    for (const child of node.children) {
+                        let inter = this.recursive(child, filter);
+                        if (inter && inter.length > 0) {
+                            for (const temp of inter) {
+                                result.push(temp);
+                            }
+                        }
+                    }
+                }
+
+            } else {
+                if (node.name === 'p') {
+                    out = { kind: 'paragraph', text: this.pharagraphs(node.children) };
+                    for (const temp of out.text) {
+                        // console.log(temp.text);
+                    }
+                    result.push(out);
+
+                } else if (node.name === 'img') {
+                    let img: InlineImage = {
+                        kind: 'inlineimage',
+                        img: node.attribs.src,
+                        title: node.attribs.alt
+                    };
+                    result.push(img);
+
+                } else {
+                    for (const child of node.children) {
+                        let inter = this.recursive(child);
+                        if (inter && inter.length > 0) {
+                            // console.log('Concat recursive: (Node length: ' + node.children.length + ')'); // OK? NO! Concat the same value for
+                            // console.dir(inter[0], { depth: null });
+                            for (const temp of inter) {
+                                result.push(temp);
+                            }
                         }
                     }
                 }

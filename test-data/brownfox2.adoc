@@ -2,6 +2,6 @@
 
 === The real fox
 
-image::fox.jpg[Red Fox]
+image::fox.png[Red Fox]
 
 The ~quick~ *brown fox _jumps_ over* the lazy [.underline]#dog#.

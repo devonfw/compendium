@@ -3,11 +3,13 @@ import * as config from '../src/config';
 import {DocConfig, TextOut, TextIn} from '../src/types';
 import {DocConfigMock, TextOutMock, TextInMock} from '../src/mocks/impl';
 import { AsciiDocFileTextOut, AsciiDocFileTextIn } from '../src/asciidoc';
+import { HtmlFileTextOut } from '../src/html';
 import * as fs from 'fs';
 import * as chai from 'chai';
 
 let docconfig: DocConfig;
 let textout: TextOut;
+let textoutHtml: TextOut;
 let textin: TextIn;
 let textinAsciidoc: TextIn;
 
@@ -17,7 +19,8 @@ const should = chai.should();
 if (config.mock) {
     docconfig = new DocConfigMock();
     // textout = new TextOutMock();
-    textout = new AsciiDocFileTextOut();
+    textout = new AsciiDocFileTextOut('result');
+    textoutHtml = new HtmlFileTextOut('result');
     textin = new TextInMock('path');
     textinAsciidoc = new AsciiDocFileTextIn('test-data');
 
@@ -53,7 +56,7 @@ xdescribe('Testing the Input of Text and doc generation', () => {
     });
 });
 
-describe('Testing the Output stream and the file creation ', () => {
+describe('Testing the Asciidoc Input and Output stream and the file creation ', () => {
     before(() => {
         //setup fixture
     });
@@ -65,6 +68,32 @@ describe('Testing the Output stream and the file creation ', () => {
                 arrayTranscript.push(transcript);
                 textout.generate(arrayTranscript);
                 if (expect(fs.existsSync('result.adoc'))) {
+                    done();
+                } else {
+                    done(new Error('File was not created'));
+                }
+            }).catch((error) => {
+                done(error);
+            });
+        });
+    });
+
+    after(() => {
+        // clean fixture
+    });
+});
+describe('Testing the Html Output stream and the file creation ', () => {
+    before(() => {
+        //setup fixture
+    });
+
+    describe('HtmlFileTextOut', () => {
+        it('should show the content of the output file', (done) => {
+            textinAsciidoc.getTranscript('brownfox2.adoc').then((transcript) => {
+                let arrayTranscript = [];
+                arrayTranscript.push(transcript);
+                textoutHtml.generate(arrayTranscript);
+                if (expect(fs.existsSync('result.html'))) {
                     done();
                 } else {
                     done(new Error('File was not created'));
