@@ -6,8 +6,9 @@ export class DocConfigMock implements DocConfig {
 
     public async getIndex(): Promise<Index> {
 
-        const index: Index =  [[{kind: 'asciidoc', source: 'c:\\temp'}],
+        const index: Index =  [[{key : 'key1', kind: 'asciidoc', source: 'c:\\temp'}],
             [{
+                key: 'key1',
                 kind: 'asciidoc',
                 index: 'test-data/brownfox.md',
             }]];

@@ -2,11 +2,11 @@ import {TextInSource, TextInSources, Index, IndexNode, IndexSource} from './type
 import {TextInMock, TextOutMock} from './mocks/impl';
 import * as fs from 'fs';
 
-export let mock = true;
+export let mock = false;
 
 export class ConfigFile {
 
-    public createIndex(configPath: string): Index {
+    public async createIndex(configPath: string): Promise<Index> {
         const config = fs.readFileSync(configPath, 'utf8');
         const data = JSON.parse(config);
 

@@ -1,31 +1,36 @@
 
 import * as config from '../src/config';
-import {DocConfig, TextOut, TextIn} from '../src/types';
+import {DocConfig, TextOut, TextIn, Merger } from '../src/types';
 import {DocConfigMock, TextOutMock, TextInMock} from '../src/mocks/impl';
 import { AsciiDocFileTextOut, AsciiDocFileTextIn } from '../src/asciidoc';
 import { HtmlFileTextOut } from '../src/html';
 import * as fs from 'fs';
 import * as chai from 'chai';
+import { ConfigFile } from '../src/config';
+import { MergerImpl } from '../src/merger';
+import { assert } from 'chai';
 
-let docconfig: DocConfig;
+let docconfigmock: DocConfig;
+let docconfig: ConfigFile;
 let textout: TextOut;
 let textoutHtml: TextOut;
 let textin: TextIn;
 let textinAsciidoc: TextIn;
+let merger: Merger;
 
 const expect = chai.expect;
 const should = chai.should();
 
 if (config.mock) {
-    docconfig = new DocConfigMock();
+    docconfigmock = new DocConfigMock();
     // textout = new TextOutMock();
+    textin = new TextInMock('path');
+} else {
+    docconfig = new ConfigFile();
     textout = new AsciiDocFileTextOut('result');
     textoutHtml = new HtmlFileTextOut('result');
-    textin = new TextInMock('path');
     textinAsciidoc = new AsciiDocFileTextIn('test-data');
-
-} else {
-    throw new Error('Not implemented');
+    merger = new MergerImpl();
 }
 
 xdescribe('Testing the Input of Text and doc generation', () => {
@@ -90,7 +95,7 @@ describe('Testing the Html Output stream and the file creation ', () => {
     describe('HtmlFileTextOut', () => {
         it('should show the content of the output file', (done) => {
             textinAsciidoc.getTranscript('brownfox2.adoc').then((transcript) => {
-                let arrayTranscript = [];
+                const arrayTranscript = [];
                 arrayTranscript.push(transcript);
                 textoutHtml.generate(arrayTranscript);
                 if (expect(fs.existsSync('result.html'))) {
@@ -98,6 +103,53 @@ describe('Testing the Html Output stream and the file creation ', () => {
                 } else {
                     done(new Error('File was not created'));
                 }
+            }).catch((error) => {
+                done(error);
+            });
+        });
+    });
+
+    after(() => {
+        // clean fixture
+    });
+});
+
+describe('Testing the config and index creation', () => {
+    before(() => {
+        //setup fixture
+    });
+
+    describe('ConfigFile', () => {
+        it('should show ', (done) => {
+            docconfig.createIndex('../compendium/src/mocks/config.json').then((index) => {
+                console.log('Config received: ');
+                console.log(index);
+
+                assert.isArray(index, 'Index must be an array');
+                assert.isArray(index[0], 'Souces must be an array');
+                assert.isArray(index[1], 'Nodes must be an array');
+
+                expect(index[0]).have.lengthOf(2, 'There are two sources');
+                expect(index[1]).have.lengthOf(2, 'There are two nodes');
+
+                expect(index[0][0].key).equals('input-data1');
+                expect(index[0][0].kind).equals('asciidoc');
+                expect(index[0][0].source).equals('C:/Users/sbadenes/Desktop/Compendium/compendium/src/mocks/input-data1');
+
+                expect(index[0][1].key).equals('input-data2');
+                expect(index[0][1].kind).equals('asciidoc');
+                expect(index[0][1].source).equals('C:/Users/sbadenes/Desktop/Compendium/compendium/src/mocks/input-data2');
+
+                expect(index[1][0].key).equals('input-data1');
+                expect(index[1][0].kind).equals('asciidoc');
+                expect(index[1][0].index).equals('brownfox.adoc');
+
+                expect(index[1][1].key).equals('input-data2');
+                expect(index[1][1].kind).equals('asciidoc');
+                expect(index[1][1].index).equals('example1.adoc');
+
+                done();
+
             }).catch((error) => {
                 done(error);
             });

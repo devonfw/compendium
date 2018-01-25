@@ -1,0 +1,27 @@
+{
+    "sources": [
+        {
+            "key": "input-data1",
+            "kind": "asciidoc",
+            "source": "C:/Users/sbadenes/Desktop/Compendium/compendium/src/mocks/input-data1"
+        },
+        {
+            "key": "input-data2",
+            "kind": "asciidoc",
+            "source": "C:/Users/sbadenes/Desktop/Compendium/compendium/src/mocks/input-data2"
+        }
+    ],
+    "nodes": [
+        {
+            "key": "input-data1",
+            "kind": "asciidoc",
+            "index": "brownfox.adoc"
+        },
+        {
+            "key": "input-data2",
+            "kind": "asciidoc",
+            "index": "example1.adoc",
+            "section": ""
+        }
+    ]
+}
