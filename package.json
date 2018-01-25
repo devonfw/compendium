@@ -1,29 +1,35 @@
 {
-    "name": "compendium",
-    "version": "0.1.0",
-    "main": "app.js",
-    "scripts": {
-        "start": "node ./out/src/app",
-        "eb": "yarn && yarn build && node ./out/src/app",
-        "build": "tsc",
-        "debug": "npm run build && node --inspect out/src/app.js",
-        "test": "mocha --opts mocha.opts"
-    },
-    "private": true,
-    "dependencies": {
-        "asciidoctor-docbook.js": "^1.5.6-preview.2",
-        "asciidoctor.js": "^1.5.6-preview.4",
-        "html-parse": "0.0.4",
-        "result.ts": "^0.3.1"
-    },
-    "devDependencies": {
-        "@types/chai": "^4.1.0",
-        "@types/mocha": "^2.2.46",
-        "@types/node": "^8.5.7",
-        "chai": "^4.1.2",
-        "mocha": "^4.1.0",
-        "nodemon": "^1.14.7",
-        "typescript": "^2.6.2"
-    },
-    "optionalDependencies": {}
+  "name": "@oasp/compendium",
+  "version": "0.1.0",
+  "main": "app.js",
+  "bin": {
+    "compendium": "./out/src/compendium.js"
+  },
+  "scripts": {
+    "start": "node ./out/src/app",
+    "eb": "yarn && yarn build && node ./out/src/app",
+    "build": "tsc",
+    "debug": "npm run build && node --inspect out/src/app.js",
+    "test": "mocha --opts mocha.opts"
+  },
+  "private": true,
+  "dependencies": {
+    "asciidoctor-docbook.js": "^1.5.6-preview.2",
+    "asciidoctor.js": "^1.5.6-preview.4",
+    "chalk": "^2.3.0",
+    "commander": "^2.13.0",
+    "html-parse": "0.0.4",
+    "result.ts": "^0.3.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.0",
+    "@types/commander": "^2.12.2",
+    "@types/mocha": "^2.2.46",
+    "@types/node": "^8.5.7",
+    "chai": "^4.1.2",
+    "mocha": "^4.1.0",
+    "nodemon": "^1.14.7",
+    "typescript": "^2.6.2"
+  },
+  "optionalDependencies": {}
 }

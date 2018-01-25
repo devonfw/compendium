@@ -10,9 +10,8 @@ export class MergerImpl implements Merger {
         for (const node of index[1]){
             if (node.kind === 'asciidoc' || node.kind === 'jira') {
                 if (textinSources[node.key]) {
-                    textinSources[node.key].getTranscript(node.index).then((data) => {
-                        transcripts.push(data); // The bind is by key -> A source identifier. The call to the method is customized for every node.
-                    });
+                    transcripts.push(await textinSources[node.key].getTranscript(node.index)); // The bind is by key -> A source identifier. The call to the method is customized for every node.
+
                 }
                 else {
                     // There isn't source-node binding

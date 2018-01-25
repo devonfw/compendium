@@ -3,12 +3,12 @@
         {
             "key": "input-data1",
             "kind": "asciidoc",
-            "source": "C:/Users/sbadenes/Desktop/Compendium/compendium/src/mocks/input-data1"
+            "source": "C:/Projects/Compendium/Compendium/src/mocks/input-data1"
         },
         {
             "key": "input-data2",
             "kind": "asciidoc",
-            "source": "C:/Users/sbadenes/Desktop/Compendium/compendium/src/mocks/input-data2"
+            "source": "C:/Projects/Compendium/Compendium/src/mocks/input-data2"
         }
     ],
     "nodes": [
@@ -20,8 +20,7 @@
         {
             "key": "input-data2",
             "kind": "asciidoc",
-            "index": "example1.adoc",
-            "section": ""
+            "index": "example1.adoc"
         }
     ]
 }
