@@ -61,7 +61,7 @@ export class ConfigFile {
 
     private checkNodeValuesJSON(nodeJSON: any): boolean {
 
-        if (nodeJSON.id && nodeJSON.id !== '') {
+        if (nodeJSON.index && nodeJSON.index !== '') {
             return true;
         }
 
