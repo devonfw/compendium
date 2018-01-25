@@ -58,14 +58,17 @@ export interface Merger {
 
 export interface IndexSource{
 
+    key: string;
     kind: TextInSource;
     source: string;
 }
 
 export interface IndexNode {
 
+    key: string;
     kind: TextInSource;
     index: string;
+    sections?: string[];
 }
 
 export type Index = [Array<IndexSource>, Array<IndexNode>];

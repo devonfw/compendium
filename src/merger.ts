@@ -8,12 +8,20 @@ export class MergerImpl implements Merger {
 
         const transcripts: Array<Transcript> = [];
         for (const node of index[1]){
-            if (node.kind === 'asciidoc') {
-                // tslint:disable-next-line:no-string-literal
-                transcripts.push( await textinSources['asciidoc'].getTranscript(node.index));
-
+            if (node.kind === 'asciidoc' || node.kind === 'jira') {
+                if (textinSources[node.key]) {
+                    textinSources[node.key].getTranscript(node.id).then((data) => {
+                        transcripts.push(data); // The bind is by key -> A source identifier. The call to the method is customized for every node.
+                    });
+                }
+                else {
+                    // There isn't source-node binding
+                    const error_msg = 'Node with id \'' + node.id + '\' doesn\'t have an existing source';
+                    throw new Error(error_msg);
+                }
             } else {
-                throw new Error('Unknown TextInSource');
+                const error_msg = '\'' + node.kind + '\'' + ' for \'' + node.id + '\' is an unknown TextInSource';
+                throw new Error(error_msg);
             }
         }
         await textout.generate(transcripts);
