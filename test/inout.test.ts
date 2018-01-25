@@ -1,6 +1,6 @@
 
 import * as config from '../src/config';
-import {DocConfig, TextOut, TextIn, Merger } from '../src/types';
+import { DocConfig, TextOut, TextIn, Merger, Index, IndexSource, IndexNode, TextInSources } from '../src/types';
 import {DocConfigMock, TextOutMock, TextInMock} from '../src/mocks/impl';
 import { AsciiDocFileTextOut, AsciiDocFileTextIn } from '../src/asciidoc';
 import { HtmlFileTextOut } from '../src/html';
@@ -61,7 +61,7 @@ xdescribe('Testing the Input of Text and doc generation', () => {
     });
 });
 
-describe('Testing the Asciidoc Input and Output stream and the file creation ', () => {
+xdescribe('Testing the Asciidoc Input and Output stream and the file creation ', () => {
     before(() => {
         //setup fixture
     });
@@ -87,7 +87,7 @@ describe('Testing the Asciidoc Input and Output stream and the file creation ', 
         // clean fixture
     });
 });
-describe('Testing the Html Output stream and the file creation ', () => {
+xdescribe('Testing the Html Output stream and the file creation ', () => {
     before(() => {
         //setup fixture
     });
@@ -114,14 +114,74 @@ describe('Testing the Html Output stream and the file creation ', () => {
     });
 });
 
-describe('Testing the config and index creation', () => {
+describe('Testing the merge of two files ', () => {
+    before(() => {
+        //setup fixture
+    });
+
+    describe('Merge', () => {
+        it('should combine 2 asciidoc in one', (done) => {
+
+            let sources: IndexSource[] = [{
+                    key: 'input-data1',
+                    kind: 'asciidoc',
+                    source: 'C:/Users/aredomar/Desktop/repos/compendium/src/mocks/input-data1'
+                },
+                {
+                    key: 'input-data2',
+                    kind: 'asciidoc',
+                    source: 'C:/Users/aredomar/Desktop/repos/compendium/src/mocks/input-data2'
+            }];
+
+            let nodes: IndexNode[] = [{
+                key: 'input-data1',
+                kind: 'asciidoc',
+                index: 'brownfox.adoc'
+            },
+            {
+                key: 'input-data2',
+                kind: 'asciidoc',
+                index: 'example1.adoc',
+                sections: ['']
+            }];
+
+            const index: Index = [sources, nodes];
+
+            let textinsources: TextInSources = {};
+
+            textinsources['input-data1'] = new AsciiDocFileTextIn('C:/Users/aredomar/Desktop/repos/compendium/src/mocks/input-data1');
+            textinsources['input-data2'] = new AsciiDocFileTextIn('C:/Users/aredomar/Desktop/repos/compendium/src/mocks/input-data2');
+
+            const merger = new MergerImpl();
+            let textoutMerger: TextOut = new AsciiDocFileTextOut('mergerResult');
+
+            merger.merge(textinsources, index, textoutMerger).then(() => {
+
+                if (expect(fs.existsSync('resultMerger.adoc'))) {
+                    done();
+                } else {
+                    done(new Error('Files haven\'t been merged'));
+                }
+
+            }).catch((error) => {
+                done(error);
+            });
+        });
+    });
+
+    after(() => {
+        // clean fixture
+    });
+});
+
+xdescribe('Testing the config and index creation', () => {
     before(() => {
         //setup fixture
     });
 
     describe('ConfigFile', () => {
         it('should show ', (done) => {
-            docconfig.createIndex('../compendium/src/mocks/config.json').then((index) => {
+            docconfig.createIndex('../compendium/src/mocks/configMock.json').then((index) => {
                 console.log('Config received: ');
                 console.log(index);
 
