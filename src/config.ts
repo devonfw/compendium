@@ -37,7 +37,11 @@ export class ConfigFile {
                     index: node.index,
                 };
                 if (node.sections !== null && node.sections !== '' && node.sections !== undefined) {
+                    if (node.sections.isArray()) {
                     indexNode.sections = node.sections;
+                    } else {
+                        console.log('The array of sections in ' + node.index + ' is malformed. All document will be loaded.\n');
+                    }
                 }
                 indexNodes.push(indexNode);
             } else {
