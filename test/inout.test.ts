@@ -26,7 +26,7 @@ if (config.mock) {
     // textout = new TextOutMock();
     textin = new TextInMock('path');
 } else {
-    docconfig = new ConfigFile();
+    docconfig = new ConfigFile('../compendium/src/mocks/configMock.json');
     textout = new AsciiDocFileTextOut('result');
     textoutHtml = new HtmlFileTextOut('result');
     textinAsciidoc = new AsciiDocFileTextIn('test-data');
@@ -181,7 +181,7 @@ xdescribe('Testing the config and index creation', () => {
 
     describe('ConfigFile', () => {
         it('should show ', (done) => {
-            docconfig.createIndex('../compendium/src/mocks/configMock.json').then((index) => {
+            docconfig.getIndex().then((index) => {
                 console.log('Config received: ');
                 console.log(index);
 

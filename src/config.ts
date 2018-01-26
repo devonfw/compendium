@@ -1,13 +1,19 @@
-import {TextInSource, TextInSources, Index, IndexNode, IndexSource} from './types';
+import {TextInSource, TextInSources, Index, IndexNode, IndexSource, DocConfig} from './types';
 import {TextInMock, TextOutMock} from './mocks/impl';
 import * as fs from 'fs';
 
 export let mock = false;
 
-export class ConfigFile {
+export class ConfigFile implements DocConfig{
 
-    public async createIndex(configPath: string): Promise<Index> {
-        const config = fs.readFileSync(configPath, 'utf8');
+    public configPath: string;
+
+    public constructor(config: string) {
+        this.configPath = config;
+    }
+
+    public async getIndex(): Promise<Index> {
+        const config = fs.readFileSync(this.configPath, 'utf8');
         const data = JSON.parse(config);
 
         // Sources

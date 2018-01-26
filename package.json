@@ -1,12 +1,13 @@
 {
   "name": "@oasp/compendium",
-  "version": "0.1.0",
-  "main": "app.js",
+  "version": "0.0.9",
+  "main": "compendium.js",
   "bin": {
     "compendium": "./out/src/compendium.js"
   },
   "scripts": {
-    "start": "node ./out/src/app",
+    "start": "node ./out/src/compendium",
+    "compendium": "node ./out/src/compendium",
     "eb": "yarn && yarn build && node ./out/src/app",
     "build": "tsc",
     "debug": "npm run build && node --inspect out/src/app.js",

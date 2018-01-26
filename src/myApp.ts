@@ -1,80 +1,42 @@
 import * as fs from 'fs';
-import { IndexSource, IndexNode, Index, TextInSources, Transcript, TextOut, Merger } from './types';
+import { IndexSource, IndexNode, Index, TextInSources, Transcript, TextOut, Merger, DocConfig } from './types';
 import { AsciiDocFileTextIn, AsciiDocFileTextOut } from './asciidoc';
 import { HtmlFileTextOut } from './html';
 import { MergerImpl } from './merger';
+import { ConfigFile } from './config';
 
-export function doCompendium(configFile: string, format: string, outputFile: string | undefined) {
+export async function doCompendium(configFile: string, format: string, outputFile: string | undefined) {
 
     console.log('\n\n=> Parameters: \n');
     console.log(' Configuration file: ', configFile);
     console.log(' Output format: ', format);
     console.log(' Output file: ', outputFile);
+    console.log('\n');
 
-    // PART I: Read the JSON file config and generate the index
-    // --------------------------------------------------------
-
-    const config = fs.readFileSync(configFile, 'utf8');
-    const data = JSON.parse(config);
+    let docconfig: ConfigFile;
     let fileOutput: TextOut;
-    let merger: Merger = new MergerImpl();
-    let output = 'result';
+    let merger: Merger;
+    
+    // Get Index
+    docconfig = new ConfigFile(configFile);
+    const index = await docconfig.getIndex();
 
+    // Test Out
+    let output = 'result';
     if (outputFile) {
         output = outputFile;
     }
-
-    // Sources
-    let indexSources: IndexSource[] = [];
-    for (const source of data.sources) {
-        if (checkSourceValuesJSON(source)) {
-
-            const indexSource: IndexSource = {
-                key: source.key,
-                kind: source.kind,
-                source: source.source
-            };
-            indexSources.push(indexSource);
-        } else {
-            throw new Error('JSON: Some sources have not a valid property/value');
-        }
-    }
-
-    // Nodes
-    let indexNodes: IndexNode[] = [];
-    for (const node of data.nodes) {
-        if (checkNodeValuesJSON(node)) {
-
-            const indexNode: IndexNode = {
-                key: node.key,
-                kind: node.kind,
-                index: node.index
-            };
-            indexNodes.push(indexNode);
-        } else {
-            throw new Error('JSON: Some nodes have not a valid property/value');
-        }
-    }
-
-    // Index
-    const index: Index = [indexSources, indexNodes];
 
     if (format === 'asciidoc') {
         fileOutput = new AsciiDocFileTextOut(output);
     } else if (format === 'html') {
         fileOutput = new HtmlFileTextOut(output);
     } else {
-        fileOutput =  new AsciiDocFileTextOut(output);
+        const msg = 'Format \''+format+'\' is not implemented yet';
+        throw new Error(msg);
     }
-    // ----
 
-    // Complementary functions for part I
-
-
-    // PART II: Checking TextinSources
-    // --------------------------------
-
-    // Instantiating TextInSources
+    // TextInSources
     let textinSources: TextInSources = {};
     for (const source of index[0]) {
         if (source.kind === 'asciidoc') {
@@ -86,10 +48,12 @@ export function doCompendium(configFile: string, format: string, outputFile: str
         }
     }
     
+    // Merger
+    merger = new MergerImpl();
     try {
-    merger.merge(textinSources, index, fileOutput).then(() => {
-        console.log('COMPENDIUM CREATED!!!');
-    });
+        merger.merge(textinSources, index, fileOutput).then(() => {
+            console.log('\n Process finished!'); // ! This is always shown. Although errors occurr.
+        });
     } catch(e) {
         throw new Error(e);;
     }

@@ -38,7 +38,7 @@ export class HtmlFileTextOut implements TextOut {
             // console.log(outputString);
             let dochtml = this.asciidoctor.convert(outputString);
             dochtml = '<!DOCTYPE html>\n<html>\n<head>\n<meta charset="utf8"/>\n<title>' + title + '</title>\n</head>\n<body>\n' + dochtml + '</body>\n</html>';
-            fs.writeFile(this.outputFile + '.html', dochtml, (err) => { if (err) throw err; console.log('File created'); });
+            fs.writeFile(this.outputFile + '.html', dochtml, (err) => { if (err) throw new Error(err.message);});
         }
 
         this.done = true;

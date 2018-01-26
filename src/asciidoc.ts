@@ -30,7 +30,7 @@ export class AsciiDocFileTextOut implements TextOut {
                 }
             }
             // console.log(outputString);
-            fs.writeFile(this.outputFile + '.adoc', outputString, (err) => { if (err) throw err; console.log('File created'); });
+            fs.writeFile(this.outputFile + '.adoc', outputString, (err) => { if (err) throw new Error(err.message);});
         }
 
         this.done = true;

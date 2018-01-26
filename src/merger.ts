@@ -23,6 +23,8 @@ export class MergerImpl implements Merger {
                 throw new Error(error_msg);
             }
         }
+
         await textout.generate(transcripts);
+
     }
 }
