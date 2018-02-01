@@ -61,7 +61,7 @@ xdescribe('Testing the Input of Text and doc generation', () => {
     });
 });
 
-xdescribe('Testing the Asciidoc Input and Output stream and the file creation ', () => {
+describe('Testing the Asciidoc Input and Output stream and the file creation ', () => {
     before(() => {
         //setup fixture
     });
@@ -72,7 +72,7 @@ xdescribe('Testing the Asciidoc Input and Output stream and the file creation ',
                 let arrayTranscript = [];
                 arrayTranscript.push(transcript);
                 textout.generate(arrayTranscript);
-                if (expect(fs.existsSync('result.adoc'))) {
+                if (fs.existsSync('result.adoc')) {
                     done();
                 } else {
                     done(new Error('File was not created'));
@@ -87,7 +87,43 @@ xdescribe('Testing the Asciidoc Input and Output stream and the file creation ',
         // clean fixture
     });
 });
-xdescribe('Testing the Html Output stream and the file creation ', () => {
+
+describe('Testing if Asciidoc Output is the expected ', () => {
+    before(() => {
+        //setup fixture
+    });
+
+    describe('AsciidocFileTextOut', () => {
+        it('should compare the 2 strings', (done) => {
+            textinAsciidoc.getTranscript('brownfox2.adoc').then((transcript) => {
+                let arrayTranscript = [];
+                arrayTranscript.push(transcript);
+                textout.generate(arrayTranscript);
+                if (fs.existsSync('result.adoc')) {
+
+                    const outputStream = fs.readFileSync('result.adoc', 'utf-8');
+                    const outputArray = outputStream.split('\n');
+                    if (outputArray) {
+                        expect(outputArray[9]).equals('The ~quick~ *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#');
+                        done();
+                    } else {
+                        done(new Error('Incorrect content'));
+                    }
+                } else {
+                    done(new Error('File was not created'));
+                }
+            }).catch((error) => {
+                done(error);
+            });
+        });
+    });
+
+    after(() => {
+        // clean fixture
+    });
+});
+
+describe('Testing the Html Output stream and the file creation ', () => {
     before(() => {
         //setup fixture
     });
@@ -174,7 +210,7 @@ describe('Testing the merge of two files ', () => {
     });
 });
 
-xdescribe('Testing the config and index creation', () => {
+describe('Testing the config and index creation', () => {
     before(() => {
         //setup fixture
     });
@@ -182,8 +218,6 @@ xdescribe('Testing the config and index creation', () => {
     describe('ConfigFile', () => {
         it('should show ', (done) => {
             docconfig.getIndex().then((index) => {
-                console.log('Config received: ');
-                console.log(index);
 
                 assert.isArray(index, 'Index must be an array');
                 assert.isArray(index[0], 'Souces must be an array');
@@ -221,7 +255,7 @@ xdescribe('Testing the config and index creation', () => {
     });
 });
 
-xdescribe('Testing the read stream of the source file ', () => {
+describe('Testing the read stream of the source file ', () => {
     before(() => {
         //setup fixture
     });

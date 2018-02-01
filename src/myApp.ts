@@ -16,7 +16,7 @@ export async function doCompendium(configFile: string, format: string, outputFil
     let docconfig: ConfigFile;
     let fileOutput: TextOut;
     let merger: Merger;
-    
+
     // Get Index
     docconfig = new ConfigFile(configFile);
     const index = await docconfig.getIndex();
@@ -32,7 +32,7 @@ export async function doCompendium(configFile: string, format: string, outputFil
     } else if (format === 'html') {
         fileOutput = new HtmlFileTextOut(output);
     } else {
-        const msg = 'Format \''+format+'\' is not implemented yet';
+        const msg = 'Format \'' + format + '\' is not implemented yet';
         throw new Error(msg);
     }
 

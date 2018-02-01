@@ -1,146 +1,98 @@
 #!/usr/bin/env node
 
-import * as commander from 'commander';
 import chalk from 'chalk';
 import { doCompendium } from './myApp';
 
-let configFile: string | undefined;
-let outputFile: string | undefined;
-let configFromFile = false;
-let outputFormat = 'asciidoc';
+let configFile, outputFile, multiple, outputFormat, inputFormat;
 
 (async () => {
 
-    commander
-        .version('0.0.9')
-        .description('A composition of concise but detailed information about a particular subject obtained from different sources - Github wiki, asciidoc files, Jira, Confluence, etc. - with the aim to be published in a single document, book or other publication.')
-        .option('-f, --config', 'indicates that config source is file')
-        .option('--asciidoc, --asciidoc', 'output file in asciidoc')
-        .option('--html, --html', 'output file in html')
-        .option('--pdf, --pdf', 'output file in pdf')
-        .arguments('<confile> [output]')
-        .action(function (confile:string, output: string) {
-            configFile = confile;
-            outputFile = output;
-        });
-    
-    commander.on('--help', showExamples);
-    
-    commander.parse(process.argv);
+    const cli = require('yargs')
+        .usage('Usaje:\n$0 [-f|-j|-c] <config file | base URL> [--html|--html|--pdf] <output file>\nor\n$0 [-f|-j|-c] <config file | base URL> <--multiple> files')
+        .example('$0 -f config.json --html out', 'Use a config file in current directory and write the result in file out.html')
+        .describe('f', 'Input type: JSON Config file (default)')
+        .describe('j', 'Input type: Jira Base URL')
+        .describe('c', 'Input type: Confluence base URL')
+        .describe('asciidoc', 'Output type: asciidoc file')
+        .describe('html', 'Output type: Html file')
+        .describe('pdf', 'Output type: PDF file')
+        .describe('multiple', 'Create multiple output files')
+        .nargs('f', 1)
+        .nargs('j', 1)
+        .nargs('c', 1)
+        .nargs('html', 1)
+        .nargs('asciidoc', 1)
+        .nargs('pdf', 1)
+        .help('h')
+        .alias('h', 'help')
+        .argv;
+    if ((cli.f && !cli.j && !cli.c) || (!cli.f && cli.j && !cli.c) || (!cli.f && !cli.j && cli.c)) {
 
-    
-    // Argument checker 1: Configuration File
-    if (typeof configFile === 'undefined') {
-        console.error('\n error: configuration file missing'); // Traditional error (like commander)
-        // console.error(` ${chalk.red('Error!')} configuration file missing`); // Customized error
-        commander.help();
-        process.exit(1);
-    }
-    
-    // // Argument checker 2: Output File
-    // if (typeof outputFile === 'undefined') {
-    //     console.error('\n error: output file missing'); // Traditional error (like commander)
-    //     // console.error(` ${chalk.red('Error!')} output file missing`); // Customized error
-    //     commander.help();
-    //     process.exit(1);
-    // }
-    
-    // Option checker 1: Only one output format is allow.
-    if ((typeof commander.asciidoc === 'boolean' && typeof commander.html === 'boolean') ||
-        (typeof commander.asciidoc === 'boolean' && typeof commander.pdf === 'boolean') ||
-        (typeof commander.html === 'boolean' && typeof commander.pdf === 'boolean')) {
-    
-        console.error('\n error: too many output formats defined'); // Traditional error (like commander)
-        //console.error(` ${chalk.red('Error!')} too many output options defined`); // Customized error
-        commander.help();
-        process.exit(1);
-    }
-    
-    // Optional checker 2: More arguments than required (Rude version) // TO IMPROVE
-    if (process.argv.length > 6) { // 6 ->[node, compendium, -f, config, -format, output]
-        console.error('\n error: too many arguments'); // Traditional error (like commander)
-        // console.error(` ${chalk.red('Error!')} too many arguments`); // Customized error
-        commander.help();
-        process.exit(1);
-    }
-    
-    // Assignments of options 1: Config from file
-    if (commander.config) {
-        configFromFile = true;
-    }
-    
-    // Assignments of options 2: Output format
-    if (commander.asciidoc) {
+        if (cli.f) {
+            inputFormat = 'config';
+            configFile = cli.f;
+        } else if (cli.j) {
+            inputFormat = 'jira';
+            configFile = cli.j;
+        } else if (cli.c) {
+            inputFormat = 'confluence';
+            configFile = cli.c;
+        }
+
+        if (inputFormat === 'asciidoc') {
+            if (cli.html) {
+                outputFormat = 'html';
+                outputFile = cli.html;
+            } else if (cli.pdf) {
+                outputFormat = 'pdf';
+                outputFile = cli.pdf;
+            } else if (cli.asciidoc) {
+                outputFormat = 'asciidoc';
+                outputFile = cli.asciidoc;
+            } else if (cli._.length === 1) {
+                outputFormat = 'asciidoc';
+                outputFile = cli._[0];
+            } else if (cli.multiple) {
+                multiple = true;
+                outputFile = cli.multiple;
+            } else {
+                console.error('Incorrect output definition, see --help for usage info');
+            }
+
+            if (outputFormat && cli._ < 1) {
+                console.log('Input file type: ' + inputFormat + '\nOutput file type: ' + outputFormat + '\nConfig: ' + configFile + '\nOutput: ' + outputFile);
+                try {
+                    await doCompendium(configFile, outputFormat, outputFile); // Logic
+                } catch (e) {
+                    console.error(e.message);
+                }
+            } else if (multiple) {
+                console.log('Not implemented yet');
+            } else {
+                console.error('Found extra parameters: ' + cli._);
+            }
+
+        } else if (inputFormat === 'confluence' || inputFormat === 'jira') {
+            console.log('Not implemented yet');
+        } else {
+            console.error('Internal error with input format. Please try again.');
+        }
+
+    } else if (cli._.length === 2) {
+        inputFormat = 'config';
         outputFormat = 'asciidoc';
-    } else if (commander.html) {
-        outputFormat = 'html';
-    } else if (commander.pdf) {
-        outputFormat = 'pdf';
-    }
-    
-    // Logic
-    if (configFile){
+        configFile = cli._[0];
+        outputFile = cli._[1];
+        console.log(cli._.length + '\n');
+        console.log('Input file type: ' + inputFormat + '\nOutput file type: ' + outputFormat + '\nConfig: ' + configFile + '\nOutput: ' + outputFile);
         try {
             await doCompendium(configFile, outputFormat, outputFile); // Logic
         } catch (e) {
-            logError(e)
+            console.error(e.message);
         }
+
     } else {
-        console.error('\n error: there are arguments missing'); // Traditional error (like commander)
-        // console.error(` ${chalk.red('Error!')} there are arguments missing`); // Customized error
-        commander.help();
-        process.exit(1);
+        console.error('Invalid input, see --help for usage info');
     }
+
 })();
-
-function logError(err: any) {
-    if (err) {
-        switch (typeof err) {
-            case 'string':
-                console.log(`\n ${chalk.red('Error!')} ${err}`);
-                break;
-            case 'object':
-                if (err.message) {
-                    console.log(`\n ${chalk.red('Error!')} ${err.message}`)
-                    break;
-                }
-            default:
-                console.log(`\n ${chalk.red('Error!')}\n  ${err}`);
-        }
-    } else {
-        commander.help();
-    }
-}
-
-function showExamples() {
-
-    console.log(`
-
-    Examples:
-    
-        $ compendium  c:\\temp\\trsc-asd.json  c:\\temp\\output\\trsc-design-document.adoc
-
-        $ compendium  –f  c:\\temp\\trsc-asd.json --html c:\\temp\\output\\trsc-design-document.html
-
-        $ compendium  –f  config.json  --asciidoc output.adoc
-
-        $ compendium  config.json --pdf output
-        
-        `);
-}
-
-function showCustomizedHelp() {    // NOT USED
-
-    console.log(` 
-    
-    Usage:           
-    
-    compendium  [-f] <<config/index source>> [--asciidoc|--html|--pdf] <<output doc>>
-    
-        -f         - default. Indicates that config source is file (only option in MVP)
-        --asciidoc – default. Indicates that output doc is in asciidoc format 
-        --html     – output doc in html
-        --pdf      – output doc in pdf (not in MVP)
-    
-        `);
-}
