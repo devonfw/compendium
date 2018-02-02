@@ -5,6 +5,11 @@ import { HtmlFileTextOut } from './html';
 import { MergerImpl } from './merger';
 import { ConfigFile } from './config';
 
+export interface Credentials {
+    username: string;
+    password: string;
+}
+
 export async function doCompendium(configFile: string, format: string, outputFile: string | undefined) {
 
     console.log('\n\n=> Parameters: \n');
@@ -47,15 +52,15 @@ export async function doCompendium(configFile: string, format: string, outputFil
             throw new Error('Unknown TextInSource');
         }
     }
-    
+
     // Merger
     merger = new MergerImpl();
     try {
         merger.merge(textinSources, index, fileOutput).then(() => {
             console.log('\n Process finished!'); // ! This is always shown. Although errors occurr.
         });
-    } catch(e) {
-        throw new Error(e);;
+    } catch (e) {
+        console.error(e.message);
     }
 
 }
@@ -67,7 +72,41 @@ function checkSourceValuesJSON(sourceJSON: any): boolean {
     }
 
     return false;
-};
+}
+
+export async function askInPrompt(): Promise<Credentials> {
+    let prompt = require('prompt');
+    let credentials: Credentials;
+
+    const promise = new Promise<Credentials>((resolve, reject) => {
+
+        prompt.start();
+
+        prompt.get([{
+            name: 'username',
+            required: true,
+        }, {
+            name: 'password',
+            hidden: true,
+            replace: '*',
+            required: true,
+
+        }], (err: any, result: any) => {
+            credentials = {
+                username: result.username,
+                password: result.password,
+            };
+            if (credentials) {
+                resolve(credentials);
+            } else {
+                reject(err.message);
+            }
+        });
+
+    });
+
+    return promise;
+}
 
 function checkNodeValuesJSON(nodeJSON: any): boolean {
 

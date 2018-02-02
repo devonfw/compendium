@@ -19,6 +19,7 @@
     "asciidoctor.js": "^1.5.6-preview.4",
     "chalk": "^2.3.0",
     "html-parse": "0.0.4",
+    "prompt": "^1.0.0",
     "result.ts": "^0.3.1",
     "yargs": "^11.0.0"
   },

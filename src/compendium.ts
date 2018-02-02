@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
 import chalk from 'chalk';
-import { doCompendium } from './myApp';
+import { doCompendium, Credentials, askInPrompt } from './myApp';
 
-let configFile, outputFile, multiple, outputFormat, inputFormat;
+let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
+
 
 (async () => {
 
     const cli = require('yargs')
-        .usage('Usaje:\n$0 [-f|-j|-c] <config file | base URL> [--html|--html|--pdf] <output file>\nor\n$0 [-f|-j|-c] <config file | base URL> <--multiple> files')
+        .usage('Usage:\n$0 [-f|-j|-c] <config file | base URL> [--asciidoc|--html|--pdf] <output file>\nor\n$0 [-f|-j|-c] <config file | base URL> <--multiple> files')
         .example('$0 -f config.json --html out', 'Use a config file in current directory and write the result in file out.html')
         .describe('f', 'Input type: JSON Config file (default)')
         .describe('j', 'Input type: Jira Base URL')
@@ -26,7 +27,10 @@ let configFile, outputFile, multiple, outputFormat, inputFormat;
         .help('h')
         .alias('h', 'help')
         .argv;
+
     if ((cli.f && !cli.j && !cli.c) || (!cli.f && cli.j && !cli.c) || (!cli.f && !cli.j && cli.c)) {
+
+        let myCredentials: Credentials;
 
         if (cli.f) {
             inputFormat = 'config';
@@ -34,12 +38,22 @@ let configFile, outputFile, multiple, outputFormat, inputFormat;
         } else if (cli.j) {
             inputFormat = 'jira';
             configFile = cli.j;
+            try {
+                myCredentials = await askInPrompt();
+            } catch (err) {
+                console.error(err.message);
+            }
         } else if (cli.c) {
             inputFormat = 'confluence';
             configFile = cli.c;
+            try {
+                myCredentials = await askInPrompt();
+            } catch (err) {
+                console.error(err.message);
+            }
         }
 
-        if (inputFormat === 'asciidoc') {
+        if (inputFormat === 'config') {
             if (cli.html) {
                 outputFormat = 'html';
                 outputFile = cli.html;
@@ -59,14 +73,14 @@ let configFile, outputFile, multiple, outputFormat, inputFormat;
                 console.error('Incorrect output definition, see --help for usage info');
             }
 
-            if (outputFormat && cli._ < 1) {
+            if ((outputFormat && outputFormat !== 'pdf' && cli._.length < 1) || (outputFormat === 'asciidoc' && cli._.length === 1)) {
                 console.log('Input file type: ' + inputFormat + '\nOutput file type: ' + outputFormat + '\nConfig: ' + configFile + '\nOutput: ' + outputFile);
                 try {
                     await doCompendium(configFile, outputFormat, outputFile); // Logic
                 } catch (e) {
                     console.error(e.message);
                 }
-            } else if (multiple) {
+            } else if (multiple || outputFormat === 'pdf') {
                 console.log('Not implemented yet');
             } else {
                 console.error('Found extra parameters: ' + cli._);
