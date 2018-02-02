@@ -24,7 +24,7 @@ export class HtmlFileTextOut implements TextOut {
 
                     if (segment.kind === 'textelement') {
                         if (segment.element === 'title') {
-                            title = segment.text;
+                            title = this.paragraphParsed(segment);
                         } else {
                             outputString = outputString + this.textElementParsed(segment) + '\n\n';
                         }
@@ -46,12 +46,12 @@ export class HtmlFileTextOut implements TextOut {
 
     private textElementParsed(myText: TextElement) {
         const textelement = myText.element;
-        if (textelement === 'h1') { return '= ' + myText.text; }
-        if (textelement === 'h2') { return '== ' + myText.text; }
-        if (textelement === 'h3') { return '=== ' + myText.text; }
-        if (textelement === 'h4') { return '==== ' + myText.text; }
+        if (textelement === 'h1') { return '= ' + this.paragraphParsed(myText); }
+        if (textelement === 'h2') { return '== ' + this.paragraphParsed(myText); }
+        if (textelement === 'h3') { return '=== ' + this.paragraphParsed(myText); }
+        if (textelement === 'h4') { return '==== ' + this.paragraphParsed(myText); }
     }
-    private paragraphParsed(myText: Paragraph) {
+    private paragraphParsed(myText: Paragraph | TextElement) {
         let output: string = '';
         for (const content of myText.text) {
             const attrs = content.attrs;

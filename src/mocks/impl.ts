@@ -70,7 +70,10 @@ export class TextInMock implements TextIn {
                 {
                     kind: 'textelement',
                     element: 'h1',
-                    text: 'The fox',
+                    text: [{
+                        attrs: { script: 'normal' },
+                        text: 'The fox',
+                    }],
                 },
                 paragraph,
             ]};

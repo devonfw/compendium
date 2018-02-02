@@ -30,7 +30,7 @@ export class AsciiDocFileTextOut implements TextOut {
                 }
             }
             // console.log(outputString);
-            fs.writeFile(this.outputFile + '.adoc', outputString, (err) => { if (err) throw new Error(err.message);});
+            fs.writeFile(this.outputFile + '.adoc', outputString, (err) => { if (err) throw new Error(err.message); });
         }
 
         this.done = true;
@@ -38,13 +38,13 @@ export class AsciiDocFileTextOut implements TextOut {
 
     private textElementParsed(myText: TextElement) {
         const textelement = myText.element;
-        if (textelement === 'title') { return '= ' + myText.text; }
-        if (textelement === 'h1') { return '= ' + myText.text; }
-        if (textelement === 'h2') { return '== ' + myText.text; }
-        if (textelement === 'h3') { return '=== ' + myText.text; }
-        if (textelement === 'h4') { return '==== ' + myText.text; }
+        if (textelement === 'title') { return '= ' + this.paragraphParsed(myText); }
+        if (textelement === 'h1') { return '= ' + this.paragraphParsed(myText); }
+        if (textelement === 'h2') { return '== ' + this.paragraphParsed(myText); }
+        if (textelement === 'h3') { return '=== ' + this.paragraphParsed(myText); }
+        if (textelement === 'h4') { return '==== ' + this.paragraphParsed(myText); }
     }
-    private paragraphParsed(myText: Paragraph) {
+    private paragraphParsed(myText: Paragraph | TextElement) {
         let output: string = '';
         for (const content of myText.text) {
             const attrs = content.attrs;
@@ -141,27 +141,27 @@ export class AsciiDocFileTextIn implements TextIn {
         if (node.children) {
             if (node.name === 'title') {
 
-                out = { kind: 'textelement', element: 'title', text: node.children[0].data };
+                out = { kind: 'textelement', element: 'title', text: this.pharagraphs(node.children) };
                 result.push(out);
 
             } else if (node.name === 'h1') {
 
-                out = { kind: 'textelement', element: 'h1', text: node.children[0].data };
+                out = { kind: 'textelement', element: 'h1', text: this.pharagraphs(node.children) };
                 result.push(out);
 
             } else if (node.name === 'h2') {
 
-                out = { kind: 'textelement', element: 'h2', text: node.children[0].data };
+                out = { kind: 'textelement', element: 'h2', text: this.pharagraphs(node.children) };
                 result.push(out);
 
             } else if (node.name === 'h3') {
 
-                out = { kind: 'textelement', element: 'h3', text: node.children[0].data };
+                out = { kind: 'textelement', element: 'h3', text: this.pharagraphs(node.children) };
                 result.push(out);
 
             } else if (node.name === 'h4') {
 
-                out = { kind: 'textelement', element: 'h4', text: node.children[0].data };
+                out = { kind: 'textelement', element: 'h4', text: this.pharagraphs(node.children) };
                 result.push(out);
 
             }

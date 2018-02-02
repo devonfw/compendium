@@ -27,7 +27,7 @@ export type RichText  = Array<RichString>;
 export interface TextElement {
     kind: 'textelement';
     element: ElementType;
-    text: string;
+    text: RichText;
 }
 
 export interface Paragraph {
