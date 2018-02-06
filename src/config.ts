@@ -1,10 +1,10 @@
-import {TextInSource, TextInSources, Index, IndexNode, IndexSource, DocConfig} from './types';
-import {TextInMock, TextOutMock} from './mocks/impl';
+import { TextInSource, TextInSources, Index, IndexNode, IndexSource, DocConfig } from './types';
+import { TextInMock, TextOutMock } from './mocks/impl';
 import * as fs from 'fs';
 
 export let mock = false;
 
-export class ConfigFile implements DocConfig{
+export class ConfigFile implements DocConfig {
 
     public configPath: string;
 
@@ -21,14 +21,18 @@ export class ConfigFile implements DocConfig{
         for (const source of data.sources) {
             if (this.checkSourceValuesJSON(source)) {
 
-                const indexSource: IndexSource = {
+                let indexSource: IndexSource = {
                     key: source.key,
                     kind: source.kind,
                     source: source.source,
                 };
+                if (source.kind === 'confluence') {
+                    indexSource.space = source.space;
+                    indexSource.context = source.context;
+                }
                 indexSources.push(indexSource);
             } else {
-                throw new Error('JSON: Some sources have not a valid property/value');
+                throw new Error('JSON: Some sources don\'t have a valid property/value');
             }
         }
 
@@ -44,14 +48,14 @@ export class ConfigFile implements DocConfig{
                 };
                 if (node.sections !== null && node.sections !== '' && node.sections !== undefined) {
                     if (node.sections.isArray()) {
-                    indexNode.sections = node.sections;
+                        indexNode.sections = node.sections;
                     } else {
                         console.log('The array of sections in ' + node.index + ' is malformed. All document will be loaded.\n');
                     }
                 }
                 indexNodes.push(indexNode);
             } else {
-                throw new Error('JSON: Some nodes have not a valid property/value');
+                throw new Error('JSON: Some nodes don\'t have a valid property/value');
             }
         }
 
@@ -60,21 +64,46 @@ export class ConfigFile implements DocConfig{
 
         return index;
     }
-    private checkSourceValuesJSON(sourceJSON: any): boolean {
+    private checkSourceValuesJSON(sourceJSON: any): boolean { // TODO: Refactor
 
-        if (sourceJSON.key && sourceJSON.key !== '' && sourceJSON.kind && (sourceJSON.kind === 'asciidoc' || sourceJSON.kind === 'jira')) { // ! Checking kind content isn't scalable
-            return true;
+        let valid = true;
+
+        // I. Common values
+        if (sourceJSON.key && sourceJSON.key !== '' && sourceJSON.kind && (sourceJSON.kind === 'asciidoc' || sourceJSON.kind === 'confluence')) { // ! Checking kind content isn't scalable         
+
+            // II. Confluence values
+            if (sourceJSON.kind === 'confluence') {
+                if (sourceJSON.space && sourceJSON.space !== '' && sourceJSON.context) { // TODO: Specify possible context values
+                    valid = true;
+                    //return true;
+                } else {
+                    valid = false;
+                }
+            }
+
+        } else {
+            valid = false;
         }
 
-        return false;
+        return valid;
     }
 
     private checkNodeValuesJSON(nodeJSON: any): boolean {
 
+        let valid = true;
+
+        // I. Common values
         if (nodeJSON.index && nodeJSON.index !== '') {
-            return true;
+
+            // II. Confluence values
+            if (nodeJSON.kind && nodeJSON.kind === 'confluence' && nodeJSON.index.indexOf(' ') !== -1) { // Blancspaces are forbiden
+                valid = false;
+            }
+
+        } else {
+            valid = false;
         }
 
-        return false;
+        return valid;
     }
 }

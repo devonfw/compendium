@@ -8,7 +8,7 @@ export class MergerImpl implements Merger {
 
         const transcripts: Array<Transcript> = [];
         for (const node of index[1]){
-            if (node.kind === 'asciidoc' || node.kind === 'jira') {
+            if (node.kind === 'asciidoc' || node.kind === 'confluence') {
                 if (textinSources[node.key]) {
                     try{
                         transcripts.push(await textinSources[node.key].getTranscript(node.index)); // The bind is by key -> A source identifier. The call to the method is customized for every node.

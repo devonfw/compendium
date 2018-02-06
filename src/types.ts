@@ -81,11 +81,13 @@ export interface Merger {
 
 }
 
-export interface IndexSource{
+export interface IndexSource {  // Updated
 
     key: string;
     kind: TextInSource;
     source: string;
+    space?: string | undefined; // For confluence
+    context?: string | undefined; // For confluence
 }
 
 export interface IndexNode {
@@ -112,3 +114,18 @@ export interface TextOut {
 
     generate(data: Array<Transcript>): Promise<void>;
 }
+
+// New types for confluence implementation
+
+export interface Cookie {
+    name: string;
+    value: string;
+}
+
+export type Cookies = Array<Cookie>;
+
+export interface ConfluenceService {
+
+    getContent(URL: string, cookie: Cookies): Promise<JSON>;
+}
+

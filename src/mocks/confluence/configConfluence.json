@@ -1,0 +1,18 @@
+{
+    "sources": [
+        {
+            "key": "JQ",
+            "kind": "confluence",
+            "source": "https://adcenter.pl.s2-eu.capgemini.com/confluence/",
+            "space": "JQ",
+            "context": "sso"
+        }
+    ],
+    "nodes": [
+        {
+            "key": "JQ",
+            "kind": "confluence",
+            "index": "Jump+the+queue+Home"
+        }
+    ]
+}

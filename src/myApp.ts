@@ -1,9 +1,10 @@
 import * as fs from 'fs';
-import { IndexSource, IndexNode, Index, TextInSources, Transcript, TextOut, Merger, DocConfig } from './types';
+import { IndexSource, IndexNode, Index, TextInSources, Transcript, TextOut, Merger, DocConfig, Cookie, Cookies } from './types';
 import { AsciiDocFileTextIn, AsciiDocFileTextOut } from './asciidoc';
 import { HtmlFileTextOut } from './html';
 import { MergerImpl } from './merger';
 import { ConfigFile } from './config';
+import { ConfluenceTextIn } from './confluence';
 
 export interface Credentials {
     username: string;
@@ -11,6 +12,11 @@ export interface Credentials {
 }
 
 export async function doCompendium(configFile: string, format: string, outputFile: string | undefined) {
+
+    // Mock Data
+    const brandNewDayProdCookie: Cookie = { name: 'brandNewDayProd', value: 'AQIC5wM2LY4SfczZfyHQ96XxEH2GxIPOO8uOp9J5YeY9F70.*AAJTSQACMDMAAlNLABQtNTIzOTg2NTQxOTM4MTkxNjM0MAACUzEAAjAx*' };
+
+    const cookiesMock: Cookies = [brandNewDayProdCookie];
 
     console.log('\n\n=> Parameters: \n');
     console.log(' Configuration file: ', configFile);
@@ -46,8 +52,8 @@ export async function doCompendium(configFile: string, format: string, outputFil
     for (const source of index[0]) {
         if (source.kind === 'asciidoc') {
             textinSources[source.key] = new AsciiDocFileTextIn(source.source); // The bind is by key -> A source identifier
-        // } else if (source.kind === 'jira') {
-        //     textinSources[source.key] = new TextInJira(source.source);
+        } else if (source.kind === 'confluence') {
+            textinSources[source.key] = new ConfluenceTextIn(source.source, source.space, cookiesMock);
         } else {
             throw new Error('Unknown TextInSource');
         }
@@ -63,15 +69,6 @@ export async function doCompendium(configFile: string, format: string, outputFil
         console.error(e.message);
     }
 
-}
-
-function checkSourceValuesJSON(sourceJSON: any): boolean {
-
-    if (sourceJSON.key && sourceJSON.key !== '' && sourceJSON.kind && (sourceJSON.kind === 'asciidoc' || sourceJSON.kind === 'jira')) { // ! Checking kind content isn't scalable
-        return true;
-    }
-
-    return false;
 }
 
 export async function askInPrompt(): Promise<Credentials> {
@@ -106,13 +103,4 @@ export async function askInPrompt(): Promise<Credentials> {
     });
 
     return promise;
-}
-
-function checkNodeValuesJSON(nodeJSON: any): boolean {
-
-    if (nodeJSON.index && nodeJSON.index !== '') {
-        return true;
-    }
-
-    return false;
 }

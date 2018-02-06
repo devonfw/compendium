@@ -21,7 +21,7 @@ const textinSources: TextInSources = {};
     for (const source of index[0]){
         if (source.kind === 'asciidoc') {
             textinSources[source.key] = new AsciiDocFileTextIn(source.source); // The bind is by key -> A source identifier
-        } else if (source.kind === 'jira') {
+        //} else if (source.kind === 'jira') {
             //textinSources[source.key] = new TextInJira(source.source);
         } else {
             throw new Error('Unknown TextInSource');
