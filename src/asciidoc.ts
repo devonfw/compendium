@@ -103,11 +103,11 @@ export class AsciiDocFileTextOut implements TextOut {
                 output = output + '| ';
                 for (const inside of cell.cell) {
                     if (inside.kind === 'paragraph') {
-                        output = output + this.paragraphParsed(inside);
+                        output = output + this.paragraphParsed(inside) + ' ';
                     } else if (inside.kind === 'inlineimage') {
-                        output = output + this.imageParsed(inside);
+                        output = output + this.imageParsed(inside) + ' ';
                     } else if (inside.kind === 'table') {
-                        output = output + this.tableParsed(inside.content);
+                        output = output + this.tableParsed(inside.content) + ' ';
                     }
                 }
             }
