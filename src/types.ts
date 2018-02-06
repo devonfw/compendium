@@ -4,7 +4,7 @@ export type ScriptType = 'super' | 'sub' | 'normal';
 
 export type ElementType = 'title' | 'h1' | 'h2' | 'h3' | 'h4';
 
-export type TextInSource = 'asciidoc' | 'jira';
+export type TextInSource = 'asciidoc' | 'jira' | 'confluence';
 
 export interface TextInSources {
     [key: string]: TextIn;
@@ -41,9 +41,34 @@ export interface InlineImage {
     title: string;
 }
 
+export interface Table {
+    kind: 'table';
+    content: TableBody;
+}
+
+export interface TableBody {
+    colgroup: Array<Col>;
+    body: Array<Row>;
+}
+
+export interface Col {
+    span?: string;
+    style: string;
+}
+export type Row = Array<Cell>;
+
+export interface Cell {
+    type: CellType;
+    colspan: string;
+    cell: Array<TableSegment>;
+}
+
+export type CellType = 'th' | 'td';
+
 //"Sum type" o "Discriminated Union" o "Tagged Union" todo nombres para
 // lomismo type:  https://blog.mariusschulz.com/2016/11/03/typescript-2-0-tagged-union-types
-export type TextSegment = TextElement | Paragraph | InlineImage;
+export type TextSegment = TextElement | Paragraph | InlineImage | Table;
+export type TableSegment = Paragraph | InlineImage | Table;
 
 export interface Transcript {
 

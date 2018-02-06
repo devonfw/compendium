@@ -1,4 +1,4 @@
-import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes } from './types';
+import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes, Table, TableBody, Col, Row, Cell, TableSegment } from './types';
 import * as fs from 'fs';
 
 export class AsciiDocFileTextOut implements TextOut {
@@ -26,6 +26,8 @@ export class AsciiDocFileTextOut implements TextOut {
                         outputString = outputString + this.paragraphParsed(segment) + '\n\n';
                     } else if (segment.kind === 'inlineimage') {
                         outputString = outputString + this.imageParsed(segment) + '\n\n';
+                    } else if (segment.kind === 'table') {
+                        outputString = outputString + this.tableParsed(segment.content) + '\n\n';
                     }
                 }
             }
@@ -89,8 +91,30 @@ export class AsciiDocFileTextOut implements TextOut {
         return output;
     }
 
-    private imageParsed(myText: InlineImage){
+    private imageParsed(myText: InlineImage) {
         return 'image::' + myText.img + '[' + myText.title + ']';
+    }
+
+    private tableParsed(content: TableBody) {
+        let output: string;
+        output = '|==================\n';
+        for (const row of content.body) {
+            for (const cell of row) {
+                output = output + '| ';
+                for (const inside of cell.cell) {
+                    if (inside.kind === 'paragraph') {
+                        output = output + this.paragraphParsed(inside);
+                    } else if (inside.kind === 'inlineimage') {
+                        output = output + this.imageParsed(inside);
+                    } else if (inside.kind === 'table') {
+                        output = output + this.tableParsed(inside.content);
+                    }
+                }
+            }
+            output = output + '\n';
+        }
+        output = output + '|==================\n';
+        return output;
     }
 
 }
@@ -112,7 +136,7 @@ export class AsciiDocFileTextIn implements TextIn {
         const doc = fs.readFileSync(dir, 'utf-8');
 
         const dochtml = this.asciidoctor.convert(doc);
-        //console.log(dochtml);
+        console.log(dochtml);
 
         const tree = this.htmlparse.parse(dochtml);
 
@@ -128,7 +152,7 @@ export class AsciiDocFileTextIn implements TextIn {
 
         transcript.segments = end;
 
-        // console.dir(JSON.stringify(transcript));
+        console.dir(JSON.stringify(transcript));
 
         return transcript;
 
@@ -196,18 +220,19 @@ export class AsciiDocFileTextIn implements TextIn {
             } else {
                 if (node.name === 'p') {
                     out = { kind: 'paragraph', text: this.pharagraphs(node.children) };
-                    for (const temp of out.text) {
-                        // console.log(temp.text);
-                    }
                     result.push(out);
 
                 } else if (node.name === 'img') {
                     let img: InlineImage = {
                         kind: 'inlineimage',
                         img: node.attribs.src,
-                        title: node.attribs.alt
+                        title: node.attribs.alt,
                     };
                     result.push(img);
+                } else if (node.name === 'table') {
+
+                    out = { kind: 'table', content: this.table(node.children) };
+                    result.push(out);
 
                 } else {
                     for (const child of node.children) {
@@ -221,6 +246,100 @@ export class AsciiDocFileTextIn implements TextIn {
                         }
                     }
                 }
+            }
+        }
+
+        return result;
+    }
+    public table(node: Array<any>): TableBody {
+
+        let result: TableBody;
+        let colspan: Array<Col>;
+        let colRow: Array<Col> = [];
+        let bodyRows: Array<Row> = [];
+
+        for (const child of node) {
+            if (child.name === 'tbody') {
+                for (const row of child.children) {
+                    if (row.name === 'tr') {
+                        let resultRow: Row = [];
+                        for (const cell of row.children) {
+                            let element: Cell;
+                            let colespan: string = '';
+
+                            if (cell.name === 'th') {
+                                if (cell.attribs.colespan) {
+                                    colespan = cell.attribs.colespan;
+                                }
+                                if (cell.children[0].name !== 'br') {
+                                    const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs(cell.children) };
+                                    element = { type: 'th', colspan: colespan, cell: [p] };
+                                    resultRow.push(element);
+                                }
+                            } else if (cell.name === 'td') {
+                                if (cell.attribs.colespan) {
+                                    colespan = cell.attribs.colespan;
+                                }
+                                if (cell.children[0].name !== 'br') {
+                                    const contentCell = this.tableTd(cell.children);
+                                    if (contentCell) {
+                                        element = { type: 'td', colspan: colespan, cell: contentCell };
+                                        resultRow.push(element);
+                                    }
+                                }
+                            }
+                        }
+                        bodyRows.push(resultRow);
+                    }
+                }
+
+            } else if (child.name === 'colgroup') {
+                for (const col of child.children) {
+                    let element: Col;
+                    let colespan: string = '\\"1\\"';
+
+                    if (col.name === 'col') {
+                        if (col.attribs.colespan) {
+                            colespan = col.attribs.colespan;
+                        }
+
+                        element = {
+                            span: colespan,
+                            style: col.attribs.style,
+                        };
+                        colRow.push(element);
+                    }
+                }
+            }
+        }
+
+        result = {
+            colgroup: colRow,
+            body: bodyRows,
+        };
+
+        return result;
+    }
+    public tableTd(node: any): Array<TableSegment>{
+        let result: Array<TableSegment> = [];
+        for (const child of node) {
+            let out: TableSegment;
+            if (child.name === 'p') {
+                out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
+                result.push(out);
+            } else if (child.name === 'img') {
+                let img: InlineImage = {
+                    kind: 'inlineimage',
+                    img: child.attribs.src,
+                    title: child.attribs.alt,
+                };
+                result.push(img);
+            } else if (child.name === 'table') {
+                out = { kind: 'table', content: this.table(child.children) };
+                result.push(out);
+            } else if (child.name === 'span') {
+                out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
+                result.push(out);
             }
         }
 
