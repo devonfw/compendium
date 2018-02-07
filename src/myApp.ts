@@ -14,7 +14,7 @@ export interface Credentials {
 export async function doCompendium(configFile: string, format: string, outputFile: string | undefined) {
 
     // Mock Data
-    const brandNewDayProdCookie: Cookie = { name: 'brandNewDayProd', value: 'AQIC5wM2LY4SfczZfyHQ96XxEH2GxIPOO8uOp9J5YeY9F70.*AAJTSQACMDMAAlNLABQtNTIzOTg2NTQxOTM4MTkxNjM0MAACUzEAAjAx*' };
+    const brandNewDayProdCookie: Cookie = { name: 'brandNewDayProd', value: 'AQIC5wM2LY4SfcxV8-VgMyIWyq_IgeQTSr7FEv3Pk3YLncA.*AAJTSQACMDMAAlNLABQtODMzOTE5MDQ1ODczOTE0MTY1NgACUzEAAjAx*' };
 
     const cookiesMock: Cookies = [brandNewDayProdCookie];
 
