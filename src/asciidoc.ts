@@ -49,44 +49,50 @@ export class AsciiDocFileTextOut implements TextOut {
     private paragraphParsed(myText: Paragraph | TextElement) {
         let output: string = '';
         for (const content of myText.text) {
-            const attrs = content.attrs;
-            let text = content.text;
-            let blankFirst = false, blankLast = false;
 
-            if (text.charAt(text.length - 1) === ' '){
-                blankLast = true;
-            }
-            if (text.charAt(0) === ' ') {
-                blankFirst = true;
-            }
-            text = text.trim();
+            if ((content as InlineImage).kind === 'inlineimage') {
+                output = output + this.imageParsed((content as InlineImage));
 
-            if (attrs.underline) { text = '[.underline]#' + text + '#'; }
-            if (attrs.cursive) { text = '_' + text + '_'; }
-            if (attrs.strong) { text = '*' + text + '*'; }
-            if (attrs.script === 'normal') {
-                text = text;
-            } else if (attrs.script === 'sub') {
-                text = '~' + text + '~';
-            } else if (attrs.script === 'super') {
-                text = '^' + text + '^';
-            }
+            } else if ((content as RichString).text) {
 
-            if (blankLast) {
-                text = text + ' ';
-            }
-            if (blankFirst) {
-                text = ' ' + text;
-            }
-            if (output === '') {
-                output = text;
-            } else {
-                if (output.charAt(output.length - 1) !== ' ' && text.charAt(0) !== ' ') {
-                    output = output + ' ';
+                const attrs = (content as RichString).attrs;
+                let text = (content as RichString).text;
+                let blankFirst = false, blankLast = false;
+
+                if (text.charAt(text.length - 1) === ' '){
+                    blankLast = true;
                 }
-                output = output + text;
-            }
+                if (text.charAt(0) === ' ') {
+                    blankFirst = true;
+                }
+                text = text.trim();
 
+                if (attrs.underline) { text = '[.underline]#' + text + '#'; }
+                if (attrs.cursive) { text = '_' + text + '_'; }
+                if (attrs.strong) { text = '*' + text + '*'; }
+                if (attrs.script === 'normal') {
+                    text = text;
+                } else if (attrs.script === 'sub') {
+                    text = '~' + text + '~';
+                } else if (attrs.script === 'super') {
+                    text = '^' + text + '^';
+                }
+
+                if (blankLast) {
+                    text = text + ' ';
+                }
+                if (blankFirst) {
+                    text = ' ' + text;
+                }
+                if (output === '') {
+                    output = text;
+                } else {
+                    if (output.charAt(output.length - 1) !== ' ' && text.charAt(0) !== ' ') {
+                        output = output + ' ';
+                    }
+                    output = output + text;
+                }
+            }
         }
         return output;
     }
@@ -274,8 +280,11 @@ export class AsciiDocFileTextIn implements TextIn {
                                 if (cell.children[0].name !== 'br') {
                                     const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs(cell.children) };
                                     element = { type: 'th', colspan: colespan, cell: [p] };
-                                    resultRow.push(element);
+                                } else {
+                                    const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([' ']) };
+                                    element = { type: 'th', colspan: colespan, cell: [p] };
                                 }
+                                resultRow.push(element);
                             } else if (cell.name === 'td') {
                                 if (cell.attribs.colespan) {
                                     colespan = cell.attribs.colespan;
@@ -286,6 +295,9 @@ export class AsciiDocFileTextIn implements TextIn {
                                         element = { type: 'td', colspan: colespan, cell: contentCell };
                                         resultRow.push(element);
                                     }
+                                } else {
+                                    const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([' ']) };
+                                    element = { type: 'th', colspan: colespan, cell: [p] };
                                 }
                             }
                         }
@@ -352,8 +364,15 @@ export class AsciiDocFileTextIn implements TextIn {
         //console.log('My params ' + myParams + '\n');
         //console.dir(node, { depth: null });
         for (const child of node) {
-            if (child.children) {
-                let para = this.pharagraphs(child.children);
+            if (child.name === 'img') {
+                const img: InlineImage = {
+                    kind: 'inlineimage',
+                    img: child.attribs.src,
+                    title: child.attribs.alt,
+                };
+                result.push(img);
+            } else if (child.children) {
+                let para: Array<RichString> = this.pharagraphs(child.children);
 
                 if (child.name) {
                     let newParam = child;
@@ -393,8 +412,8 @@ export class AsciiDocFileTextIn implements TextIn {
         return result;
 
     }
-    public putMyAttribute(para: RichText, myParam: string): RichText {
-        let paragraph: RichText = [];
+    public putMyAttribute(para: Array<RichString>, myParam: string): Array<RichString> {
+        let paragraph: Array<RichString> = [];
         // console.log(myParam);
         // tslint:disable-next-line:forin
         for (const par of para) {

@@ -22,7 +22,7 @@ export interface RichString {
     text: string;
 }
 
-export type RichText  = Array<RichString>;
+export type RichText  = Array<RichString | InlineImage>;
 
 export interface TextElement {
     kind: 'textelement';
