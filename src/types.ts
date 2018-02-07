@@ -41,6 +41,12 @@ export interface InlineImage {
     title: string;
 }
 
+export interface List {
+    kind: 'list';
+    ordered: boolean;
+    elements: Array<RichText>;
+}
+
 export interface Table {
     kind: 'table';
     content: TableBody;
@@ -67,8 +73,8 @@ export type CellType = 'th' | 'td';
 
 //"Sum type" o "Discriminated Union" o "Tagged Union" todo nombres para
 // lomismo type:  https://blog.mariusschulz.com/2016/11/03/typescript-2-0-tagged-union-types
-export type TextSegment = TextElement | Paragraph | InlineImage | Table;
-export type TableSegment = Paragraph | InlineImage | Table;
+export type TextSegment = TextElement | Paragraph | InlineImage | Table | List;
+export type TableSegment = Paragraph | InlineImage | Table | List;
 
 export interface Transcript {
 

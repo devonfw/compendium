@@ -240,6 +240,16 @@ export class AsciiDocFileTextIn implements TextIn {
                     out = { kind: 'table', content: this.table(node.children) };
                     result.push(out);
 
+                } else if (node.name === 'ul') {
+
+                    out = { kind: 'list', ordered: false, elements: this.list(node.children) };
+                    result.push(out);
+
+                } else if (node.name === 'ol') {
+
+                    out = { kind: 'list', ordered: true, elements: this.list(node.children) };
+                    result.push(out);
+
                 } else {
                     for (const child of node.children) {
                         let inter = this.recursive(child);
@@ -257,6 +267,18 @@ export class AsciiDocFileTextIn implements TextIn {
 
         return result;
     }
+    public list(node: Array<any>): Array<RichText> {
+        let result: Array<RichText> = [];
+        let out: RichText;
+        for (const li of node) {
+            if (li.name === 'li') {
+                out = this.pharagraphs(li.children);
+                result.push(out);
+            }
+        }
+        return result;
+    }
+
     public table(node: Array<any>): TableBody {
 
         let result: TableBody;
@@ -351,6 +373,12 @@ export class AsciiDocFileTextIn implements TextIn {
                 result.push(out);
             } else if (child.name === 'span') {
                 out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
+                result.push(out);
+            } else if (node.name === 'ul') {
+                out = { kind: 'list', ordered: false, elements: this.list(node.children) };
+                result.push(out);
+            } else if (node.name === 'ol') {
+                out = { kind: 'list', ordered: true, elements: this.list(node.children) };
                 result.push(out);
             }
         }
