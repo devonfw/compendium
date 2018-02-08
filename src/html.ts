@@ -128,23 +128,30 @@ export class HtmlFileTextOut implements TextOut {
         return output;
     }
 
-    private listParsed(list: List) {
+    private listParsed(list: List, notation?: string) {
         let output: string = '';
-        const content = list.elements;
-        let notation = '*';
-        if (list.ordered) {
-            notation = '.';
+        if (!notation) {
+            notation = '*';
+            if (list.ordered) {
+                notation = '.';
+            }
+        } else {
+
+            if (list.ordered) {
+                notation = notation + '.';
+            } else {
+                notation = notation + '*';
+            }
         }
-        for (const element of content) {
+        for (const element of list.elements) {
             if ((element as List).kind === 'list') {
-                output = notation + this.listParsed((element as List));
+                output = output + this.listParsed((element as List), notation);
             } else if ((element as Paragraph).kind === 'paragraph') {
-                output = notation + ' ' + this.paragraphParsed((element as Paragraph));
+                output = output + notation + ' ' + this.paragraphParsed((element as Paragraph)) + '\n';
             } else if ((element as RichText)[0]) {
                 const temp: Paragraph = { kind: 'paragraph', text: (element as RichText) };
-                output = notation + ' ' + this.paragraphParsed(temp);
+                output = output + notation + ' ' + this.paragraphParsed(temp) + '\n';
             }
-            output = output + '\n';
         }
         return output;
     }
