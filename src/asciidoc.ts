@@ -1,4 +1,4 @@
-import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes, Table, TableBody, Col, Row, Cell, TableSegment } from './types';
+import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes, Table, TableBody, Col, Row, Cell, TableSegment, List } from './types';
 import * as fs from 'fs';
 
 export class AsciiDocFileTextOut implements TextOut {
@@ -28,6 +28,8 @@ export class AsciiDocFileTextOut implements TextOut {
                         outputString = outputString + this.imageParsed(segment) + '\n\n';
                     } else if (segment.kind === 'table') {
                         outputString = outputString + this.tableParsed(segment.content) + '\n\n';
+                    } else if (segment.kind === 'list') {
+                        outputString = outputString + this.listParsed(segment) + '\n\n';
                     }
                 }
             }
@@ -114,12 +116,42 @@ export class AsciiDocFileTextOut implements TextOut {
                         output = output + this.imageParsed(inside) + ' ';
                     } else if (inside.kind === 'table') {
                         output = output + this.tableParsed(inside.content) + ' ';
+                    } else if (inside.kind === 'list') {
+                        output = output + this.listParsed(inside) + ' ';
                     }
                 }
             }
             output = output + '\n';
         }
         output = output + '|==================\n';
+        return output;
+    }
+
+    private listParsed(list: List, notation?: string) {
+        let output: string = '';
+        if (!notation) {
+            notation = '*';
+            if (list.ordered) {
+                notation = '.';
+            }
+        } else {
+
+            if (list.ordered) {
+                notation = notation + '.';
+            } else {
+                notation = notation + '*';
+            }
+        }
+        for (const element of list.elements) {
+            if ((element as List).kind === 'list'){
+                output = output + this.listParsed((element as List), notation);
+            } else if ((element as Paragraph).kind === 'paragraph') {
+                output = output + notation + ' ' + this.paragraphParsed((element as Paragraph)) + '\n';
+            } else if ((element as RichText)[0]) {
+                const temp: Paragraph = { kind: 'paragraph', text: (element as RichText) };
+                output = output + notation + ' ' + this.paragraphParsed(temp) + '\n';
+            }
+        }
         return output;
     }
 
@@ -267,13 +299,38 @@ export class AsciiDocFileTextIn implements TextIn {
 
         return result;
     }
-    public list(node: Array<any>): Array<RichText> {
-        let result: Array<RichText> = [];
-        let out: RichText;
+    public list(node: Array<any>): Array<RichText | List | Paragraph> {
+        let result: Array<RichText | List | Paragraph> = [];
+        let out: RichText | List | Paragraph;
         for (const li of node) {
             if (li.name === 'li') {
-                out = this.pharagraphs(li.children);
-                result.push(out);
+                for (const child of li.children)
+                    if (child.type === 'text' && child.data !== '\n') {
+                        out = this.pharagraphs([child]);
+                        result.push(out);
+                    } else if (child.name === 'ul') {
+                        out = { kind: 'list', ordered: false, elements: this.list(child.children) };
+                        result.push(out);
+                    } else if (child.name === 'ol') {
+                        out = { kind: 'list', ordered: true, elements: this.list(child.children) };
+                        result.push(out);
+                    } else if (child.name === 'p') {
+                        out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
+                        result.push(out);
+                    } else if (child.name === 'div') {
+                        for (const element of child.children) {
+                            if (element.name === 'ol'){
+                                out = { kind: 'list', ordered: true, elements: this.list(element.children) };
+                                result.push(out);
+                            } else if (element.name === 'ul') {
+                                out = { kind: 'list', ordered: false, elements: this.list(element.children) };
+                                result.push(out);
+                            }
+                        }
+                    } else if (!child.data){
+                        out = this.pharagraphs(child.children);
+                        result.push(out);
+                    }
             }
         }
         return result;
@@ -400,7 +457,7 @@ export class AsciiDocFileTextIn implements TextIn {
                 };
                 result.push(img);
             } else if (child.children) {
-                let para: Array<RichString> = this.pharagraphs(child.children);
+                let para: Array<RichString | InlineImage> = this.pharagraphs(child.children);
 
                 if (child.name) {
                     let newParam = child;
@@ -408,7 +465,7 @@ export class AsciiDocFileTextIn implements TextIn {
                     if (child.name === 'span' && child.attribs.class === 'underline') {
                         newParam.name = 'underline';
                     }
-                    para = this.putMyAttribute(para, newParam.name);
+                    para = this.putMyAttribute((para as Array<RichString>), newParam.name);
                 }
                 if (para && para.length > 0) {
                     //console.log('Concat paragraph: (Node length: ' + para.length + ')'); // OK

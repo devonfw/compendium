@@ -44,7 +44,7 @@ export interface InlineImage {
 export interface List {
     kind: 'list';
     ordered: boolean;
-    elements: Array<RichText>;
+    elements: Array<RichText | List | Paragraph>;
 }
 
 export interface Table {

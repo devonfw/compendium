@@ -1,4 +1,4 @@
-import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes, Cookies, ConfluenceService, TableSegment, TableBody, Col, Row, Cell } from './types';
+import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes, Cookies, ConfluenceService, TableSegment, TableBody, Col, Row, Cell, List } from './types';
 import * as fs from 'fs';
 import { ConfluenceServiceImpl } from './confluence/confluenceService';
 
@@ -239,6 +239,16 @@ export class ConfluenceTextIn implements TextIn {
                     out = { kind: 'table', content: this.table(node.children) };
                     result.push(out);
 
+                } else if (node.name === 'ul') {
+
+                    out = { kind: 'list', ordered: false, elements: this.list(node.children) };
+                    result.push(out);
+
+                } else if (node.name === 'ol') {
+
+                    out = { kind: 'list', ordered: true, elements: this.list(node.children) };
+                    result.push(out);
+
                 } else {
                     for (const child of node.children) {
                         let inter = this.recursive(child);
@@ -256,6 +266,33 @@ export class ConfluenceTextIn implements TextIn {
 
         return result;
     }
+    public list(node: Array<any>): Array<RichText | List | Paragraph> {
+        let result: Array<RichText | List | Paragraph> = [];
+        let out: RichText | List | Paragraph;
+        for (const li of node) {
+            if (li.name === 'li') {
+                for (const child of li.children)
+                    if (child.type === 'text' && child.data !== '\n') {
+                        out = this.pharagraphs([child]);
+                        result.push(out);
+                    } else if (child.name === 'ul') {
+                        out = { kind: 'list', ordered: false, elements: this.list(child.children) };
+                        result.push(out);
+                    } else if (child.name === 'ol') {
+                        out = { kind: 'list', ordered: true, elements: this.list(child.children) };
+                        result.push(out);
+                    } else if (child.name === 'p') {
+                        out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
+                        result.push(out);
+                    } else if (!child.data) {
+                        out = this.pharagraphs(child.children);
+                        result.push(out);
+                    }
+            }
+        }
+        return result;
+    }
+
     public table(node: Array<any>): TableBody {
 
         let result: TableBody;
@@ -279,8 +316,11 @@ export class ConfluenceTextIn implements TextIn {
                                 if (cell.children[0].name !== 'br') {
                                     const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs(cell.children) };
                                     element = { type: 'th', colspan: colespan, cell: [p] };
-                                    resultRow.push(element);
+                                } else {
+                                    const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([' ']) };
+                                    element = { type: 'th', colspan: colespan, cell: [p] };
                                 }
+                                resultRow.push(element);
                             } else if (cell.name === 'td') {
                                 if (cell.attribs.colespan) {
                                     colespan = cell.attribs.colespan;
@@ -291,6 +331,9 @@ export class ConfluenceTextIn implements TextIn {
                                         element = { type: 'td', colspan: colespan, cell: contentCell };
                                         resultRow.push(element);
                                     }
+                                } else {
+                                    const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([' ']) };
+                                    element = { type: 'th', colspan: colespan, cell: [p] };
                                 }
                             }
                         }
@@ -345,6 +388,12 @@ export class ConfluenceTextIn implements TextIn {
             } else if (child.name === 'span') {
                 out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
                 result.push(out);
+            } else if (node.name === 'ul') {
+                out = { kind: 'list', ordered: false, elements: this.list(node.children) };
+                result.push(out);
+            } else if (node.name === 'ol') {
+                out = { kind: 'list', ordered: true, elements: this.list(node.children) };
+                result.push(out);
             }
         }
 
@@ -357,8 +406,15 @@ export class ConfluenceTextIn implements TextIn {
         //console.log('My params ' + myParams + '\n');
         //console.dir(node, { depth: null });
         for (const child of node) {
-            if (child.children) {
-                let para = this.pharagraphs(child.children);
+            if (child.name === 'img') {
+                const img: InlineImage = {
+                    kind: 'inlineimage',
+                    img: child.attribs.src,
+                    title: child.attribs.alt,
+                };
+                result.push(img);
+            } else if (child.children) {
+                let para: Array<RichString | InlineImage> = this.pharagraphs(child.children);
 
                 if (child.name) {
                     let newParam = child;
@@ -366,7 +422,7 @@ export class ConfluenceTextIn implements TextIn {
                     if (child.name === 'span' && child.attribs.class === 'underline') {
                         newParam.name = 'underline';
                     }
-                    para = this.putMyAttribute(para, newParam.name);
+                    para = this.putMyAttribute((para as Array<RichString>), newParam.name);
                 }
                 if (para && para.length > 0) {
                     //console.log('Concat paragraph: (Node length: ' + para.length + ')'); // OK
@@ -398,8 +454,8 @@ export class ConfluenceTextIn implements TextIn {
         return result;
 
     }
-    public putMyAttribute(para: RichText, myParam: string): RichText {
-        let paragraph: RichText = [];
+    public putMyAttribute(para: Array<RichString>, myParam: string): Array<RichString> {
+        let paragraph: Array<RichString> = [];
         // console.log(myParam);
         // tslint:disable-next-line:forin
         for (const par of para) {

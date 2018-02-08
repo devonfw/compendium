@@ -14,3 +14,12 @@ The ~quick~ *brown fox _jumps_ over* the lazy [.underline]#dog.#
 |4       |Item 4  |Item 4
 |footer 1|footer 2|footer 3
 |==========================
+
+* hola1
+* hola2
+** anidada1
+** anidada2
+*** anidadaotravez1
+*** anidadaotravez2
+** anidada3
+* hola3
