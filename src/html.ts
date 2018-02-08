@@ -109,16 +109,16 @@ export class HtmlFileTextOut implements TextOut {
         output = '|==================\n';
         for (const row of content.body) {
             for (const cell of row) {
-                output = output + '| ';
                 for (const inside of cell.cell) {
                     if (inside.kind === 'paragraph') {
-                        output = output + this.paragraphParsed(inside) + ' ';
+                        output = output;
+                        output = output + '| ' + this.paragraphParsed(inside) + ' ';
                     } else if (inside.kind === 'inlineimage') {
-                        output = output + this.imageParsed(inside) + ' ';
+                        output = output + 'a| ' + this.imageParsed(inside) + ' ';
                     } else if (inside.kind === 'table') {
-                        output = output + this.tableParsed(inside.content) + ' ';
+                        output = output + 'a| ' + this.tableParsed(inside.content) + ' ';
                     } else if (inside.kind === 'list') {
-                        output = output + this.listParsed(inside) + ' ';
+                        output = output + 'a| ' + this.listParsed(inside) + ' ';
                     }
                 }
             }

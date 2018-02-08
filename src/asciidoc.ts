@@ -108,16 +108,16 @@ export class AsciiDocFileTextOut implements TextOut {
         output = '|==================\n';
         for (const row of content.body) {
             for (const cell of row) {
-                output = output + '| ';
                 for (const inside of cell.cell) {
                     if (inside.kind === 'paragraph') {
-                        output = output + this.paragraphParsed(inside) + ' ';
+                        output = output ;
+                        output = output + '| ' + this.paragraphParsed(inside) + ' ';
                     } else if (inside.kind === 'inlineimage') {
-                        output = output + this.imageParsed(inside) + ' ';
+                        output = output + 'a| ' + this.imageParsed(inside) + ' ';
                     } else if (inside.kind === 'table') {
-                        output = output + this.tableParsed(inside.content) + ' ';
+                        output = output + 'a| ' + this.tableParsed(inside.content) + ' ';
                     } else if (inside.kind === 'list') {
-                        output = output + this.listParsed(inside) + ' ';
+                        output = output + 'a| ' + this.listParsed(inside) + ' ';
                     }
                 }
             }
@@ -190,7 +190,7 @@ export class AsciiDocFileTextIn implements TextIn {
 
         transcript.segments = end;
 
-        console.dir(JSON.stringify(transcript));
+        //console.dir(JSON.stringify(transcript));
 
         return transcript;
 
@@ -415,6 +415,7 @@ export class AsciiDocFileTextIn implements TextIn {
         let result: Array<TableSegment> = [];
         for (const child of node) {
             let out: TableSegment;
+            console.log(child.name);
             if (child.name === 'p') {
                 out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
                 result.push(out);
@@ -431,13 +432,26 @@ export class AsciiDocFileTextIn implements TextIn {
             } else if (child.name === 'span') {
                 out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
                 result.push(out);
-            } else if (node.name === 'ul') {
-                out = { kind: 'list', ordered: false, elements: this.list(node.children) };
+            } else if (child.name === 'ul') {
+                console.log('llego al ul');
+                console.log(child.children);
+                out = { kind: 'list', ordered: false, elements: this.list(child.children) };
                 result.push(out);
-            } else if (node.name === 'ol') {
-                out = { kind: 'list', ordered: true, elements: this.list(node.children) };
+            } else if (child.name === 'ol') {
+                out = { kind: 'list', ordered: true, elements: this.list(child.children) };
                 result.push(out);
-            }
+            } else if (child.name === 'div') {
+                console.log(child.name);
+                if (child.children) {
+                    for (const element of child.children) {
+                        const temp: Array<TableSegment> = this.tableTd(element.children);
+                        console.dir(temp);
+                        for (const inside of temp) {
+                            result.push(inside);
+                        }
+                    }
+                }
+                }
         }
 
         return result;
