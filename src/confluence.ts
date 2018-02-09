@@ -1,6 +1,6 @@
 import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes, Cookies, ConfluenceService, TableSegment, TableBody, Col, Row, Cell, Credentials, List } from './types';
 import * as fs from 'fs';
-import { ConfluenceServiceImpl } from './confluence/confluenceService';
+import { ConfluenceServiceImpl } from './confluenceService';
 
 /*
     The basepath has to have this format: https://adcenter.pl.s2-eu.capgemini.com/confluence/

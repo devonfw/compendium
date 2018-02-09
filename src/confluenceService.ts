@@ -1,5 +1,4 @@
-import { Credentials } from './../types';
-import { ConfluenceService, Cookies } from "../types";
+import { ConfluenceService, Cookies, Credentials } from "./types";
 import * as request from 'superagent';
 
 export class ConfluenceServiceImpl implements ConfluenceService {
