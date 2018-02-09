@@ -73,7 +73,7 @@ export class ConfigFile implements DocConfig {
 
             // II. Confluence values
             if (sourceJSON.kind === 'confluence') {
-                if (sourceJSON.space && sourceJSON.space !== '' && sourceJSON.context) { // TODO: Specify possible context values
+                if (sourceJSON.space && sourceJSON.space !== '' && sourceJSON.context) { // TODO: Specify possible context values Ie: ( 'sso' || 'basic' || ...) && (sourceJSON.context === 'sso' || sourceJSON.context === 'basic')
                     valid = true;
                     //return true;
                 } else {

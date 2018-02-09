@@ -1,4 +1,4 @@
-import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes, Cookies, ConfluenceService, TableSegment, TableBody, Col, Row, Cell, List } from './types';
+import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes, Cookies, ConfluenceService, TableSegment, TableBody, Col, Row, Cell, Credentials, List } from './types';
 import * as fs from 'fs';
 import { ConfluenceServiceImpl } from './confluence/confluenceService';
 
@@ -22,24 +22,30 @@ export class ConfluenceTextIn implements TextIn {
 
     private url_base: string;
     private space: string | undefined;
-    private cookies: Cookies;
-    
+    private cookies: Cookies | undefined;
+    private credentials: Credentials | undefined;
+
+
     private htmlparse = require('html-parse');
 
-    public constructor(basepath: string, space: string | undefined, cookies: Cookies) {
-        
+    public constructor(basepath: string, space: string | undefined, auth: Cookies | Credentials) {
+
         this.url_base = basepath;
         this.space = space;
-        this.cookies = cookies;
+        if ((auth as Cookies)[0]) {
+            this.cookies = (auth as Cookies);
+        } else if ((auth as Credentials).username) {
+            this.credentials = (auth as Credentials);
+        }
     }
 
-    public async getTranscript(title: string, sections?: string[]): Promise<Transcript> { // By id: a unique page identification
+    public async getTranscript(title: string, sections?: string[]): Promise<Transcript> {
 
         let transcript: Transcript = { segments: [] };
         let end: Array<TextSegment> = [];
         let confluenceService: ConfluenceService = new ConfluenceServiceImpl();
 
-        const url = this.createURLbyTitle(title); // Optional
+        const url = this.createURLbyTitle(title); // Optional for console messages
         let error = false;
 
         // I. Create URI
@@ -48,14 +54,29 @@ export class ConfluenceTextIn implements TextIn {
 
         // II. ConfluenceService
         let content;
-        try {
-            content = await confluenceService.getContent(uri, this.cookies);
-        } catch (err) {
-            if (err.message) {
-                throw new Error(err.message);
-            } else {
-                throw new Error('It isn\'t possible to get the content from confluence');
+        if (this.cookies) {
+            try {
+                content = await confluenceService.getContentbyCookies(uri, this.cookies);
+            } catch (err) {
+                if (err.message) {
+                    throw new Error(err.message);
+                } else {
+                    throw new Error('It isn\'t possible to get the content from confluence');
+                }
             }
+        } else if (this.credentials) {
+            try {
+                content = await confluenceService.getContentbyCredentials(uri, this.credentials);
+            } catch (err) {
+                if (err.message) {
+                    throw new Error(err.message);
+                } else {
+                    throw new Error('It isn\'t possible to get the content from confluence');
+                }
+            }
+        } else {
+            // Logicaly, this never should be shown.
+            throw new Error('Credentials are mandatory to access confluence resources');
         }
 
         if (content) {
@@ -82,7 +103,7 @@ export class ConfluenceTextIn implements TextIn {
         }
 
         if (error) {
-            throw new Error('It isn\'t possible to get transcript from '+url);
+            throw new Error('It isn\'t possible to get transcript from ' + url);
         }
 
         return transcript;
@@ -95,7 +116,7 @@ export class ConfluenceTextIn implements TextIn {
 
         let htmlContent;
         let error = false;
-    
+
         const parsed_content = JSON.parse(JSON.stringify(content)); // It's mandatory 
         if (parsed_content.id) { // By Id
             // console.log(' -> Content by id!');
@@ -114,7 +135,7 @@ export class ConfluenceTextIn implements TextIn {
                 }
             } else {
                 // At the moment (What should we do with full workspaces? They have several pages. Include all the content? It's easy to iterate over the JSON and get every body.view page values) 
-                throw new Error('Only one Confluence page at once is allowed in this version. Check your request.'); 
+                throw new Error('Only one Confluence page at once is allowed in this version. Check your request.');
             }
         }
 
@@ -141,10 +162,10 @@ export class ConfluenceTextIn implements TextIn {
 
         let outputURI = '';
 
-        if (this.url_base && this.space && title) {      
-            outputURI += this.url_base + `rest/api/content?spaceKey=${this.space}&title=${title}&expand=body.view`;  
-        } else {          
-            throw new Error ('Bad URI');
+        if (this.url_base && this.space && title) {
+            outputURI += this.url_base + `rest/api/content?spaceKey=${this.space}&title=${title}&expand=body.view`;
+        } else {
+            throw new Error('Bad URI');
         }
         return outputURI;
     }
@@ -382,7 +403,6 @@ export class ConfluenceTextIn implements TextIn {
         let result: Array<TableSegment> = [];
         for (const child of node) {
             let out: TableSegment;
-            console.log(child.name);
             if (child.name === 'p') {
                 out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
                 result.push(out);
@@ -400,19 +420,15 @@ export class ConfluenceTextIn implements TextIn {
                 out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
                 result.push(out);
             } else if (child.name === 'ul') {
-                console.log('llego al ul');
-                console.log(child.children);
                 out = { kind: 'list', ordered: false, elements: this.list(child.children) };
                 result.push(out);
             } else if (child.name === 'ol') {
                 out = { kind: 'list', ordered: true, elements: this.list(child.children) };
                 result.push(out);
             } else if (child.name === 'div') {
-                console.log(child.name);
                 if (child.children) {
                     for (const element of child.children) {
                         const temp: Array<TableSegment> = this.tableTd(element.children);
-                        console.dir(temp);
                         for (const inside of temp) {
                             result.push(inside);
                         }

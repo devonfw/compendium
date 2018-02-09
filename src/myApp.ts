@@ -1,22 +1,14 @@
+import { COOKIES_TEST, CREDENTIALS_TEST, isConfluenceTest } from './mocks/confluence/auth';
 import * as fs from 'fs';
-import { IndexSource, IndexNode, Index, TextInSources, Transcript, TextOut, Merger, DocConfig, Cookie, Cookies } from './types';
+import { IndexSource, IndexNode, Index, TextInSources, Transcript, TextOut, Merger, DocConfig, Cookie, Cookies, Credentials } from './types';
 import { AsciiDocFileTextIn, AsciiDocFileTextOut } from './asciidoc';
 import { HtmlFileTextOut } from './html';
 import { MergerImpl } from './merger';
 import { ConfigFile } from './config';
 import { ConfluenceTextIn } from './confluence';
-
-export interface Credentials {
-    username: string;
-    password: string;
-}
+import chalk from 'chalk';
 
 export async function doCompendium(configFile: string, format: string, outputFile: string | undefined) {
-
-    // Mock Data
-    const brandNewDayProdCookie: Cookie = { name: 'brandNewDayProd', value: 'AQIC5wM2LY4SfcxV8-VgMyIWyq_IgeQTSr7FEv3Pk3YLncA.*AAJTSQACMDMAAlNLABQtODMzOTE5MDQ1ODczOTE0MTY1NgACUzEAAjAx*' };
-
-    const cookiesMock: Cookies = [brandNewDayProdCookie];
 
     console.log('\n\n=> Parameters: \n');
     console.log(' Configuration file: ', configFile);
@@ -53,7 +45,28 @@ export async function doCompendium(configFile: string, format: string, outputFil
         if (source.kind === 'asciidoc') {
             textinSources[source.key] = new AsciiDocFileTextIn(source.source); // The bind is by key -> A source identifier
         } else if (source.kind === 'confluence') {
-            textinSources[source.key] = new ConfluenceTextIn(source.source, source.space, cookiesMock);
+            if (source.context === 'capgemini') {
+                if (isConfluenceTest) {
+                    textinSources[source.key] = new ConfluenceTextIn(source.source, source.space, COOKIES_TEST);
+                } else {
+                    throw new Error('Resource under \'Single Sign On\' context. This authentication is not yet implemented.');
+                }
+            } else {
+                if (isConfluenceTest) {
+                    textinSources[source.key] = new ConfluenceTextIn(source.source, source.space, CREDENTIALS_TEST);
+                } else {
+
+                    let credentials: Credentials;
+                    try {
+                        // First of all -> Show in promt what are the credentials for
+                        console.log(chalk.bold(`Please enter credentials for source with key '${chalk.green.italic(source.key)}' (${chalk.blue(source.source)})\n`));
+                        credentials = await askInPrompt();
+                        textinSources[source.key] = new ConfluenceTextIn(source.source, source.space, credentials);
+                    } catch (err) {
+                        throw new Error(err.message);
+                    }
+                }
+            }
         } else {
             throw new Error('Unknown TextInSource');
         }

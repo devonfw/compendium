@@ -132,6 +132,12 @@ export type Cookies = Array<Cookie>;
 
 export interface ConfluenceService {
 
-    getContent(URL: string, cookie: Cookies): Promise<JSON>;
+    getContentbyCookies(URL: string, cookie: Cookies): Promise<JSON>;
+    getContentbyCredentials(URL: string, credentials: Credentials): Promise<JSON>;
+
 }
 
+export interface Credentials {
+    username: string;
+    password: string;
+}

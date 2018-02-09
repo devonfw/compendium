@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import chalk from 'chalk';
-import { doCompendium, Credentials, askInPrompt } from './myApp';
+import { Credentials } from './types';
+import { doCompendium, askInPrompt } from './myApp';
 
 let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
 
@@ -78,7 +79,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
                 try {
                     await doCompendium(configFile, outputFormat, outputFile); // Logic
                 } catch (e) {
-                    console.error(e.message);
+                    console.error(chalk.red(e.message));
                 }
             } else if (multiple || outputFormat === 'pdf') {
                 console.log('Not implemented yet');
@@ -102,7 +103,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
         try {
             await doCompendium(configFile, outputFormat, outputFile); // Logic
         } catch (e) {
-            console.error(e.message);
+            console.error(chalk.red(e.message));
         }
 
     } else {

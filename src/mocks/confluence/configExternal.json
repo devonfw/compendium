@@ -1,0 +1,18 @@
+{
+    "sources": [
+        {
+            "key": "external",
+            "kind": "confluence",
+            "source": "https://adcenter.pl.s2-eu.capgemini.com/confluence/",
+            "space": "JQ",
+            "context": "other"
+        }
+    ],
+    "nodes": [
+        {
+            "key": "external",
+            "kind": "confluence",
+            "index": "Jump+the+queue+Home"
+        }
+    ]
+}
