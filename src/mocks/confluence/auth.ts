@@ -1,6 +1,6 @@
 import { Cookie, Cookies, Credentials } from './../../types';
 
-export const isConfluenceTest = true;
+export const isConfluenceTest = false;
 
 // Cookies
 // -------
@@ -13,7 +13,3 @@ const brandNewDayProdCookie: Cookie = { name: 'brandNewDayProd', value: brandNew
 
 export const COOKIES_TEST: Cookies = [brandNewDayProdCookie];
 // export const COOKIES_TEST_EXTRA: Cookies = [brandNewDayProdCookie, SESIONIDCookie];
-
-// Credentials
-// -----------
-export const CREDENTIALS_TEST: Credentials = {username: 'pepe', password: '123'};

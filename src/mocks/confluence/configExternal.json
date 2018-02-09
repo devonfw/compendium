@@ -3,8 +3,8 @@
         {
             "key": "external",
             "kind": "confluence",
-            "source": "https://adcenter.pl.s2-eu.capgemini.com/confluence/",
-            "space": "JQ",
+            "source": "http://localhost:8090/",
+            "space": "CP",
             "context": "other"
         }
     ],
@@ -12,7 +12,7 @@
         {
             "key": "external",
             "kind": "confluence",
-            "index": "Jump+the+queue+Home"
+            "index": "Home"
         }
     ]
 }

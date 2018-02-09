@@ -21,11 +21,12 @@
     "html-parse": "0.0.4",
     "prompt": "^1.0.0",
     "result.ts": "^0.3.1",
-    "yargs": "^11.0.0"
+    "yargs": "^11.0.0",
+    "superagent": "^3.8.2"
   },
   "devDependencies": {
     "@types/chai": "^4.1.0",
-    "@types/commander": "^2.12.2",
+    "@types/superagent": "^3.5.7",
     "@types/mocha": "^2.2.46",
     "@types/node": "^8.5.7",
     "chai": "^4.1.2",

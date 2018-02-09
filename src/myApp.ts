@@ -49,22 +49,18 @@ export async function doCompendium(configFile: string, format: string, outputFil
                 if (isConfluenceTest) {
                     textinSources[source.key] = new ConfluenceTextIn(source.source, source.space, COOKIES_TEST);
                 } else {
+                    // Here is where credentials are request to call our external service to obtain the cookies
                     throw new Error('Resource under \'Single Sign On\' context. This authentication is not yet implemented.');
                 }
             } else {
-                if (isConfluenceTest) {
-                    textinSources[source.key] = new ConfluenceTextIn(source.source, source.space, CREDENTIALS_TEST);
-                } else {
-
-                    let credentials: Credentials;
-                    try {
-                        // First of all -> Show in promt what are the credentials for
-                        console.log(chalk.bold(`Please enter credentials for source with key '${chalk.green.italic(source.key)}' (${chalk.blue(source.source)})\n`));
-                        credentials = await askInPrompt();
-                        textinSources[source.key] = new ConfluenceTextIn(source.source, source.space, credentials);
-                    } catch (err) {
-                        throw new Error(err.message);
-                    }
+               
+                let credentials: Credentials;
+                try {
+                    console.log(chalk.bold(`Please enter credentials for source with key '${chalk.green.italic(source.key)}' (${chalk.blue(source.source)})\n`));
+                    credentials = await askInPrompt();
+                    textinSources[source.key] = new ConfluenceTextIn(source.source, source.space, credentials);
+                } catch (err) {
+                    throw new Error(err.message);
                 }
             }
         } else {
