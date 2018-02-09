@@ -1,4 +1,4 @@
-import { COOKIES_TEST, CREDENTIALS_TEST, isConfluenceTest } from './mocks/confluence/auth';
+import { COOKIES_TEST, isConfluenceTest } from './mocks/confluence/auth';
 import * as fs from 'fs';
 import { IndexSource, IndexNode, Index, TextInSources, Transcript, TextOut, Merger, DocConfig, Cookie, Cookies, Credentials } from './types';
 import { AsciiDocFileTextIn, AsciiDocFileTextOut } from './asciidoc';
