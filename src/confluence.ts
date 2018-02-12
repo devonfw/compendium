@@ -338,33 +338,35 @@ export class ConfluenceTextIn implements TextIn {
                         let resultRow: Row = [];
                         for (const cell of row.children) {
                             let element: Cell;
-                            let colespan: string = '';
+                            let colespan: string = '1';
 
                             if (cell.name === 'th') {
-                                if (cell.attribs.colespan) {
-                                    colespan = cell.attribs.colespan;
+                                if (cell.attribs.colspan) {
+                                    colespan = cell.attribs.colspan;
                                 }
-                                if (cell.children[0].name !== 'br') {
+                                if (cell.children && cell.children.length > 0 && cell.children[0].name !== 'br') {
                                     const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs(cell.children) };
                                     element = { type: 'th', colspan: colespan, cell: [p] };
                                 } else {
-                                    const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([' ']) };
+                                    const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([{ data: ' ', type: 'text' }]) };
                                     element = { type: 'th', colspan: colespan, cell: [p] };
                                 }
                                 resultRow.push(element);
                             } else if (cell.name === 'td') {
-                                if (cell.attribs.colespan) {
-                                    colespan = cell.attribs.colespan;
+                                if (cell.attribs.colspan) {
+                                    colespan = cell.attribs.colspan;
                                 }
-                                if (cell.children[0].name !== 'br') {
+                                if (cell.children && cell.children.length > 0 && cell.children[0].name !== 'br') {
+                                    // console.dir(cell.children);
                                     const contentCell = this.tableTd(cell.children);
                                     if (contentCell) {
                                         element = { type: 'td', colspan: colespan, cell: contentCell };
                                         resultRow.push(element);
                                     }
                                 } else {
-                                    const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([' ']) };
-                                    element = { type: 'th', colspan: colespan, cell: [p] };
+                                    const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([{ data: ' ', type: 'text' }]) };
+                                    element = { type: 'td', colspan: colespan, cell: [p] };
+                                    resultRow.push(element);
                                 }
                             }
                         }
@@ -399,6 +401,7 @@ export class ConfluenceTextIn implements TextIn {
 
         return result;
     }
+
     public tableTd(node: any): Array<TableSegment> {
         let result: Array<TableSegment> = [];
         for (const child of node) {
@@ -472,7 +475,7 @@ export class ConfluenceTextIn implements TextIn {
                     }
                 }
 
-            } else if (child.data !== '\n' && child.data !== '' && child.data !== ' ') {
+            } else if (child.data !== '\n' && child.data !== '') {
                 let attrs: TextAttributes = {
                     strong: false,  // "bold"
                     cursive: false,   // "italic"
