@@ -35,16 +35,16 @@ At final, we can see a scheme to know what is the operation depending on the inp
 
 
 ==== Asciidoc input
-image::../uploads/cf3eb656b89e016ba30915f6619fdcf2/AsciidocInput.PNG[ASCIIDOC INPUT]
+image::./images/AsciidocInput.PNG[ASCIIDOC INPUT]
 
 ==== Confluence input
-image::../uploads/00ce85de6d221f6b0a7508b6b3976a3f/ConfluenceInput.PNG[CONFLUENCE INPUT]
+image::./images/ConfluenceInput.PNG[CONFLUENCE INPUT]
 
 ==== Asciidoc output
-image::../uploads/05c50582bb1fb2fa497184f74566757f/AsciidocOutput.PNG[ASCIIDOC OUTPUT]
+image::./images/AsciidocOutput.PNG[ASCIIDOC OUTPUT]
 
 ==== HTML output
-image::../uploads/e9863fe877c511200f6efc2f7df4f528/HTMLOutput.PNG[HTML OUTPUT]
+image::./images/HTMLOutput.PNG[HTML OUTPUT]
 
 
 == Compendium processing
