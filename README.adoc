@@ -35,10 +35,10 @@ At final, we can see a scheme to know what is the operation depending on the inp
 
 
 ==== Asciidoc input
-image::./images/AsciidocInput.PNG[ASCIIDOC INPUT]
+image::../images/AsciidocInput.PNG[ASCIIDOC INPUT]
 
 ==== Confluence input
-image::./images/ConfluenceInput.PNG[CONFLUENCE INPUT]
+image::http://gitlab-val.es.capgemini.com/gitlab/ADCenter/compendium/blob/master/images/ConfluenceInput.PNG[CONFLUENCE INPUT]
 
 ==== Asciidoc output
 image::./images/AsciidocOutput.PNG[ASCIIDOC OUTPUT]
