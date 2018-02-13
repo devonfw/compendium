@@ -38,13 +38,13 @@ At final, we can see a scheme to know what is the operation depending on the inp
 image::../images/AsciidocInput.PNG[ASCIIDOC INPUT]
 
 ==== Confluence input
-image::http://gitlab-val.es.capgemini.com/gitlab/ADCenter/compendium/blob/master/images/ConfluenceInput.PNG[CONFLUENCE INPUT]
+image::../images/ConfluenceInput.PNG[CONFLUENCE INPUT]
 
 ==== Asciidoc output
-image::./images/AsciidocOutput.PNG[ASCIIDOC OUTPUT]
+image::../images/AsciidocOutput.PNG[ASCIIDOC OUTPUT]
 
 ==== HTML output
-image::./images/HTMLOutput.PNG[HTML OUTPUT]
+image::../images/HTMLOutput.PNG[HTML OUTPUT]
 
 
 == Compendium processing
