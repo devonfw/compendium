@@ -1,4 +1,4 @@
-import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes, Cookies, ConfluenceService, TableSegment, TableBody, Col, Row, Cell, Credentials, List } from './types';
+import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes, Cookies, ConfluenceService, TableSegment, TableBody, Col, Row, Cell, Credentials, List, Link } from './types';
 import * as fs from 'fs';
 import { ConfluenceServiceImpl } from './confluenceService';
 
@@ -214,6 +214,9 @@ export class ConfluenceTextIn implements TextIn {
                 out = { kind: 'textelement', element: 'h4', text: this.pharagraphs(node.children) };
                 result.push(out);
 
+            } else if (node.name === 'a') {
+                out = { kind: 'link', ref: node.attribs.href, text: this.linkContent(node.children) };
+                result.push(out);
             }
             if (filter !== [] && filter !== null && filter !== undefined) {
                 let sectionFound = false;
@@ -287,9 +290,27 @@ export class ConfluenceTextIn implements TextIn {
 
         return result;
     }
-    public list(node: Array<any>): Array<RichText | List | Paragraph> {
-        let result: Array<RichText | List | Paragraph> = [];
-        let out: RichText | List | Paragraph;
+
+    public linkContent(node: Array<any>): Paragraph | InlineImage {
+        let result: Paragraph | InlineImage;
+        if (node.length === 1 && node[0].name === 'img') {
+            const img: InlineImage = {
+                kind: 'inlineimage',
+                img: node[0].attribs.src,
+                title: node[0].attribs.alt,
+            };
+            result = img;
+        } else {
+            const out: Paragraph = { kind: 'paragraph', text: this.pharagraphs(node) };
+            result = out;
+        }
+
+        return result;
+    }
+
+    public list(node: Array<any>): Array<RichText | List | Paragraph | Link> {
+        let result: Array<RichText | List | Paragraph | Link> = [];
+        let out: RichText | List | Paragraph | Link;
         for (const li of node) {
             if (li.name === 'li') {
                 for (const child of li.children)
@@ -315,6 +336,9 @@ export class ConfluenceTextIn implements TextIn {
                                 result.push(out);
                             }
                         }
+                    } else if (child.name === 'a') {
+                        out = { kind: 'link', ref: child.attribs.href, text: this.linkContent(child.children) };
+                        result.push(out);
                     } else if (!child.data) {
                         out = this.pharagraphs(child.children);
                         result.push(out);
@@ -428,6 +452,9 @@ export class ConfluenceTextIn implements TextIn {
             } else if (child.name === 'ol') {
                 out = { kind: 'list', ordered: true, elements: this.list(child.children) };
                 result.push(out);
+            } else if (node.name === 'a') {
+                out = { kind: 'link', ref: node.attribs.href, text: this.linkContent(node.children) };
+                result.push(out);
             } else if (child.name === 'div') {
                 if (child.children) {
                     for (const element of child.children) {
@@ -456,11 +483,14 @@ export class ConfluenceTextIn implements TextIn {
                     title: child.attribs.alt,
                 };
                 result.push(img);
+            } else if (child.name === 'a') {
+                const out: Link = { kind: 'link', ref: child.attribs.href, text: this.linkContent(child.children) };
+                result.push(out);
             } else if (child.children) {
-                let para: Array<RichString | InlineImage> = this.pharagraphs(child.children);
+                let para: Array<RichString | InlineImage | Link> = this.pharagraphs(child.children);
 
                 if (child.name) {
-                    let newParam = child;
+                    const newParam = child;
 
                     if (child.name === 'span' && child.attribs.class === 'underline') {
                         newParam.name = 'underline';
@@ -476,13 +506,13 @@ export class ConfluenceTextIn implements TextIn {
                 }
 
             } else if (child.data !== '\n' && child.data !== '') {
-                let attrs: TextAttributes = {
+                const attrs: TextAttributes = {
                     strong: false,  // "bold"
                     cursive: false,   // "italic"
                     underline: false,
                     script: 'normal'
                 };
-                let out: RichString = {
+                const out: RichString = {
                     text: '',
                     attrs: attrs
                 };

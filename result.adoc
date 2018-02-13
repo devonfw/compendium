@@ -13,6 +13,8 @@ The lazy *brown cat* *_jumps_* *over* the quick dog.
 
 === The *real* *_fox_*
 
+image::fox.png[Red Fox, link="http://www.google.es"]
+
 image::fox.png[Red Fox]
 
 The ~quick~  *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#
@@ -22,7 +24,7 @@ The ~quick~  *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#
 | 1 |    |    
 | 2 | Item 2 | Item 2 
 | 3 | Item 3 | Item 3 
-| 4 | Item 4 | Item 4 
+| 4 | Item 4 | link:http://www.google.es[Google] 
 | footer 1 | footer 2 a| * hola1
 * hola2
 ** anidada1

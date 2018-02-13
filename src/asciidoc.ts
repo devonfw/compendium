@@ -1,4 +1,4 @@
-import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes, Table, TableBody, Col, Row, Cell, TableSegment, List } from './types';
+import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes, Table, TableBody, Col, Row, Cell, TableSegment, List, Link } from './types';
 import * as fs from 'fs';
 
 export class AsciiDocFileTextOut implements TextOut {
@@ -30,6 +30,8 @@ export class AsciiDocFileTextOut implements TextOut {
                         outputString = outputString + this.tableParsed(segment.content) + '\n\n';
                     } else if (segment.kind === 'list') {
                         outputString = outputString + this.listParsed(segment) + '\n\n';
+                    } else if (segment.kind === 'link') {
+                        outputString = outputString + this.linkParsed(segment) + '\n\n';
                     }
                 }
             }
@@ -55,6 +57,8 @@ export class AsciiDocFileTextOut implements TextOut {
             if ((content as InlineImage).kind === 'inlineimage') {
                 output = output + this.imageParsed((content as InlineImage));
 
+            } else if ((content as Link).kind === 'link') {
+                output = output + this.linkParsed((content as Link));
             } else if ((content as RichString).text) {
 
                 const attrs = (content as RichString).attrs;
@@ -99,6 +103,16 @@ export class AsciiDocFileTextOut implements TextOut {
         return output;
     }
 
+    private linkParsed(myLink: Link) {
+        let output: string = '';
+        if ((myLink.text as InlineImage).kind === 'inlineimage'){
+            output = 'image::' + (myLink.text as InlineImage).img + '[' + (myLink.text as InlineImage).title + ', link="' + myLink.ref + '"]';
+        } else {
+            output = 'link:' + myLink.ref + '[' + this.paragraphParsed((myLink.text as Paragraph)) + ']';
+        }
+        return output;
+    }
+
     private imageParsed(myText: InlineImage) {
         return 'image::' + myText.img + '[' + myText.title + ']';
     }
@@ -121,6 +135,8 @@ export class AsciiDocFileTextOut implements TextOut {
                         output = output + 'a| ' + this.tableParsed(inside.content) + ' ';
                     } else if (inside.kind === 'list') {
                         output = output + 'a| ' + this.listParsed(inside) + ' ';
+                    } else if (inside.kind === 'link') {
+                        output = output + 'a| ' + this.linkParsed(inside) + ' ';
                     }
                 }
             }
@@ -148,6 +164,8 @@ export class AsciiDocFileTextOut implements TextOut {
         for (const element of list.elements) {
             if ((element as List).kind === 'list'){
                 output = output + this.listParsed((element as List), notation);
+            } else if ((element as Link).kind === 'link') {
+                output = output + this.linkParsed((element as Link));
             } else if ((element as Paragraph).kind === 'paragraph') {
                 output = output + notation + ' ' + this.paragraphParsed((element as Paragraph)) + '\n';
             } else if ((element as RichText)[0]) {
@@ -177,7 +195,7 @@ export class AsciiDocFileTextIn implements TextIn {
         const doc = fs.readFileSync(dir, 'utf-8');
 
         const dochtml = this.asciidoctor.convert(doc);
-        //console.log(dochtml);
+        console.log(dochtml);
 
         const tree = this.htmlparse.parse(dochtml);
 
@@ -229,6 +247,9 @@ export class AsciiDocFileTextIn implements TextIn {
                 out = { kind: 'textelement', element: 'h4', text: this.pharagraphs(node.children) };
                 result.push(out);
 
+            } else if (node.name === 'a') {
+                out = { kind: 'link', ref: node.attribs.href, text: this.linkContent(node.children) };
+                result.push(out);
             }
             if (filter !== [] && filter !== null && filter !== undefined) {
                 let sectionFound = false;
@@ -302,9 +323,27 @@ export class AsciiDocFileTextIn implements TextIn {
 
         return result;
     }
-    public list(node: Array<any>): Array<RichText | List | Paragraph> {
-        let result: Array<RichText | List | Paragraph> = [];
-        let out: RichText | List | Paragraph;
+
+    public linkContent(node: Array<any>): Paragraph | InlineImage {
+        let result: Paragraph | InlineImage;
+        if (node.length === 1 && node[0].name === 'img') {
+            const img: InlineImage = {
+                kind: 'inlineimage',
+                img: node[0].attribs.src,
+                title: node[0].attribs.alt,
+            };
+            result = img;
+        } else {
+            const out: Paragraph = { kind: 'paragraph', text: this.pharagraphs(node) };
+            result = out;
+        }
+
+        return result;
+    }
+
+    public list(node: Array<any>): Array<RichText | List | Paragraph | Link> {
+        let result: Array<RichText | List | Paragraph | Link> = [];
+        let out: RichText | List | Paragraph | Link;
         for (const li of node) {
             if (li.name === 'li') {
                 for (const child of li.children)
@@ -330,6 +369,9 @@ export class AsciiDocFileTextIn implements TextIn {
                                 result.push(out);
                             }
                         }
+                    } else if (child.name === 'a') {
+                        out = { kind: 'link', ref: child.attribs.href, text: this.linkContent(child.children) };
+                        result.push(out);
                     } else if (!child.data){
                         out = this.pharagraphs(child.children);
                         result.push(out);
@@ -443,6 +485,9 @@ export class AsciiDocFileTextIn implements TextIn {
             } else if (child.name === 'ol') {
                 out = { kind: 'list', ordered: true, elements: this.list(child.children) };
                 result.push(out);
+            } else if (node.name === 'a') {
+                out = { kind: 'link', ref: node.attribs.href, text: this.linkContent(node.children) };
+                result.push(out);
             } else if (child.name === 'div') {
                 if (child.children) {
                     for (const element of child.children) {
@@ -471,11 +516,14 @@ export class AsciiDocFileTextIn implements TextIn {
                     title: child.attribs.alt,
                 };
                 result.push(img);
+            } else if (child.name === 'a') {
+                const out: Link = { kind: 'link', ref: child.attribs.href, text: this.linkContent(child.children) };
+                result.push(out);
             } else if (child.children) {
-                let para: Array<RichString | InlineImage> = this.pharagraphs(child.children);
+                let para: Array<RichString | InlineImage | Link> = this.pharagraphs(child.children);
 
                 if (child.name) {
-                    let newParam = child;
+                    const newParam = child;
 
                     if (child.name === 'span' && child.attribs.class === 'underline') {
                         newParam.name = 'underline';
@@ -491,13 +539,13 @@ export class AsciiDocFileTextIn implements TextIn {
                 }
 
             } else if (child.data !== '\n' && child.data !== '') {
-                let attrs: TextAttributes = {
+                const attrs: TextAttributes = {
                     strong: false,  // "bold"
                     cursive: false,   // "italic"
                     underline: false,
                     script: 'normal'
                 };
-                let out: RichString = {
+                const out: RichString = {
                     text: '',
                     attrs: attrs
                 };

@@ -1,4 +1,4 @@
-import { TextOut, Transcript, TextElement, Paragraph, InlineImage, List, RichText, TableBody, RichString } from './types';
+import { TextOut, Transcript, TextElement, Paragraph, InlineImage, List, RichText, TableBody, RichString, Link } from './types';
 import * as fs from 'fs';
 
 export class HtmlFileTextOut implements TextOut {
@@ -31,6 +31,8 @@ export class HtmlFileTextOut implements TextOut {
                         outputString = outputString + this.tableParsed(segment.content) + '\n\n';
                     } else if (segment.kind === 'list') {
                         outputString = outputString + this.listParsed(segment) + '\n\n';
+                    } else if (segment.kind === 'link') {
+                        outputString = outputString + this.linkParsed(segment) + '\n\n';
                     }
                 }
             }
@@ -56,6 +58,8 @@ export class HtmlFileTextOut implements TextOut {
             if ((content as InlineImage).kind === 'inlineimage') {
                 output = output + this.imageParsed((content as InlineImage));
 
+            } else if ((content as Link).kind === 'link') {
+                output = output + this.linkParsed((content as Link));
             } else if ((content as RichString).text) {
 
                 const attrs = (content as RichString).attrs;
@@ -100,6 +104,16 @@ export class HtmlFileTextOut implements TextOut {
         return output;
     }
 
+    private linkParsed(myLink: Link) {
+        let output: string = '';
+        if ((myLink.text as InlineImage).kind === 'inlineimage') {
+            output = 'image::' + (myLink.text as InlineImage).img + '[' + (myLink.text as InlineImage).title + ', link="' + myLink.ref + '"]';
+        } else {
+            output = 'link:' + myLink.ref + '[' + this.paragraphParsed((myLink.text as Paragraph)) + ']';
+        }
+        return output;
+    }
+
     private imageParsed(myText: InlineImage) {
         return 'image::' + myText.img + '[' + myText.title + ']';
     }
@@ -109,6 +123,9 @@ export class HtmlFileTextOut implements TextOut {
         output = '|==================\n';
         for (const row of content.body) {
             for (const cell of row) {
+                if (cell.colspan && cell.colspan !== '1') {
+                    output = output + cell.colspan + '+^';
+                }
                 for (const inside of cell.cell) {
                     if (inside.kind === 'paragraph') {
                         output = output;
@@ -119,6 +136,8 @@ export class HtmlFileTextOut implements TextOut {
                         output = output + 'a| ' + this.tableParsed(inside.content) + ' ';
                     } else if (inside.kind === 'list') {
                         output = output + 'a| ' + this.listParsed(inside) + ' ';
+                    } else if (inside.kind === 'link') {
+                        output = output + 'a| ' + this.linkParsed(inside) + ' ';
                     }
                 }
             }
@@ -146,6 +165,8 @@ export class HtmlFileTextOut implements TextOut {
         for (const element of list.elements) {
             if ((element as List).kind === 'list') {
                 output = output + this.listParsed((element as List), notation);
+            } else if ((element as Link).kind === 'link') {
+                output = output + this.linkParsed((element as Link));
             } else if ((element as Paragraph).kind === 'paragraph') {
                 output = output + notation + ' ' + this.paragraphParsed((element as Paragraph)) + '\n';
             } else if ((element as RichText)[0]) {
