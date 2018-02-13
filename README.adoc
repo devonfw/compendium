@@ -1,0 +1,105 @@
+:toc: macro
+toc::[] 
+
+
+= COMPENDIUM
+
+Compendium is a processor for generating, unifying and converting different sources like AsciiDoc files, Jira and Confluence in different formats.
+We can select all the content or only parts of it and generate an AsciiDoc, HTML, PDF or multiple file.
+
+== Technologies
+This project uses different technologies. Here is a list of all of them:
+
+* link:https://code.visualstudio.com/[Visual Studio Code] +
+It's a great programme, because it can use in every SO and it's free. We developed using 1.19.2 version
+
+* link:https://nodejs.org/en/[NodeJS] +
+Server-side development using the basics of the Express framework. It is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient. 
+
+* link:https://github.com/asciidoctor/asciidoctor.js[Asciidoctor.js] +
+Server-side development using the 1.5.6 version. Asciidoctor.js uses Opal to transpile Asciidoctor from Ruby to Javascript, we can run on any Javascript platform.
+
+* link:https://www.npmjs.com/[NPM] +
+A Command line client using 5.6.0 version. NPM is the package manager for Javascript, packages are open-source. It consists of three distinct components, one of them is the Commando Line Interface (CLI). Because of, CLI runs from a terminal, we interact with it.
+
+* link:http://yargs.js.org/[Yargs] +
+Command line tool using 5.0 version. Yargs is a node.js library, and help us build an interactive command line tool by parsing arguments and implementing new enhanced interface.
+
+
+== Operating mode
+
+For the definition of the programming interfaces have been developed for both the inputs and the outputs. +
+Thus, when adding new features is much easier, since we only have to implement the necessary classes and the interface. +
+On the other hand, tests have been carried out, which verify that the operation of the code is correct and in case of failure we quickly know where our problem lies.
+At final, we can see a scheme to know what is the operation depending on the input or output parameters.
+
+
+==== Asciidoc input
+image::../images/AsciidocInput.PNG[ASCIIDOC INPUT]
+
+==== Confluence input
+image::../images/ConfluenceInput.PNG[CONFLUENCE INPUT]
+
+==== Asciidoc output
+image::../images/AsciidocOutput.PNG[ASCIIDOC OUTPUT]
+
+==== HTML output
+image::../images/HTMLOutput.PNG[HTML OUTPUT]
+
+
+== Compendium processing
+
+Compendium can be installed using `npm install` command in the terminal. +
+Open a terminal and type : 
+
+    $ npm install
+    $ npm run build 
+
+== Usage 
+
+If you could install successfully Compendium, the command line interface (CLI) will be available in your PATH. To verify this, you can run the following in your terminal: 
+
+    $ node compendium.js --version 
+
+You should see the information about the Compendium version printed in the terminal. +
+`0.0.9` 
+
+=== Command line interface (CLI)
+
+The `compendium` command allows you to invoke Compendium from the command line. For a correct usage you need to introduce five arguments.
+
+[source]
+node compendium.js [-f] <config file | base URL> [--asciidoc|--html|--pdf] <output file>
+or
+node compendium.js [-f] <config file | base URL> <--multiple> files
+Options:
+  --version   Show version number
+  -f          Input type: JSON Config file (This is by default)
+  --asciidoc  Output type: asciidoc file
+  --html      Output type: Html fileno
+  --pdf       Output type: PDF file
+  --multiple  Create multiple output files
+  -h, --help  Show help
+
+Depending of the input type, you can use Compendium in different ways, since within this file you can do as much as asciidoc files, jira issues and confluence pages. 
+
+
+==== JSON Config file
+
+To obtain a file with different sources the best way is using a JSON Config file. To write it, we need to know the following. +
+The file has two differentiated parts, the first part which contains the sources, and the second part, which contains the nodes. +
+First, we need to define the different sources, we can define as many sources as necessary. In this part, for each source we have three different arguments:
+
+* key: It's a reference, it refers the content in the file.
+* kind: It's the type or document format (i.e asciidoc).
+* source: It's the URL or PATH where the information is located.
+
+On the other hand, we need to define the nodes, as to the sources, we can have all the nodes that are necessary. For each node we have three arguments also:
+
+* key: It's a reference, it refers sources key.
+* index: It's the file name or name/id project (i.e examples.adoc).
+* section: It's the section that you want to extract. If you want to extract all the content in the document you should leave this argument blank, but if you want to extract different sections, you should write in an array. (i.e [h1, h3])
+
+IMPORTANT: You can't write the same key, each key should be unique. And if you want to extract Confluence or Jira information you need to introduce your credentials to get the information.
+
+Reference can be made to asciidoc files, jira issues and confluence pages. You can see an example link:http://gitlab-val.es.capgemini.com/gitlab/ADCenter/compendium/blob/master/src/mocks/config.json[here].
