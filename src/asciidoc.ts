@@ -191,8 +191,18 @@ export class AsciiDocFileTextIn implements TextIn {
     public async getTranscript(id: string, sections?: string[]): Promise<Transcript> {
 
         const dir = this.base + '/' + id;
+        let doc;
 
-        const doc = fs.readFileSync(dir, 'utf-8');
+        try {
+            doc = fs.readFileSync(dir, 'utf-8');
+        } catch (err) {
+            if (err.code === 'ENOENT') {
+                err.message = 'File ' + id + ' in ' + dir + ' not found.';
+                throw err;
+            } else {
+                throw err;
+            }
+        }
 
         const dochtml = this.asciidoctor.convert(doc);
         console.log(dochtml);
@@ -211,7 +221,7 @@ export class AsciiDocFileTextIn implements TextIn {
 
         transcript.segments = end;
 
-        //console.dir(JSON.stringify(transcript));
+        console.dir(JSON.stringify(transcript));
 
         return transcript;
 
@@ -247,9 +257,6 @@ export class AsciiDocFileTextIn implements TextIn {
                 out = { kind: 'textelement', element: 'h4', text: this.pharagraphs(node.children) };
                 result.push(out);
 
-            } else if (node.name === 'a') {
-                out = { kind: 'link', ref: node.attribs.href, text: this.linkContent(node.children) };
-                result.push(out);
             }
             if (filter !== [] && filter !== null && filter !== undefined) {
                 let sectionFound = false;
@@ -284,8 +291,11 @@ export class AsciiDocFileTextIn implements TextIn {
                     out = { kind: 'paragraph', text: this.pharagraphs(node.children) };
                     result.push(out);
 
+                } else if (node.name === 'a') {
+                    out = { kind: 'link', ref: node.attribs.href, text: this.linkContent(node.children) };
+                    result.push(out);
                 } else if (node.name === 'img') {
-                    let img: InlineImage = {
+                    const img: InlineImage = {
                         kind: 'inlineimage',
                         img: node.attribs.src,
                         title: node.attribs.alt,

@@ -27,6 +27,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
         .nargs('pdf', 1)
         .help('h')
         .alias('h', 'help')
+        .alias('v', 'version')
         .argv;
 
     if ((cli.f && !cli.j && !cli.c) || (!cli.f && cli.j && !cli.c) || (!cli.f && !cli.j && cli.c)) {

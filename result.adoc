@@ -15,8 +15,6 @@ The lazy *brown cat* *_jumps_* *over* the quick dog.
 
 image::fox.png[Red Fox, link="http://www.google.es"]
 
-image::fox.png[Red Fox]
-
 The ~quick~  *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#
 
 |==================

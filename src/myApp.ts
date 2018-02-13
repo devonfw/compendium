@@ -19,10 +19,15 @@ export async function doCompendium(configFile: string, format: string, outputFil
     let docconfig: ConfigFile;
     let fileOutput: TextOut;
     let merger: Merger;
+    let index;
 
     // Get Index
     docconfig = new ConfigFile(configFile);
-    const index = await docconfig.getIndex();
+    try {
+        index = await docconfig.getIndex();
+    } catch (err) {
+        throw new Error(err.message);
+    }
 
     // Test Out
     let output = 'result';
