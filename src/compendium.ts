@@ -99,7 +99,6 @@ let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
         outputFormat = 'asciidoc';
         configFile = cli._[0];
         outputFile = cli._[1];
-        console.log(cli._.length + '\n');
         console.log('Input file type: ' + inputFormat + '\nOutput file type: ' + outputFormat + '\nConfig: ' + configFile + '\nOutput: ' + outputFile);
         try {
             await doCompendium(configFile, outputFormat, outputFile); // Logic

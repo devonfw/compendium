@@ -10,12 +10,6 @@ import chalk from 'chalk';
 
 export async function doCompendium(configFile: string, format: string, outputFile: string | undefined) {
 
-    console.log('\n\n=> Parameters: \n');
-    console.log(' Configuration file: ', configFile);
-    console.log(' Output format: ', format);
-    console.log(' Output file: ', outputFile);
-    console.log('\n');
-
     let docconfig: ConfigFile;
     let fileOutput: TextOut;
     let merger: Merger;

@@ -203,7 +203,9 @@ export class AsciiDocFileTextIn implements TextIn {
                 throw err;
             }
         }
-
+        doc = doc.replace(':toc: macro', '');
+        doc = doc.replace('toc::[]', '');
+        //console.log(doc);
         const dochtml = this.asciidoctor.convert(doc);
         //console.log(dochtml);
 
