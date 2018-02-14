@@ -205,7 +205,7 @@ export class AsciiDocFileTextIn implements TextIn {
         }
 
         const dochtml = this.asciidoctor.convert(doc);
-        console.log(dochtml);
+        //console.log(dochtml);
 
         const tree = this.htmlparse.parse(dochtml);
 
@@ -221,7 +221,7 @@ export class AsciiDocFileTextIn implements TextIn {
 
         transcript.segments = end;
 
-        console.dir(JSON.stringify(transcript));
+        //console.dir(JSON.stringify(transcript));
 
         return transcript;
 
@@ -590,24 +590,15 @@ export class AsciiDocFileTextIn implements TextIn {
                     }
                 }
 
-            } else if (child.data !== '\n' && child.data !== '') {
-                const attrs: TextAttributes = {
-                    strong: false,  // "bold"
-                    cursive: false,   // "italic"
-                    underline: false,
-                    script: 'normal'
-                };
-                const out: RichString = {
-                    text: '',
-                    attrs: attrs
-                };
+            } else if (child.data !== '\n' && child.data !== '' && child.data !== ' ') {
+                     const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' }; // "bold" // "italic"
+                     const out: RichString = { text: '', attrs: attrs };
 
-                out.text = child.data;
-                out.attrs = attrs;
-                // console.dir(out, { depth: null });  // <------
-                result.push(out);
-
-            }
+                     out.text = child.data;
+                     out.attrs = attrs;
+                     // console.dir(out, { depth: null });  // <------
+                     result.push(out);
+                   }
         }
         return result;
 

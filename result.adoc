@@ -3,45 +3,9 @@ toc::[]
 
 == The fox
 
-The quick *brown fox* *_jumps_* *over* the lazy dog.
+=== The real fox
 
-== The cat
+image::fox.png[Red Fox]
 
-The lazy *brown cat* *_jumps_* *over* the quick dog.
-
-|==================
-| Important | This is an important thing to know. 
-|==================
-
-
-|==================
-| Tip | It is convenient read this twice. 
-|==================
-
-
-== The fox
-
-=== The *real* *_fox_*
-
-image::fox.png[Red Fox, link="http://www.google.es"]
-
-The ~quick~  *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#
-
-|==================
-| Column 1 | Columns 2 | and 3 
-| 1 |    |    
-| 2 | Item 2 | Item 2 
-| 3 | Item 3 | Item 3 
-| 4 | Item 4 | link:http://www.google.es[Google] 
-| footer 1 | footer 2 a| * hola1
-* hola2
-** anidada1
-** anidada2
-*** anidadaotravez1
-*** anidadaotravez2
-** anidada3
-* hola3
- 
-|==================
-
+The ~quick~ *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#
 

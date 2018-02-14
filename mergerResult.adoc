@@ -9,6 +9,16 @@ The quick *brown fox* *_jumps_* *over* the lazy dog.
 
 The lazy *brown cat* *_jumps_* *over* the quick dog.
 
+|==================
+| Important | This is an important thing to know. 
+|==================
+
+
+|==================
+| Tip | It is convenient read this twice. 
+|==================
+
+
 *_hola mundo1_* * blablacar* s
 
 *_hola mundo2_* * blablacar* s

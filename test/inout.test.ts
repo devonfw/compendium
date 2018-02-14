@@ -228,11 +228,11 @@ describe('Testing the config and index creation', () => {
 
                 expect(index[0][0].key).equals('input-data1');
                 expect(index[0][0].kind).equals('asciidoc');
-                expect(index[0][0].source).equals('C:/Users/sbadenes/Desktop/Compendium/compendium/src/mocks/input-data1');
+                expect(index[0][0].source).equals('./src/mocks/input-data1');
 
                 expect(index[0][1].key).equals('input-data2');
                 expect(index[0][1].kind).equals('asciidoc');
-                expect(index[0][1].source).equals('C:/Users/sbadenes/Desktop/Compendium/compendium/src/mocks/input-data2');
+                expect(index[0][1].source).equals('./src/mocks/input-data2');
 
                 expect(index[1][0].key).equals('input-data1');
                 expect(index[1][0].kind).equals('asciidoc');
@@ -240,7 +240,7 @@ describe('Testing the config and index creation', () => {
 
                 expect(index[1][1].key).equals('input-data2');
                 expect(index[1][1].kind).equals('asciidoc');
-                expect(index[1][1].index).equals('example1.adoc');
+                expect(index[1][1].index).equals('brownfox2.adoc');
 
                 done();
 
