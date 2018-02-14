@@ -458,6 +458,42 @@ export class AsciiDocFileTextIn implements TextIn {
                         colRow.push(element);
                     }
                 }
+            } else if (child.name === 'tr') {
+                let resultRow: Row = [];
+                for (const cell of child.children) {
+                    let element: Cell;
+                    let colespan: string = '1';
+
+                    if (cell.name === 'th') {
+                        if (cell.attribs.colspan) {
+                            colespan = cell.attribs.colspan;
+                        }
+                        if (cell.children && cell.children.length > 0 && cell.children[0].name !== 'br') {
+                            const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs(cell.children) };
+                            element = { type: 'th', colspan: colespan, cell: [p] };
+                        } else {
+                            const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([{ data: ' ', type: 'text' }]) };
+                            element = { type: 'th', colspan: colespan, cell: [p] };
+                        }
+                        resultRow.push(element);
+                    } else if (cell.name === 'td') {
+                        if (cell.attribs.colspan) {
+                            colespan = cell.attribs.colspan;
+                        }
+                        if (cell.children && cell.children.length > 0 && cell.children[0].name !== 'br') {
+                            const contentCell = this.tableTd(cell.children);
+                            if (contentCell) {
+                                element = { type: 'td', colspan: colespan, cell: contentCell };
+                                resultRow.push(element);
+                            }
+                        } else {
+                            const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([{ data: ' ', type: 'text' }]) };
+                            element = { type: 'td', colspan: colespan, cell: [p] };
+                            resultRow.push(element);
+                        }
+                    }
+                }
+                bodyRows.push(resultRow);
             }
         }
 
@@ -474,40 +510,46 @@ export class AsciiDocFileTextIn implements TextIn {
         for (const child of node) {
             let out: TableSegment;
             if (child.name === 'p') {
-                out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
-                result.push(out);
+              out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
+              result.push(out);
             } else if (child.name === 'img') {
-                let img: InlineImage = {
-                    kind: 'inlineimage',
-                    img: child.attribs.src,
-                    title: child.attribs.alt,
-                };
-                result.push(img);
+              let img: InlineImage = { kind: 'inlineimage', img: child.attribs.src, title: child.attribs.alt };
+              result.push(img);
             } else if (child.name === 'table') {
-                out = { kind: 'table', content: this.table(child.children) };
-                result.push(out);
+              out = { kind: 'table', content: this.table(child.children) };
+              result.push(out);
             } else if (child.name === 'span') {
-                out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
-                result.push(out);
+              out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
+              result.push(out);
             } else if (child.name === 'ul') {
-                out = { kind: 'list', ordered: false, elements: this.list(child.children) };
-                result.push(out);
+              out = { kind: 'list', ordered: false, elements: this.list(child.children) };
+              result.push(out);
             } else if (child.name === 'ol') {
-                out = { kind: 'list', ordered: true, elements: this.list(child.children) };
-                result.push(out);
+              out = { kind: 'list', ordered: true, elements: this.list(child.children) };
+              result.push(out);
             } else if (node.name === 'a') {
-                out = { kind: 'link', ref: node.attribs.href, text: this.linkContent(node.children) };
-                result.push(out);
+              out = { kind: 'link', ref: node.attribs.href, text: this.linkContent(node.children) };
+              result.push(out);
             } else if (child.name === 'div') {
-                if (child.children) {
-                    for (const element of child.children) {
-                        const temp: Array<TableSegment> = this.tableTd(element.children);
-                        for (const inside of temp) {
-                            result.push(inside);
-                        }
+              if (child.children) {
+                for (const element of child.children) {
+                  if (element.children) {
+                    const temp: Array<TableSegment> = this.tableTd(element.children);
+                    for (const inside of temp) {
+                      result.push(inside);
                     }
+                  } else if (element.type === 'text') {
+                    const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs(
+                        [element]
+                      ) };
+                    result.push(p);
+                  }
                 }
-                }
+              }
+            } else if (child.type === 'text' && child.data !== '\n') {
+              const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([child]) };
+              result.push(p);
+            }
         }
 
         return result;

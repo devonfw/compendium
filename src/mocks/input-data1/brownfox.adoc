@@ -6,3 +6,7 @@ The quick *brown fox _jumps_ over* the lazy dog.
 == The cat
 
 The lazy *brown cat _jumps_ over* the quick dog.
+
+IMPORTANT: This is an important thing to know.
+
+TIP: It is convenient read this twice.
