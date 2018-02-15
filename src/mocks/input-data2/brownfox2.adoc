@@ -3,7 +3,7 @@
 
 === The *real _fox_*
 
-image::fox.png[Red Fox, link="http://www.google.es"]
+image::/images/brownfox2/fox.png[Red Fox, link="http://www.google.es"]
 
 The ~quick~ *brown fox _jumps_ over* the lazy [.underline]#dog.#
 

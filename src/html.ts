@@ -37,7 +37,8 @@ export class HtmlFileTextOut implements TextOut {
                 }
             }
             // console.log(outputString);
-            fs.writeFile(this.outputFile + '.adoc', outputString, (err) => { if (err) throw new Error(err.message); });
+            outputString = this.asciidoctor.convert(outputString);
+            fs.writeFile(this.outputFile + '.html', outputString, (err) => { if (err) throw new Error(err.message); });
         }
 
         this.done = true;

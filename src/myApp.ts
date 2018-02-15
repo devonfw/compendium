@@ -67,6 +67,65 @@ export async function doCompendium(configFile: string, format: string, outputFil
         }
     }
 
+
+    output = output.replace(output.split('/').splice(-1, 1)[0], '');
+    try {
+      const shell = require('shelljs');
+      shell.mkdir('-p', output);
+    } catch (err) {
+      if (err.code !== 'EEXIST') {
+        throw err;
+      }
+    }
+
+    for (const source of index[0]) {
+        if (source.kind === 'asciidoc'){
+            for (const node of index[1]) {
+                let onlyFilename: string = '';
+
+                const lol = node.index.split('.');
+
+                if (lol.length > 1) {
+                    lol.splice(-1, 1);
+                }
+
+                for (const piece of lol) {
+                    onlyFilename = onlyFilename + piece;
+                }
+                if (node.key === source.key && dirExists(source.source + '/images/' + onlyFilename)) {
+                    let imageOutput: string;
+                    if (output.charAt(0) === '.' && output.charAt(1) === '/'){
+                        imageOutput = output + '/images/';
+                    } else if (output.charAt(0) === '/') {
+                        imageOutput = '.' + output + '/images/';
+                    } else {
+                        imageOutput = './' + output + '/images/';
+                    }
+                    if (!dirExists(imageOutput + '/' + onlyFilename)) {
+                        try {
+                            const shell = require('shelljs');
+                            shell.mkdir('-p', imageOutput + '/' + onlyFilename + '/');
+                        } catch (err) {
+                            if (err.code !== 'EEXIST') {
+                                throw err;
+                            }
+                        }
+                    }
+                    try {
+                        const ncp = require('ncp').ncp;
+                        ncp(source.source + '/images/' + onlyFilename + '/', imageOutput + '/' + onlyFilename + '/',  (err: Error) => {
+                            if (err) {
+                                return console.error(err);
+                            }
+                        });
+                    } catch (err) {
+                        console.log(err.message);
+                    }
+                }
+            }
+        }
+    }
+
     // Merger
     merger = new MergerImpl();
     try {
@@ -111,4 +170,13 @@ export async function askInPrompt(): Promise<Credentials> {
     });
 
     return promise;
+}
+
+function dirExists(filename: string) {
+    try {
+        fs.accessSync(filename);
+        return true;
+    } catch (e) {
+        return false;
+    }
 }
