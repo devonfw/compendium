@@ -19,41 +19,29 @@ The lazy *brown cat* *_jumps_* *over* the quick dog.
 |==================
 
 
-*_hola mundo1_* * blablacar* s
+== The fox
 
-*_hola mundo2_* * blablacar* s
+=== The *real* *_fox_*
 
-_*hola mundo3*_
+image::/images/brownfox2/fox.png[Red Fox, link="http://www.google.es"]
 
-*_h_* _ola mundo_ *_3_*
+The ~quick~ *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#
 
-[.underline]#underline1#
+|==================
+| Column 1 | Columns 2 | and 3 
+| 1 |  |  
+| 2 | Item 2 | Item 2 
+| 3 | Item 3 | Item 3 
+| 4 | Item 4 | link:http://www.google.es[Google] 
+| footer 1 | footer 2 a| * hola1
+* hola2
+** anidada1
+** anidada2
+*** anidadaotravez1
+*** anidadaotravez2
+** anidada3
+* hola3
+ 
+|==================
 
-hola[.underline] underline2
-
-*_[.underline]#underline3#_*
-
-*[.underline]#underline4#*
-
-[.underline]#underline5#
-
-_[.underline]#*underline6*#_
-
-~small1~ text
-
-~*small2*~ text
-
-~*small3*~ text
-
-^elevado1^ asdfa 
-
-^*elevado2*^ asdfa
-
-^*elevado3*^ asdfa
-
-^*elevado4*^ asdfa
-
-*hola* *_mundo_*
-
-*hola* *_mundo_*
 

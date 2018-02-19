@@ -123,6 +123,43 @@ describe('Testing if Asciidoc Output is the expected ', () => {
     });
 });
 
+describe('Testing if HTML Output is the expected ', () => {
+  before(() => {
+    //setup fixture
+  });
+
+  describe('HTMLFileTextOut', () => {
+    it('should compare the 2 strings', done => {
+      textinAsciidoc
+        .getTranscript('brownfox2.adoc')
+        .then(transcript => {
+          let arrayTranscript = [];
+          arrayTranscript.push(transcript);
+          textout.generate(arrayTranscript);
+          if (fs.existsSync('result.html')) {
+            const outputStream = fs.readFileSync('result.html', 'utf-8');
+            const outputArray = outputStream.split('\n');
+            if (outputArray) {
+              expect(outputArray[21]).equals('<p>The <sub>quick</sub> <strong>brown fox</strong> <strong><em>jumps</em></strong> <strong>over</strong> the lazy <span class="underline">dog.</span></p>');
+              done();
+            } else {
+              done(new Error('Incorrect content'));
+            }
+          } else {
+            done(new Error('File was not created'));
+          }
+        })
+        .catch(error => {
+          done(error);
+        });
+    });
+  });
+
+  after(() => {
+    // clean fixture
+  });
+});
+
 describe('Testing the Html Output stream and the file creation ', () => {
     before(() => {
         //setup fixture
@@ -161,12 +198,12 @@ describe('Testing the merge of two files ', () => {
             let sources: IndexSource[] = [{
                     key: 'input-data1',
                     kind: 'asciidoc',
-                    source: 'C:/Users/aredomar/Desktop/repos/compendium/src/mocks/input-data1'
+                    source: './src/mocks/input-data1'
                 },
                 {
                     key: 'input-data2',
                     kind: 'asciidoc',
-                    source: 'C:/Users/aredomar/Desktop/repos/compendium/src/mocks/input-data2'
+                    source: './src/mocks/input-data2'
             }];
 
             let nodes: IndexNode[] = [{
@@ -177,7 +214,7 @@ describe('Testing the merge of two files ', () => {
             {
                 key: 'input-data2',
                 kind: 'asciidoc',
-                index: 'example1.adoc',
+                index: 'brownfox2.adoc',
                 sections: ['']
             }];
 
