@@ -135,7 +135,7 @@ describe('Testing if HTML Output is the expected ', () => {
         .then(transcript => {
           let arrayTranscript = [];
           arrayTranscript.push(transcript);
-          textout.generate(arrayTranscript);
+          textoutHtml.generate(arrayTranscript);
           if (fs.existsSync('result.html')) {
             const outputStream = fs.readFileSync('result.html', 'utf-8');
             const outputArray = outputStream.split('\n');
