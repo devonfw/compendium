@@ -14,12 +14,10 @@
     "nodes": [
         {
             "key": "input-data1",
-            "kind": "asciidoc",
             "index": "brownfox.adoc"
         },
         {
             "key": "input-data2",
-            "kind": "asciidoc",
             "index": "brownfox2.adoc",
             "section": ""
         }

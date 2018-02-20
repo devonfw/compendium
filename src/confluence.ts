@@ -182,19 +182,19 @@ export class ConfluenceTextIn implements TextIn {
            let result: Array<TextSegment> = [];
            let out: TextSegment;
            if (node.children) {
-             if (node.name === 'title') {
+             if (node.name === 'h1') {
                out = { kind: 'textelement', element: 'title', text: this.pharagraphs(node.children) };
                result.push(out);
-             } else if (node.name === 'h1') {
+             } else if (node.name === 'h2') {
                out = { kind: 'textelement', element: 'h1', text: this.pharagraphs(node.children) };
                result.push(out);
-             } else if (node.name === 'h2') {
+             } else if (node.name === 'h3') {
                out = { kind: 'textelement', element: 'h2', text: this.pharagraphs(node.children) };
                result.push(out);
-             } else if (node.name === 'h3') {
+             } else if (node.name === 'h4') {
                out = { kind: 'textelement', element: 'h3', text: this.pharagraphs(node.children) };
                result.push(out);
-             } else if (node.name === 'h4') {
+             } else if (node.name === 'h5') {
                out = { kind: 'textelement', element: 'h4', text: this.pharagraphs(node.children) };
                result.push(out);
              }

@@ -1,8 +1,5 @@
 import { TextInSource, TextInSources, Index, IndexNode, IndexSource, DocConfig } from './types';
-import { TextInMock, TextOutMock } from './mocks/impl';
 import * as fs from 'fs';
-
-export let mock = false;
 
 export class ConfigFile implements DocConfig {
 
@@ -43,7 +40,6 @@ export class ConfigFile implements DocConfig {
 
                 const indexNode: IndexNode = {
                     key: node.key,
-                    kind: node.kind,
                     index: node.index,
                 };
                 if (node.sections !== null && node.sections !== '' && node.sections !== undefined) {

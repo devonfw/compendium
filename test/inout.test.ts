@@ -1,7 +1,6 @@
 
 import * as config from '../src/config';
 import { DocConfig, TextOut, TextIn, Merger, Index, IndexSource, IndexNode, TextInSources } from '../src/types';
-import {DocConfigMock, TextOutMock, TextInMock} from '../src/mocks/impl';
 import { AsciiDocFileTextOut, AsciiDocFileTextIn } from '../src/asciidoc';
 import { HtmlFileTextOut } from '../src/html';
 import * as fs from 'fs';
@@ -21,17 +20,12 @@ let merger: Merger;
 const expect = chai.expect;
 const should = chai.should();
 
-if (config.mock) {
-    docconfigmock = new DocConfigMock();
-    // textout = new TextOutMock();
-    textin = new TextInMock('path');
-} else {
-    docconfig = new ConfigFile('../compendium/src/mocks/configMock.json');
-    textout = new AsciiDocFileTextOut('result');
-    textoutHtml = new HtmlFileTextOut('result');
-    textinAsciidoc = new AsciiDocFileTextIn('test-data');
-    merger = new MergerImpl();
-}
+docconfig = new ConfigFile('../compendium/src/mocks/configMock.json');
+textout = new AsciiDocFileTextOut('result');
+textoutHtml = new HtmlFileTextOut('result');
+textinAsciidoc = new AsciiDocFileTextIn('test-data');
+merger = new MergerImpl();
+
 
 xdescribe('Testing the Input of Text and doc generation', () => {
     before(() => {
@@ -94,7 +88,7 @@ describe('Testing if Asciidoc Output is the expected ', () => {
     });
 
     describe('AsciidocFileTextOut', () => {
-        it('should compare the 2 strings', (done) => {
+        it('should compare the 2 rich texts', (done) => {
             textinAsciidoc.getTranscript('brownfox2.adoc').then((transcript) => {
                 let arrayTranscript = [];
                 arrayTranscript.push(transcript);
@@ -113,6 +107,29 @@ describe('Testing if Asciidoc Output is the expected ', () => {
                     done(new Error('File was not created'));
                 }
             }).catch((error) => {
+                done(error);
+            });
+        });
+    });
+    describe('AsciidocFileTextOut', () => {
+        it('should compare the table output', done => {
+            textinAsciidoc.getTranscript('brownfox2.adoc').then(transcript => {
+                let arrayTranscript = [];
+                arrayTranscript.push(transcript);
+                textout.generate(arrayTranscript);
+                if (fs.existsSync('result.adoc')) {
+                  const outputStream = fs.readFileSync('result.adoc', 'utf-8');
+                  const outputArray = outputStream.split('\n');
+                  if (outputArray) {
+                    expect(outputArray[16]).equals('| 4 | Item 4 | link:http://www.google.es[Google] ');
+                    done();
+                  } else {
+                    done(new Error('Incorrect content'));
+                  }
+                } else {
+                  done(new Error('File was not created'));
+                }
+            }).catch(error => {
                 done(error);
             });
         });
@@ -208,12 +225,10 @@ describe('Testing the merge of two files ', () => {
 
             let nodes: IndexNode[] = [{
                 key: 'input-data1',
-                kind: 'asciidoc',
                 index: 'brownfox.adoc'
             },
             {
                 key: 'input-data2',
-                kind: 'asciidoc',
                 index: 'brownfox2.adoc',
                 sections: ['']
             }];
@@ -272,11 +287,9 @@ describe('Testing the config and index creation', () => {
                 expect(index[0][1].source).equals('./src/mocks/input-data2');
 
                 expect(index[1][0].key).equals('input-data1');
-                expect(index[1][0].kind).equals('asciidoc');
                 expect(index[1][0].index).equals('brownfox.adoc');
 
                 expect(index[1][1].key).equals('input-data2');
-                expect(index[1][1].kind).equals('asciidoc');
                 expect(index[1][1].index).equals('brownfox2.adoc');
 
                 done();

@@ -52,7 +52,6 @@ export async function doCompendium(configFile: string, format: string, outputFil
                     throw new Error('Resource under \'Single Sign On\' context. This authentication is not yet implemented.');
                 }
             } else {
-               
                 let credentials: Credentials;
                 try {
                     console.log(chalk.bold(`Please enter credentials for source with key '${chalk.green.italic(source.key)}' (${chalk.blue(source.source)})\n`));
@@ -78,60 +77,13 @@ export async function doCompendium(configFile: string, format: string, outputFil
       }
     }
 
-    for (const source of index[0]) {
-        if (source.kind === 'asciidoc'){
-            for (const node of index[1]) {
-                let onlyFilename: string = '';
-
-                const lol = node.index.split('.');
-
-                if (lol.length > 1) {
-                    lol.splice(-1, 1);
-                }
-
-                for (const piece of lol) {
-                    onlyFilename = onlyFilename + piece;
-                }
-                if (node.key === source.key && dirExists(source.source + '/images/' + onlyFilename)) {
-                    let imageOutput: string;
-                    if (output.charAt(0) === '.' && output.charAt(1) === '/'){
-                        imageOutput = output + '/images/';
-                    } else if (output.charAt(0) === '/') {
-                        imageOutput = '.' + output + '/images/';
-                    } else {
-                        imageOutput = './' + output + '/images/';
-                    }
-                    if (!dirExists(imageOutput + '/' + onlyFilename)) {
-                        try {
-                            const shell = require('shelljs');
-                            shell.mkdir('-p', imageOutput + '/' + onlyFilename + '/');
-                        } catch (err) {
-                            if (err.code !== 'EEXIST') {
-                                throw err;
-                            }
-                        }
-                    }
-                    try {
-                        const ncp = require('ncp').ncp;
-                        ncp(source.source + '/images/' + onlyFilename + '/', imageOutput + '/' + onlyFilename + '/',  (err: Error) => {
-                            if (err) {
-                                return console.error(err);
-                            }
-                        });
-                    } catch (err) {
-                        console.log(err.message);
-                    }
-                }
-            }
-        }
-    }
 
     // Merger
     merger = new MergerImpl();
     try {
-        merger.merge(textinSources, index, fileOutput).then(() => {
-            console.log('\n Process finished!'); // ! This is always shown. Although errors occurr.
-        });
+        await merger.merge(textinSources, index, fileOutput);
+        console.log('\n Process finished!'); // ! This is always shown. Although errors occurr.
+
     } catch (e) {
         console.error(e.message);
     }

@@ -12,6 +12,31 @@ export class AsciiDocFileTextOut implements TextOut {
 
     public async generate(data: Array<Transcript>): Promise<void> {
 
+        if (this.dirExists('./imageTemp/')) {
+            const arrayDir = this.outputFile.split('/');
+            let outputDir: string = '';
+            if (arrayDir.length > 1) {
+              arrayDir.splice(-1, 1);
+            }
+
+            for (const piece of arrayDir) {
+              outputDir = outputDir + piece;
+            }
+            try {
+              const ncp = require('ncp').ncp;
+              ncp('./imageTemp/', outputDir, (err: Error) => {
+                if (err) {
+                  return console.error(err);
+                }
+                const shell = require('shelljs');
+                shell.rm('-rf', 'imageTemp');
+              });
+            } catch (err) {
+              console.log(err.message);
+            }
+
+        }
+
         let outputString = ':toc: macro\ntoc::[]\n\n';
 
         if (data.length < 1) {
@@ -34,6 +59,7 @@ export class AsciiDocFileTextOut implements TextOut {
                         outputString = outputString + this.linkParsed(segment) + '\n\n';
                     }
                 }
+                outputString = outputString + '\n\n';
             }
             // console.log(outputString);
             try {
@@ -49,10 +75,10 @@ export class AsciiDocFileTextOut implements TextOut {
     private textElementParsed(myText: TextElement) {
         const textelement = myText.element;
         if (textelement === 'title') { return '= ' + this.paragraphParsed(myText); }
-        if (textelement === 'h1') { return '= ' + this.paragraphParsed(myText); }
-        if (textelement === 'h2') { return '== ' + this.paragraphParsed(myText); }
-        if (textelement === 'h3') { return '=== ' + this.paragraphParsed(myText); }
-        if (textelement === 'h4') { return '==== ' + this.paragraphParsed(myText); }
+        if (textelement === 'h1') { return '== ' + this.paragraphParsed(myText); }
+        if (textelement === 'h2') { return '=== ' + this.paragraphParsed(myText); }
+        if (textelement === 'h3') { return '==== ' + this.paragraphParsed(myText); }
+        if (textelement === 'h4') { return '===== ' + this.paragraphParsed(myText); }
     }
     private paragraphParsed(myText: Paragraph | TextElement) {
         let output: string = '';
@@ -123,6 +149,9 @@ export class AsciiDocFileTextOut implements TextOut {
 
     private tableParsed(content: TableBody) {
         let output: string;
+        if (content.body[0][0].type === 'th'){
+            output = '[options="header"]\n';
+        }
         output = '|==================\n';
         for (const row of content.body) {
             for (const cell of row) {
@@ -179,6 +208,14 @@ export class AsciiDocFileTextOut implements TextOut {
         }
         return output;
     }
+    private dirExists(filename: string) {
+    try {
+        fs.accessSync(filename);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
 
 }
 
@@ -209,8 +246,14 @@ export class AsciiDocFileTextIn implements TextIn {
         }
         doc = doc.replace(':toc: macro', '');
         doc = doc.replace('toc::[]', '');
+        let dochtml: string = '';
         //console.log(doc);
-        const dochtml = this.asciidoctor.convert(doc);
+        try {
+            dochtml = this.asciidoctor.convert(doc, { attributes: {showtitle: true, doctype: 'book'}} );
+        } catch (err) {
+            console.log(err.code);
+            throw err;
+        }
         //console.log(dochtml);
 
         const tree = this.htmlparse.parse(dochtml);
@@ -238,27 +281,27 @@ export class AsciiDocFileTextIn implements TextIn {
         let result: Array<TextSegment> = [];
         let out: TextSegment;
         if (node.children) {
-            if (node.name === 'title') {
+            if (node.name === 'h1') {
 
                 out = { kind: 'textelement', element: 'title', text: this.pharagraphs(node.children) };
                 result.push(out);
 
-            } else if (node.name === 'h1') {
+            } else if (node.name === 'h2') {
 
                 out = { kind: 'textelement', element: 'h1', text: this.pharagraphs(node.children) };
                 result.push(out);
 
-            } else if (node.name === 'h2') {
+            } else if (node.name === 'h3') {
 
                 out = { kind: 'textelement', element: 'h2', text: this.pharagraphs(node.children) };
                 result.push(out);
 
-            } else if (node.name === 'h3') {
+            } else if (node.name === 'h4') {
 
                 out = { kind: 'textelement', element: 'h3', text: this.pharagraphs(node.children) };
                 result.push(out);
 
-            } else if (node.name === 'h4') {
+            } else if (node.name === 'h5') {
 
                 out = { kind: 'textelement', element: 'h4', text: this.pharagraphs(node.children) };
                 result.push(out);
@@ -306,6 +349,7 @@ export class AsciiDocFileTextIn implements TextIn {
                         img: node.attribs.src,
                         title: node.attribs.alt,
                     };
+                    this.copyImage(node.attribs.src);
                     result.push(img);
                 } else if (node.name === 'table') {
 
@@ -348,6 +392,7 @@ export class AsciiDocFileTextIn implements TextIn {
                 img: node[0].attribs.src,
                 title: node[0].attribs.alt,
             };
+            this.copyImage(node[0].attribs.src);
             result = img;
         } else {
             const out: Paragraph = { kind: 'paragraph', text: this.pharagraphs(node) };
@@ -405,7 +450,7 @@ export class AsciiDocFileTextIn implements TextIn {
         let bodyRows: Array<Row> = [];
 
         for (const child of node) {
-            if (child.name === 'tbody') {
+            if (child.name === 'tbody' || child.name === 'thead') {
                 for (const row of child.children) {
                     if (row.name === 'tr') {
                         let resultRow: Row = [];
@@ -418,13 +463,16 @@ export class AsciiDocFileTextIn implements TextIn {
                                     colespan = cell.attribs.colspan;
                                 }
                                 if (cell.children && cell.children.length > 0 && cell.children[0].name !== 'br') {
-                                    const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs(cell.children) };
-                                    element = { type: 'th', colspan: colespan, cell: [p] };
+                                    const contentCell = this.tableTd(cell.children);
+                                    if (contentCell) {
+                                      element = { type: 'th', colspan: colespan, cell: contentCell };
+                                      resultRow.push(element);
+                                    }
                                 } else {
                                     const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([{ data: ' ', type: 'text' }]) };
                                     element = { type: 'th', colspan: colespan, cell: [p] };
+                                    resultRow.push(element);
                                 }
-                                resultRow.push(element);
                             } else if (cell.name === 'td') {
                                 if (cell.attribs.colspan) {
                                     colespan = cell.attribs.colspan;
@@ -475,13 +523,16 @@ export class AsciiDocFileTextIn implements TextIn {
                             colespan = cell.attribs.colspan;
                         }
                         if (cell.children && cell.children.length > 0 && cell.children[0].name !== 'br') {
-                            const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs(cell.children) };
-                            element = { type: 'th', colspan: colespan, cell: [p] };
+                             const contentCell = this.tableTd(cell.children);
+                             if (contentCell) {
+                               element = { type: 'th', colspan: colespan, cell: contentCell };
+                               resultRow.push(element);
+                             }
                         } else {
                             const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([{ data: ' ', type: 'text' }]) };
                             element = { type: 'th', colspan: colespan, cell: [p] };
+                            resultRow.push(element);
                         }
-                        resultRow.push(element);
                     } else if (cell.name === 'td') {
                         if (cell.attribs.colspan) {
                             colespan = cell.attribs.colspan;
@@ -520,6 +571,7 @@ export class AsciiDocFileTextIn implements TextIn {
               result.push(out);
             } else if (child.name === 'img') {
               let img: InlineImage = { kind: 'inlineimage', img: child.attribs.src, title: child.attribs.alt };
+              this.copyImage(child.attribs.src);
               result.push(img);
             } else if (child.name === 'table') {
               out = { kind: 'table', content: this.table(child.children) };
@@ -552,7 +604,7 @@ export class AsciiDocFileTextIn implements TextIn {
                   }
                 }
               }
-            } else if (child.type === 'text' && child.data !== '\n') {
+            } else if ((child.type === 'text' && child.data !== '\n') || (child.type === 'tag')) {
               const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([child]) };
               result.push(p);
             }
@@ -573,6 +625,7 @@ export class AsciiDocFileTextIn implements TextIn {
                     img: child.attribs.src,
                     title: child.attribs.alt,
                 };
+                this.copyImage(child.attribs.src);
                 result.push(img);
             } else if (child.name === 'a') {
                 const out: Link = { kind: 'link', ref: child.attribs.href, text: this.linkContent(child.children) };
@@ -631,4 +684,34 @@ export class AsciiDocFileTextIn implements TextIn {
         return paragraph;
     }
 
+    public copyImage(dir: string){
+        const arrayDir = dir.split('/');
+        let outputDir: string = '';
+        if (arrayDir.length > 1) {
+            arrayDir.splice(-1, 1);
+        }
+
+        for (const piece of arrayDir) {
+            outputDir = outputDir + '/' + piece;
+        }
+
+        try {
+            const shell = require('shelljs');
+            shell.mkdir('-p', './imageTemp/' + outputDir);
+        } catch (err) {
+            if (err.code !== 'EEXIST') {
+                throw err;
+            }
+        }
+        try {
+            const ncp = require('ncp').ncp;
+            ncp(this.base + '/' + dir, 'imageTemp/' + dir,  (err: Error) => {
+                if (err) {
+                    return console.error(err);
+                }
+            });
+        } catch (err) {
+            console.log(err.message);
+        }
+    }
 }

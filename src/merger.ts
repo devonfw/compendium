@@ -8,25 +8,24 @@ export class MergerImpl implements Merger {
 
         const transcripts: Array<Transcript> = [];
         for (const node of index[1]){
-            if (node.kind === 'asciidoc' || node.kind === 'confluence') {
-                if (textinSources[node.key]) {
-                    try{
-                        transcripts.push(await textinSources[node.key].getTranscript(node.index)); // The bind is by key -> A source identifier. The call to the method is customized for every node.
-                    } catch (err) {
-                        throw new Error(err.message);
-                    }
+            if (textinSources[node.key]) {
+                try{
+                    transcripts.push(await textinSources[node.key].getTranscript(node.index)); // The bind is by key -> A source identifier. The call to the method is customized for every node.
+                } catch (err) {
+                    throw new Error(err.message);
                 }
-                else {
-                    // There isn't source-node binding
-                    const error_msg = 'Node with id \'' + node.index + '\' doesn\'t have an existing source';
-                    throw new Error(error_msg);
-                }
-            } else {
-                const error_msg = '\'' + node.kind + '\'' + ' for \'' + node.index + '\' is an unknown TextInSource';
+            }
+            else {
+                // There isn't source-node binding
+                const error_msg = 'Node with id \'' + node.index + '\' doesn\'t have an existing source';
                 throw new Error(error_msg);
             }
-        }
-        await textout.generate(transcripts);
 
+        }
+        try {
+            await textout.generate(transcripts);
+        } catch (err) {
+            throw err;
+        }
     }
 }

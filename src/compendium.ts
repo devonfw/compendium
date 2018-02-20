@@ -14,7 +14,6 @@ let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
         .example('$0 -f config.json --html out', 'Use a config file in current directory and write the result in file out.html')
         .describe('f', 'Input type: JSON Config file (default)')
         .describe('j', 'Input type: Jira Base URL')
-        .describe('c', 'Input type: Confluence base URL')
         .describe('asciidoc', 'Output type: asciidoc file')
         .describe('html', 'Output type: Html file')
         .describe('pdf', 'Output type: PDF file')
@@ -30,7 +29,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
         .alias('v', 'version')
         .argv;
 
-    if ((cli.f && !cli.j && !cli.c) || (!cli.f && cli.j && !cli.c) || (!cli.f && !cli.j && cli.c)) {
+    if ((cli.f && !cli.j && !cli.c) || (!cli.f && cli.j && !cli.c)) {
 
         let myCredentials: Credentials;
 
@@ -40,14 +39,6 @@ let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
         } else if (cli.j) {
             inputFormat = 'jira';
             configFile = cli.j;
-            try {
-                myCredentials = await askInPrompt();
-            } catch (err) {
-                console.error(err.message);
-            }
-        } else if (cli.c) {
-            inputFormat = 'confluence';
-            configFile = cli.c;
             try {
                 myCredentials = await askInPrompt();
             } catch (err) {

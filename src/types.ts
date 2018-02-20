@@ -105,7 +105,6 @@ export interface IndexSource {  // Updated
 export interface IndexNode {
 
     key: string;
-    kind: TextInSource;
     index: string;
     sections?: string[];
 }
