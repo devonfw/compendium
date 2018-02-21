@@ -11,12 +11,10 @@ const textinSources: TextInSources = {};
 
 (async () => {
 
-    if (config.mock) {
-        docconfig = new DocConfigMock();
-        textout = new TextOutMock();
-    } else {
-        throw new Error('Not implemented');
-    }
+
+    docconfig = new DocConfigMock();
+    textout = new TextOutMock();
+
     const index = await docconfig.getIndex();
     for (const source of index[0]){
         if (source.kind === 'asciidoc') {

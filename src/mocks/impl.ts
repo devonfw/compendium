@@ -9,7 +9,6 @@ export class DocConfigMock implements DocConfig {
         const index: Index =  [[{key : 'key1', kind: 'asciidoc', source: 'c:\\temp'}],
             [{
                 key: 'key1',
-                kind: 'asciidoc',
                 index: 'test-data/brownfox.md',
             }]];
         return index;
