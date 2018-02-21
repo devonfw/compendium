@@ -59,7 +59,7 @@ export class AsciiDocFileTextOut implements TextOut {
                         outputString = outputString + this.linkParsed(segment) + '\n\n';
                     }
                 }
-                outputString = outputString + '\n\n';
+                outputString = outputString + '\n\n<<<<';
             }
             // console.log(outputString);
             try {
@@ -651,10 +651,7 @@ export class AsciiDocFileTextIn implements TextIn {
 
             } else if (child.data !== '\n' && child.data !== '' && child.data !== ' ') {
                      const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' }; // "bold" // "italic"
-                     const out: RichString = { text: '', attrs: attrs };
-
-                     out.text = child.data;
-                     out.attrs = attrs;
+                     const out: RichString = { text: child.data, attrs: attrs };
                      // console.dir(out, { depth: null });  // <------
                      result.push(out);
                    }
