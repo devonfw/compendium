@@ -66,14 +66,14 @@ let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
                 console.error('Incorrect output definition, see --help for usage info');
             }
 
-            if ((outputFormat && outputFormat !== 'pdf' && cli._.length < 1) || (outputFormat === 'asciidoc' && cli._.length === 1)) {
+            if ((outputFormat && cli._.length < 1) || (outputFormat === 'asciidoc' && cli._.length === 1)) {
                 console.log('Input file type: ' + inputFormat + '\nOutput file type: ' + outputFormat + '\nConfig: ' + configFile + '\nOutput: ' + outputFile);
                 try {
                     await doCompendium(configFile, outputFormat, outputFile); // Logic
                 } catch (e) {
                     console.error(chalk.red(e.message));
                 }
-            } else if (multiple || outputFormat === 'pdf') {
+            } else if (multiple) {
                 console.log('Not implemented yet');
             } else {
                 console.error('Found extra parameters: ' + cli._);

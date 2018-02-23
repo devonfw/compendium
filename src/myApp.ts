@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import { IndexSource, IndexNode, Index, TextInSources, Transcript, TextOut, Merger, DocConfig, Cookie, Cookies, Credentials } from './types';
 import { AsciiDocFileTextIn, AsciiDocFileTextOut } from './asciidoc';
 import { HtmlFileTextOut } from './html';
+import { PdfFileTextOut } from './pdf';
 import { MergerImpl } from './merger';
 import { ConfigFile } from './config';
 import { ConfluenceTextIn } from './confluence';
@@ -33,6 +34,8 @@ export async function doCompendium(configFile: string, format: string, outputFil
         fileOutput = new AsciiDocFileTextOut(output);
     } else if (format === 'html') {
         fileOutput = new HtmlFileTextOut(output);
+    } else if (format === 'pdf') {
+        fileOutput = new PdfFileTextOut(output);
     } else {
         const msg = 'Format \'' + format + '\' is not implemented yet';
         throw new Error(msg);
@@ -66,15 +69,16 @@ export async function doCompendium(configFile: string, format: string, outputFil
         }
     }
 
-
-    output = output.replace(output.split('/').splice(-1, 1)[0], '');
-    try {
-      const shell = require('shelljs');
-      shell.mkdir('-p', output);
-    } catch (err) {
-      if (err.code !== 'EEXIST') {
-        throw err;
-      }
+    if (output.split('/').length > 1) {
+        const myOutput = output.replace(output.split('/').splice(-1, 1)[0], '');
+        try {
+            const shell = require('shelljs');
+            shell.mkdir('-p', myOutput);
+        } catch (err) {
+            if (err.code !== 'EEXIST') {
+                throw err;
+            }
+        }
     }
 
 

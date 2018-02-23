@@ -4,7 +4,7 @@
             "key": "external",
             "kind": "confluence",
             "source": "http://localhost:8090/",
-            "space": "CP",
+            "space": "COM",
             "context": "other"
         }
     ],
@@ -12,7 +12,7 @@
         {
             "key": "external",
             "kind": "confluence",
-            "index": "Home"
+            "index": "hello+world"
         }
     ]
 }

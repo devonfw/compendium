@@ -12,3 +12,8 @@ The lazy *brown cat _jumps_ over* the quick dog.
 IMPORTANT: This is an important thing to know.
 
 TIP: It is convenient read this twice.
+
+```javascript
+    var foo = something.here();
+```
+

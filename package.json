@@ -19,6 +19,7 @@
     "asciidoctor.js": "^1.5.6-preview.4",
     "chalk": "^2.3.0",
     "html-parse": "0.0.4",
+    "html-to-pdf": "^0.1.11",
     "ncp": "^2.0.0",
     "prompt": "^1.0.0",
     "result.ts": "^0.3.1",

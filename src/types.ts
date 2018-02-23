@@ -22,7 +22,7 @@ export interface RichString {
     text: string;
 }
 
-export type RichText  = Array<RichString | InlineImage | Link>;
+export type RichText  = Array<RichString | InlineImage | Table | Link | Code>;
 
 export interface TextElement {
     kind: 'textelement';
@@ -48,9 +48,15 @@ export interface Link {
 }
 
 export interface List {
-    kind: 'list';
-    ordered: boolean;
-    elements: Array<RichText | List | Paragraph | Link>;
+  kind: 'list';
+  ordered: boolean;
+  elements: Array<RichText | List | Paragraph | Link | Code>;
+}
+
+export interface Code {
+    kind: 'code';
+    languaje?: string;
+    content: string;
 }
 
 export interface Table {
@@ -79,8 +85,8 @@ export type CellType = 'th' | 'td';
 
 //"Sum type" o "Discriminated Union" o "Tagged Union" todo nombres para
 // lomismo type:  https://blog.mariusschulz.com/2016/11/03/typescript-2-0-tagged-union-types
-export type TextSegment = TextElement | Paragraph | InlineImage | Table | List | Link;
-export type TableSegment = Paragraph | InlineImage | Table | List | Link;
+export type TextSegment = TextElement | Paragraph | InlineImage | Table | List | Link | Code;
+export type TableSegment = Paragraph | InlineImage | Table | List | Link | Code;
 
 export interface Transcript {
 

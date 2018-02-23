@@ -1,7 +1,7 @@
 import { TextOut, Transcript, TextElement, Paragraph, InlineImage, List, RichText, TableBody, RichString, Link, Code, Table } from './types';
 import * as fs from 'fs';
 
-export class HtmlFileTextOut implements TextOut {
+export class PdfFileTextOut implements TextOut {
 
     public done: boolean = false;
     public asciidoctor = require('asciidoctor.js')();
@@ -13,27 +13,10 @@ export class HtmlFileTextOut implements TextOut {
 
     public async generate(data: Array<Transcript>): Promise<void> {
 
-        if (this.dirExists('./imageTemp/')) {
-            const arrayDir = this.outputFile.split('/');
-            let outputDir: string = '';
-            if (arrayDir.length > 1) {
-                arrayDir.splice(-1, 1);
-                for (const piece of arrayDir) {
-                  outputDir = outputDir + piece;
-                }
-            }
-            try {
-            const ncp = require('ncp').ncp;
-            ncp('./imageTemp/', outputDir, (err: Error) => {
-                if (err) {
-                return console.error(err);
-                }
-                const shell = require('shelljs');
-                shell.rm('-rf', 'imageTemp');
-            });
-            } catch (err) {
-            console.log(err.message);
-            }
+        try {
+            await this.moveTheImages();
+        } catch (err) {
+            throw err;
         }
 
         let outputString = ':toc: macro\ntoc::[]\n\n';
@@ -49,7 +32,7 @@ export class HtmlFileTextOut implements TextOut {
                     } else if (segment.kind === 'paragraph') {
                         outputString = outputString + this.paragraphParsed(segment) + '\n\n';
                     } else if (segment.kind === 'inlineimage') {
-                        outputString = outputString + this.imageParsed(segment) + '\n\n';
+                        outputString = outputString + '\n' + this.imageParsed(segment) + '\n\n';
                     } else if (segment.kind === 'table') {
                         outputString = outputString + this.tableParsed(segment.content) + '\n\n';
                     } else if (segment.kind === 'list') {
@@ -60,15 +43,50 @@ export class HtmlFileTextOut implements TextOut {
                         outputString = outputString + this.codeParsed(segment) + '\n\n';
                     }
                 }
-                outputString = outputString + '\n\n';
+                outputString = outputString + '\n\n<<<<\n\n';
             }
-            // console.log(outputString);
-            outputString = this.asciidoctor.convert(outputString);
-            try {
-                fs.writeFileSync(this.outputFile + '.html', outputString);
-            } catch (err) {
-                throw err;
+
+            const dochtml = this.asciidoctor.convert(outputString, { attributes: {showtitle: true, doctype: 'book'}} );
+            //console.log(outputString);
+            const docWithStyle =
+              `<!DOCTYPE html>
+            <html>
+            <head>
+            <style>
+            table {
+                font-family: arial, sans-serif;
+                border-collapse: collapse;
+                width: 100%;
             }
+
+            td{
+                border: 1px solid #dddddd;
+                text-align: left;
+            }
+            th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                background-color: #dddddd;
+            }
+            img {
+                width:90%;
+            }
+
+            </style>
+            </head>
+            <body>
+            ` + dochtml + `
+            </body>
+            </html>`;
+
+            const htmlToPdf = require('html-to-pdf');
+            htmlToPdf.setInputEncoding('UTF-8');
+            htmlToPdf.setOutputEncoding('UTF-8');
+            htmlToPdf.convertHTMLString(docWithStyle, this.outputFile + '.pdf', (error: any, success: any) => {
+                if (error) {
+                    console.log(error);
+                }
+            });
         }
 
         this.done = true;
@@ -237,5 +255,29 @@ export class HtmlFileTextOut implements TextOut {
         return false;
     }
 }
+    private async moveTheImages(): Promise<void> {
+        if (this.dirExists('./imageTemp/')) {
+            const arrayDir = this.outputFile.split('/');
+            let outputDir: string = '';
+            if (arrayDir.length > 1) {
+                arrayDir.splice(-1, 1);
+                for (const piece of arrayDir) {
+                  outputDir = outputDir + piece;
+                }
+            }
+            try {
+                const ncp = require('ncp').ncp;
+                ncp('./imageTemp/', outputDir, (err: Error) => {
+                    if (err) {
+                    return console.error(err);
+                    }
+                    const shell = require('shelljs');
+                    shell.rm('-rf', 'imageTemp');
+                });
+            } catch (err) {
+                console.log(err.message);
+            }
+        }
+    }
 
 }
