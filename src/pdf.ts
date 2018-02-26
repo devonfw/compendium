@@ -49,7 +49,7 @@ export class PdfFileTextOut implements TextOut {
             const dochtml = this.asciidoctor.convert(outputString, { attributes: {showtitle: true, doctype: 'book'}} );
             //console.log(outputString);
             const docWithStyle =
-              `<!DOCTYPE html>
+            `<!DOCTYPE html>
             <html>
             <head>
             <style>
