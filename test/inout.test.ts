@@ -7,10 +7,10 @@ import * as fs from 'fs';
 import * as chai from 'chai';
 import { ConfigFile } from '../src/config';
 import { MergerImpl } from '../src/merger';
-import { assert } from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import { TextInMock } from '../src/mocks/impl';
 
+// tslint:disable-next-line:no-var-requires
 chai.use(require('chai-fs')); // It has no types
 chai.use(chaiAsPromised);
 
@@ -48,7 +48,6 @@ textoutAsciidoc2 = new AsciiDocFileTextOut(outputPath2);
 textoutHtml1 = new HtmlFileTextOut(outputPath1);
 textoutHtml2 = new HtmlFileTextOut(outputPath2);
 
-
 xdescribe('Testing the Input of Text and doc generation', () => {
     before(() => {
         //setup fixture
@@ -85,10 +84,6 @@ xdescribe('Testing the Input of Text and doc generation', () => {
 describe('Testing the Asciidoc Input and Output stream and the file creation ', () => {
     before(() => {
         //setup fixture
-        const ouput = 'test-data/output/output1.adoc';
-        if (fs.existsSync(ouput)) {
-            fs.unlinkSync(ouput);
-        }
     });
 
     describe('AsciidocFileTextOut', () => {
@@ -96,12 +91,12 @@ describe('Testing the Asciidoc Input and Output stream and the file creation ', 
             textinAsciidoc.getTranscript('brownfox2.adoc').then((transcript) => {
                 let arrayTranscript = [];
                 arrayTranscript.push(transcript);
-                textoutAsciidoc1.generate(arrayTranscript).then(() => {
-                    expect('test-data/output/output1.adoc').to.be.a.file('output1.adoc was not created');
+                textoutAsciidoc1.generate(arrayTranscript);
+                if (fs.existsSync('result.adoc')) {
                     done();
-                }).catch((error) => {
-                    done(error);
-                });
+                } else {
+                    done(new Error('File was not created'));
+                }
             }).catch((error) => {
                 done(error);
             });
@@ -151,7 +146,7 @@ describe('Testing if Asciidoc Output is the expected ', () => {
             textinAsciidoc.getTranscript('brownfox2.adoc').then(transcript => {
                 let arrayTranscript = [];
                 arrayTranscript.push(transcript);
-                textout.generate(arrayTranscript);
+                textoutAsciidoc2.generate(arrayTranscript);
                 if (fs.existsSync('result.adoc')) {
                   const outputStream = fs.readFileSync('result.adoc', 'utf-8');
                   const outputArray = outputStream.split('\n');
@@ -226,12 +221,12 @@ describe('Testing the Html Output stream and the file creation ', () => {
             textinAsciidoc.getTranscript('brownfox2.adoc').then((transcript) => {
                 const arrayTranscript = [];
                 arrayTranscript.push(transcript);
-                textoutHtml1.generate(arrayTranscript).then(() => {
-                    expect('test-data/output/output1.html').to.be.a.file('output1.html was not created');
+                textoutHtml1.generate(arrayTranscript);
+                if (expect(fs.existsSync('result.html'))) {
                     done();
-                }).catch((error) => {
-                    done(error);
-                });
+                } else {
+                    done(new Error('File was not created'));
+                }
             }).catch((error) => {
                 done(error);
             });
@@ -256,14 +251,14 @@ describe('Testing the merge of two files ', () => {
         it('should combine 2 asciidoc in one', (done) => {
 
             let sources: IndexSource[] = [{
-                    key: 'input-data1',
-                    kind: 'asciidoc',
-                source: pathBase + './src/mocks/input-data1'
-                },
-                {
-                    key: 'input-data2',
-                    kind: 'asciidoc',
-                    source: pathBase + './src/mocks/input-data2'
+                key: 'input-data1',
+                kind: 'asciidoc',
+                source: './src/mocks/input-data1'
+            },
+            {
+                key: 'input-data2',
+                kind: 'asciidoc',
+                source: './src/mocks/input-data2'
             }];
 
             let nodes: IndexNode[] = [{
@@ -277,16 +272,23 @@ describe('Testing the merge of two files ', () => {
             }];
 
             const index: Index = [sources, nodes];
-            const textinsources: TextInSources = {};
+
+            let textinsources: TextInSources = {};
 
             textinsources['input-data1'] = new AsciiDocFileTextIn(pathBase + '/src/mocks/input-data1');
             textinsources['input-data2'] = new AsciiDocFileTextIn(pathBase + '/src/mocks/input-data2');
 
-            const textoutMerger: TextOut = new AsciiDocFileTextOut('test-data/output/mergedOutput');
+            const merger = new MergerImpl();
+            let textoutMerger: TextOut = new AsciiDocFileTextOut('mergerResult');
 
             merger.merge(textinsources, index, textoutMerger).then(() => {
-                expect('test-data/output/mergedOutput.adoc').to.be.a.file('Files haven\'t been merged. Output \'mergedOutput.adoc\' hasn\'t been created.');
-                done();
+
+                if (expect(fs.existsSync('resultMerger.adoc'))) {
+                    done();
+                } else {
+                    done(new Error('Files haven\'t been merged'));
+                }
+
             }).catch((error) => {
                 done(error);
             });

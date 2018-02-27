@@ -1,6 +1,6 @@
 //import * as result from 'result.ts';
 //import {Result} from 'result.ts';
-import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph } from '../types';
+import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, ConfluenceService, Cookies, Credentials } from '../types';
 import * as fs from 'fs';
 
 export class DocConfigMock implements DocConfig {

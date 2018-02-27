@@ -1,0 +1,29 @@
+{
+    "sources": [
+        {
+            "key": "input-data1",
+            "kind": "asciidoc",
+            "source": "C:/Projects/Compendium/Compendium/src/mocks/input-data1"
+        },
+        {
+            "key": "input-data1",
+            "kind": "asciidoc",
+            "source": "C:/Projects/Compendium/Compendium/src/mocks/input-data1"
+        },
+        {
+            "key": "input-data3",
+            "kind": "asciidoc",
+            "source": "C:/Projects/Compendium/Compendium/src/mocks/input-data2"
+        }
+    ],
+    "nodes": [
+        {
+            "key": "input-data1",
+            "index": "brownfox.adoc"
+        },
+        {
+            "key": "input-data2",
+            "index": "example1.adoc"
+        }
+    ]
+}

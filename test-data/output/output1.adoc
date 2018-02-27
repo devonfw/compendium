@@ -1,0 +1,11 @@
+:toc: macro
+toc::[]
+
+== The fox
+
+=== The real fox
+
+image::fox.png[Red Fox]
+
+The ~quick~  *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#
+
