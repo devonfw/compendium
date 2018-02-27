@@ -1,5 +1,8 @@
 import { TextInSource, TextInSources, Index, IndexNode, IndexSource, DocConfig } from './types';
+import { TextInMock, TextOutMock } from './mocks/impl';
 import * as fs from 'fs';
+
+export let mock = false;
 
 export class ConfigFile implements DocConfig {
 
@@ -31,6 +34,11 @@ export class ConfigFile implements DocConfig {
             } else {
                 throw new Error('JSON: Some sources don\'t have a valid property/value');
             }
+        }
+
+        // Consistency I. Duplicate keys
+        if (this.checkDuplicateKeys(indexSources)) {
+            throw new Error('JSON: Data inconsistency, some sources have the same key.');
         }
 
         // Nodes
@@ -86,10 +94,52 @@ export class ConfigFile implements DocConfig {
 
     private checkNodeValuesJSON(nodeJSON: any): boolean {
 
+        if (nodeJSON.key && nodeJSON.key !== '' && nodeJSON.index && nodeJSON.index !== '') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private checkDuplicateKeys(indexSources: IndexSource[]): boolean {
+
+        let duplicate = false;
+        const source: any = {};
+
+        indexSources.map((item) => {
+            const key = item['key'];
+            if (key in source) {
+                duplicate = true;
+            }
+            else {
+                source[key] = item;
+            }
+
+        });
+
+        return duplicate;
+    }
+
+    private getKindByKey(indexSources: IndexSource[], key: string): string {
+
+        let kind = '';
+
+        for (const source of indexSources) {
+            if (source.key === key) {
+                kind = source.kind;
+            }
+        }
+
+        return kind;
+    }
+
+    // To delete when changes are solid
+    private checkNodeValuesJSON_Old(nodeJSON: any): boolean {
+
         let valid = true;
 
         // I. Common values
-        if (nodeJSON.index && nodeJSON.index !== '') {
+        if (nodeJSON.key && nodeJSON.key !== '' && nodeJSON.index && nodeJSON.index !== '') {
 
             // II. Confluence values
             if (nodeJSON.kind && nodeJSON.kind === 'confluence' && nodeJSON.index.indexOf(' ') !== -1) { // Blancspaces are forbiden

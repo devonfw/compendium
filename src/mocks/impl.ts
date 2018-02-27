@@ -1,6 +1,7 @@
 //import * as result from 'result.ts';
 //import {Result} from 'result.ts';
 import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph } from '../types';
+import * as fs from 'fs';
 
 export class DocConfigMock implements DocConfig {
 
@@ -81,4 +82,51 @@ export class TextInMock implements TextIn {
             throw new Error('No Transcript available');
         }
     }
+}
+export class ConfluenceServiceImplMock implements ConfluenceService {
+
+    public getContentbyCookies(URL: string, cookies: Cookies): Promise<JSON> {
+
+        throw new Error('Not implemented yet');
+    }
+
+    public getContentbyCredentials(URL: string, credentials: Credentials): Promise<JSON> {
+
+        const URI_CAPGEMINI = 'https://adcenter.pl.s2-eu.capgemini.com/confluence/rest/api/content?spaceKey=JQ&title=Jump+the+queue+Home&expand=body.view';
+        const URI_LOCAL = 'http://localhost:8090/rest/api/content?spaceKey=CP&title=Jump+the+queue+Home+(Edited+for+Demo)&expand=body.view';
+
+        const goodContent_path = 'test-data/input/confluence/good/JumpTheQueueHome_capgemini.json';
+        //const goodContent1_path = 'test-data/input/confluence/good/JumpTheQueueHome_local.json'; // Not used
+        const multiplesPagesContent_path = 'test-data/input/confluence/bad/multiplePages.json';
+        const badFormatContent_path = 'test-data/input/confluence/bad/badFormat.json';
+
+        return new Promise<JSON>((resolve, reject) => {
+
+            // No URL and credentials filter for now
+            // if (URI !== URI_CAPGEMINI ) {
+            //     throw new Error('Bad URL');
+            // } else if (credentials.username !== 'Admin' && credentials.password !== 'Admin123') {
+            //     throw new Error('Bad credentials');
+            // } else { ...
+
+            const id_multiplePages = 'multiple+pages';
+            const id_badFormat = 'bad+format';
+            let path = goodContent_path; // Default
+
+            if (URL.indexOf(id_multiplePages) > -1) {
+                path = multiplesPagesContent_path;
+            } else if (URL.indexOf(id_badFormat) > -1) {
+                path = badFormatContent_path;
+            }
+
+            try {
+                const data = fs.readFileSync(path, 'utf-8');
+                resolve(JSON.parse(data));
+            } catch (err) {
+                reject(err);
+            }
+
+        });
+    }
+
 }

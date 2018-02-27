@@ -1,177 +1,200 @@
 import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes, Cookies, ConfluenceService, Table, TableSegment, TableBody, Col, Row, Cell, Code, Credentials, List, Link } from './types';
 import * as fs from 'fs';
 import { ConfluenceServiceImpl } from './confluenceService';
-
+import { ConfluenceServiceImplMock } from './mocks/impl';
 /*
     The basepath has to have this format: https://adcenter.pl.s2-eu.capgemini.com/confluence/
-    
+
     Where context has to be /confluence/
 
     API REST: /rest/api/content
 
-    Parameters: 
+    Parameters:
                 &title=My+Title    -> title
                 &spaceKey=JQ       -> Workspace
                 ?expand=body.view  -> For html content
                 &type=page         -> Content type
                 ...                -> more info: https://docs.atlassian.com/atlassian-confluence/REST/6.6.0/#content-getContent
 
-    For a page name 'Helloo world':  https://adcenter.pl.s2-eu.capgemini.com/confluence/rest/api/content?title=hello+world&expand=body.view
+    For a page name 'Hello world':  https://adcenter.pl.s2-eu.capgemini.com/confluence/rest/api/content?title=hello+world&expand=body.view
 */
 export class ConfluenceTextIn implements TextIn {
-    private url_base: string;
-    private space: string | undefined;
+
+    private baseURL: string;
+    private spaceKey: string | undefined;
     private cookies: Cookies | undefined;
     private credentials: Credentials | undefined;
+    private mock: boolean | undefined;
 
     private htmlparse = require('html-parse');
 
-    public constructor(basepath: string, space: string | undefined, auth: Cookies | Credentials) {
-    this.url_base = basepath;
-    this.space = space;
-    if ((auth as Cookies)[0]) {
-        this.cookies = auth as Cookies;
-    } else if ((auth as Credentials).username) {
-        this.credentials = auth as Credentials;
-    }
+    public constructor(baseURL: string, spaceKey: string | undefined, auth: Cookies | Credentials, isMock?: boolean) {
+
+        this.baseURL = baseURL;
+        this.spaceKey = spaceKey;
+        if ((auth as Cookies)[0]) {
+            this.cookies = (auth as Cookies);
+        } else if ((auth as Credentials).username) {
+            this.credentials = (auth as Credentials);
+        }
+        this.mock = isMock;
     }
 
     public async getTranscript(title: string, sections?: string[]): Promise<Transcript> {
-    let transcript: Transcript = { segments: [] };
-    let end: Array<TextSegment> = [];
-    let confluenceService: ConfluenceService = new ConfluenceServiceImpl();
 
-    const url = this.createURLbyTitle(title); // Optional for console messages
-    let error = false;
+        const transcript: Transcript = { segments: [] };
+        const end: Array<TextSegment> = [];
+        let confluenceService: ConfluenceService;
 
-    // I. Create URI
-    const uri = this.createURIbyTitle(title);
-    console.log(uri);
+        // Input data Validation
+        if (this.baseURL === '') {
+            throw new Error('ConfluenceTextIn: BaseURL cannot be blank.');
+        } else if (this.spaceKey === undefined) {
+            throw new Error('ConfluenceTextIn: SpaceKey is undefined.'); // Logically, this should never happen
+        } else if (this.spaceKey === '') {
+            throw new Error('ConfluenceTextIn: SpaceKey cannot be blank.');
+        }
 
-    // II. ConfluenceService
-    let content;
-    if (this.cookies) {
-        try {
-        content = await confluenceService.getContentbyCookies(uri, this.cookies);
-        } catch (err) {
-        if (err.message) {
-            throw new Error(err.message);
+        // Service assignment: mock or real
+        if (this.mock) {
+            confluenceService = new ConfluenceServiceImplMock();
         } else {
-            throw new Error("It isn't possible to get the content from confluence");
+            confluenceService = new ConfluenceServiceImpl();
         }
-        }
-    } else if (this.credentials) {
-        try {
-        content = await confluenceService.getContentbyCredentials(uri, this.credentials);
-        } catch (err) {
-        if (err.message) {
-            throw new Error(err.message);
-        } else {
-            throw new Error("It isn't possible to get the content from confluence");
-        }
-        }
-    } else {
-        // Logicaly, this never should be shown.
-        throw new Error('Credentials are mandatory to access confluence resources');
-    }
 
-    if (content) {
-        // III. Data processing
-        const htmlView = this.processDataFromConfluence(content);
+        // I. Create URI
+        const uri = this.createURIbyTitle(title);
+        const url = this.createURLbyTitle(title); // Optional for console messages
+        //console.log(uri);
 
-        if (htmlView) {
-        // IV. IR
-        const tree = this.htmlparse.parse(htmlView);
-        for (const branch of tree) {
-            let temp = await this.recursive(branch);
-            for (const final of temp) {
-            end.push(final);
+        // II. ConfluenceService
+        let content;
+        let error = false;
+        if (this.cookies) {
+            try {
+                content = await confluenceService.getContentbyCookies(uri, this.cookies);
+            } catch (err) {
+                if (err.message) {
+                    throw new Error(err.message);
+                } else {
+                    throw new Error('It isn\'t possible to get the content from confluence');
+                }
             }
-        }
-        transcript.segments = end;
+        } else if (this.credentials) {
+            try {
+                content = await confluenceService.getContentbyCredentials(uri, this.credentials);
+            } catch (err) {
+                if (err.message) {
+                    throw new Error(err.message);
+                } else {
+                    throw new Error('It isn\'t possible to get the content from confluence');
+                }
+            }
         } else {
-        error = true;
+            // Logically, this never should be shown.
+            throw new Error('Credentials are mandatory to access confluence resources');
         }
-    } else {
-        error = true;
-    }
 
-    if (error) {
-        throw new Error("It isn't possible to get transcript from " + url);
-    }
+        if (content) {
 
-    return transcript;
+            // III. Data processing
+            const htmlView = this.processDataFromConfluence(content);
+
+            if (htmlView) {
+
+                // IV. IR
+                const tree = this.htmlparse.parse(htmlView);
+                for (const branch of tree) {
+                    const temp = await this.recursive(branch);
+                    for (const final of temp) {
+                        end.push(final);
+                    }
+                }
+                transcript.segments = end;
+            } else {
+                error = true;
+            }
+        } else {
+            error = true;
+        }
+
+        if (error) {
+            throw new Error('It isn\'t possible to get transcript from ' + url);
+        }
+
+        return transcript;
     }
 
     // Methods related to Confluence
     // -----------------------------
 
     private processDataFromConfluence(content: JSON): string {
-    let htmlContent;
-    let error = false;
 
-    const parsed_content = JSON.parse(JSON.stringify(content)); // It's mandatory
-    if (parsed_content.id) {
-        // By Id
-        // console.log(' -> Content by id!');
-        if (parsed_content.body.view.value) {
-        htmlContent = parsed_content.body.view.value;
-        } else {
-        error = true;
-        }
-    } else if (parsed_content.results) {
-        if (parsed_content.size === 1 && parsed_content.results[0].id) {
-        // By Search (title) & [1 page]
-        // console.log(' -> Content by Title!');
-        if (parsed_content.results[0].body.view.value) {
-            htmlContent = parsed_content.results[0].body.view.value;
-        } else {
-            error = true;
-        }
-        } else {
-        // At the moment (What should we do with full workspaces? They have several pages. Include all the content? It's easy to iterate over the JSON and get every body.view page values)
-        throw new Error('Only one Confluence page at once is allowed in this version. Check your request.');
-        }
-    }
+        let htmlContent;
+        let error = false;
 
-    if (error) {
-        throw new Error('Received JSON from Confluence is not in a proper format');
-    }
+        const parsed_content = JSON.parse(JSON.stringify(content)); // It's mandatory
+        if (parsed_content.id) { // By Id
+            // console.log(' -> Content by id!');
+            if (parsed_content.body.view.value) {
+                htmlContent = parsed_content.body.view.value;
+            } else {
+                error = true;
+            }
+        } else if (parsed_content.results) {
+            if (parsed_content.size === 1 && parsed_content.results[0].id) { // By Search (title) & [1 page]
+                // console.log(' -> Content by Title!');
+                if (parsed_content.results[0].body.view.value) {
+                    htmlContent = parsed_content.results[0].body.view.value;
+                } else {
+                    error = true;
+                }
+            } else {
+                // At the moment (What should we do with full workspaces? They have several pages. Include all the content? It's easy to iterate over the JSON and get every body.view page values)
+                throw new Error('Only one Confluence page is allowed at once in this version. Check your request please.');
+            }
+        }
 
-    return htmlContent;
+        if (error) {
+            throw new Error('Received JSON from Confluence is not in a proper format.');
+        }
+
+        return htmlContent;
     }
 
     /*
-Confluence API REST
+        Confluence API REST
 
-URL: https://adcenter.pl.s2-eu.capgemini.com/confluence/display/JQ/Jump+the+queue+Home
-URI: https://adcenter.pl.s2-eu.capgemini.com/confluence/rest/api/content?title=Jump+the+queue+Home&expand=body.view
+        URL: https://adcenter.pl.s2-eu.capgemini.com/confluence/display/JQ/Jump+the+queue+Home
+        URI: https://adcenter.pl.s2-eu.capgemini.com/confluence/rest/api/content?title=Jump+the+queue+Home&expand=body.view
 
-Example:
+        Example:
 
-pathName: display/JQ/Jump+the+queue+Home
-pathNameRest: rest/api/content?spaceKey=JQ&title=Jump+the+queue+Home&expand=body.view
+        pathName: display/JQ/Jump+the+queue+Home
+        pathNameRest: rest/api/content?spaceKey=JQ&title=Jump+the+queue+Home&expand=body.view
 
-*/
+    */
     private createURIbyTitle(title: string): string {
-    let outputURI = '';
 
-    if (this.url_base && this.space && title) {
-        outputURI += this.url_base + `rest/api/content?spaceKey=${this.space}&title=${title}&expand=body.view`;
-    } else {
-        throw new Error('Bad URI');
-    }
-    return outputURI;
+        let outputURI = '';
+
+        if (title !== '') {
+            outputURI += this.baseURL + `rest/api/content?spaceKey=${this.spaceKey}&title=${title}&expand=body.view`;
+        } else {
+            throw new Error('CreateURI: Title cannot be blank');
+        }
+        return outputURI;
     }
 
     private createURLbyTitle(title: string): string {
-    let outputURL = '';
-    if (this.url_base && this.space && title) {
-        outputURL += this.url_base + `display/${this.space}/${title}`;
-    } else {
-        throw new Error('Bad URL');
-    }
-    return outputURL;
+
+        let outputURL = '';
+        if (title !== '') {
+            outputURL += this.baseURL + `display/${this.spaceKey}/${title}`;
+        } else {
+            throw new Error('CreateURL: Title cannot be blank');
+        }
+        return outputURL;
     }
 
     // IR functionalities

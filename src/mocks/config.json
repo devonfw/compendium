@@ -3,24 +3,26 @@
         {
             "key": "input-data1",
             "kind": "asciidoc",
-            "source": "C:/Projects/Compendium/Compendium/src/mocks/input-data1"
+            "source": "C:/Users/sbadenes/Desktop/devonm/devon-methodology"
         },
         {
             "key": "input-data2",
             "kind": "asciidoc",
-            "source": "C:/Projects/Compendium/Compendium/src/mocks/input-data2"
+            "source": "C:/Users/sbadenes/Desktop/devonm/devon-methodology/references/JumpTheQueue/design"
         }
     ],
     "nodes": [
         {
             "key": "input-data1",
-            "kind": "asciidoc",
-            "index": "brownfox.adoc"
+            "index": "Accelerated_Solution_Design.adoc"
+        },
+        {
+            "key": "input-data1",
+            "index": "design_process.adoc"
         },
         {
             "key": "input-data2",
-            "kind": "asciidoc",
-            "index": "example1.adoc"
+            "index": "JumpTheQueue.adoc"
         }
     ]
 }
