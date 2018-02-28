@@ -5,7 +5,9 @@ toc::[]
 
 === The real fox
 
-image::fox.png[Red Fox]
+image::fox.png[Red Fox] 
 
-The ~quick~  *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#
+The ~quick~ *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#
+
+
 

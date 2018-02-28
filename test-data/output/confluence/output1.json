@@ -2,13 +2,9 @@
   "segments": [
     {
       "kind": "paragraph",
-      "text": []
-    },
-    {
-      "kind": "paragraph",
       "text": [
         {
-          "text": " ",
+          "text": "\n",
           "attrs": {
             "strong": false,
             "cursive": false,
@@ -19,8 +15,12 @@
       ]
     },
     {
+      "kind": "paragraph",
+      "text": []
+    },
+    {
       "kind": "textelement",
-      "element": "h1",
+      "element": "title",
       "text": [
         {
           "text": "1. Project Introduction. Statement of Purpose",
@@ -119,7 +119,7 @@
     },
     {
       "kind": "textelement",
-      "element": "h1",
+      "element": "title",
       "text": [
         {
           "text": "2. Objectives",
@@ -187,7 +187,7 @@
     },
     {
       "kind": "textelement",
-      "element": "h1",
+      "element": "title",
       "text": [
         {
           "text": "3. First Steps Analysis",
@@ -213,12 +213,21 @@
           }
         },
         {
-          "text": "First Steps Analysis ",
-          "attrs": {
-            "strong": false,
-            "cursive": false,
-            "underline": false,
-            "script": "normal"
+          "kind": "link",
+          "ref": "/confluence/display/JQ/Jump+the+queue+Home",
+          "text": {
+            "kind": "paragraph",
+            "text": [
+              {
+                "text": "First Steps Analysis ",
+                "attrs": {
+                  "strong": false,
+                  "cursive": false,
+                  "underline": false,
+                  "script": "normal"
+                }
+              }
+            ]
           }
         },
         {
@@ -234,7 +243,7 @@
     },
     {
       "kind": "textelement",
-      "element": "h1",
+      "element": "title",
       "text": [
         {
           "text": "4. User Stories",
@@ -291,7 +300,17 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "paragraph",
@@ -414,7 +433,17 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "paragraph",
@@ -455,7 +484,7 @@
     },
     {
       "kind": "textelement",
-      "element": "h2",
+      "element": "h1",
       "text": [
         {
           "text": "Epic 1. Get a number",
@@ -484,7 +513,17 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "paragraph",
@@ -544,7 +583,17 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "paragraph",
@@ -562,7 +611,7 @@
     },
     {
       "kind": "textelement",
-      "element": "h3",
+      "element": "h2",
       "text": [
         {
           "text": "User story 1. Accept terms &amp; conditions",
@@ -703,7 +752,22 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": [
+                    {
+                      "text": "visitor ",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "th",
@@ -731,17 +795,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -813,17 +867,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -875,17 +919,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             },
@@ -895,17 +929,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -971,17 +995,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             },
@@ -991,17 +1005,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -1011,11 +1015,21 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "textelement",
-      "element": "h3",
+      "element": "h2",
       "text": [
         {
           "text": "User story 2. Verify information",
@@ -1156,7 +1170,22 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": [
+                    {
+                      "text": "visitor ",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "th",
@@ -1184,17 +1213,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -1266,17 +1285,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -1328,17 +1337,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             },
@@ -1348,17 +1347,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -1418,7 +1407,17 @@
                 },
                 {
                   "kind": "paragraph",
-                  "text": []
+                  "text": [
+                    {
+                      "text": "\n",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
                 }
               ]
             },
@@ -1428,17 +1427,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             },
@@ -1448,17 +1437,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -1468,11 +1447,21 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "textelement",
-      "element": "h3",
+      "element": "h2",
       "text": [
         {
           "text": "User story 3. Consent information",
@@ -1613,7 +1602,22 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": [
+                    {
+                      "text": "visitor ",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "th",
@@ -1641,17 +1645,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -1723,17 +1717,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -1785,17 +1769,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             },
@@ -1805,17 +1779,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -1875,7 +1839,17 @@
                 },
                 {
                   "kind": "paragraph",
-                  "text": []
+                  "text": [
+                    {
+                      "text": "\n",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
                 }
               ]
             },
@@ -1885,17 +1859,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             },
@@ -1905,17 +1869,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -1925,11 +1879,21 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "textelement",
-      "element": "h3",
+      "element": "h2",
       "text": [
         {
           "text": "User story 4. Register",
@@ -2070,7 +2034,22 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": [
+                    {
+                      "text": "visitor ",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "th",
@@ -2098,17 +2077,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -2180,17 +2149,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -2242,17 +2201,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             },
@@ -2262,17 +2211,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -2408,17 +2347,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             },
@@ -2428,17 +2357,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -2448,11 +2367,21 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "textelement",
-      "element": "h3",
+      "element": "h2",
       "text": [
         {
           "text": "User story 5. Priority access",
@@ -2636,17 +2565,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -2718,17 +2637,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -2780,17 +2689,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             },
@@ -2800,17 +2699,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -2876,17 +2765,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             },
@@ -2896,17 +2775,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -2916,11 +2785,21 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "textelement",
-      "element": "h2",
+      "element": "h1",
       "text": [
         {
           "text": "Epic 2. Consult the queue",
@@ -2963,7 +2842,7 @@
     },
     {
       "kind": "textelement",
-      "element": "h3",
+      "element": "h2",
       "text": [
         {
           "text": "User story 6. Consult Queue",
@@ -3104,7 +2983,22 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": [
+                    {
+                      "text": "visitor or internal user or jump the queue owner",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "th",
@@ -3132,17 +3026,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -3171,7 +3055,22 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": [
+                    {
+                      "text": "consult the status of the queue",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "th",
@@ -3199,17 +3098,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -3238,17 +3127,12 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
-            },
-            {
-              "type": "th",
-              "colspan": "1",
               "cell": [
                 {
                   "kind": "paragraph",
                   "text": [
                     {
-                      "text": " ",
+                      "text": "I would know when it is my turn",
                       "attrs": {
                         "strong": false,
                         "cursive": false,
@@ -3261,22 +3145,22 @@
               ]
             },
             {
+              "type": "th",
+              "colspan": "1",
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": []
+                }
+              ]
+            },
+            {
               "type": "td",
               "colspan": "1",
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -3370,17 +3254,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             },
@@ -3390,17 +3264,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -3410,11 +3274,21 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "textelement",
-      "element": "h3",
+      "element": "h2",
       "text": [
         {
           "text": "User story 7. Waiting time",
@@ -3555,7 +3429,22 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": [
+                    {
+                      "text": "visitor or internal user",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "th",
@@ -3583,17 +3472,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -3622,7 +3501,22 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": [
+                    {
+                      "text": "see my estimated waiting time",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "th",
@@ -3650,17 +3544,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -3689,17 +3573,12 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
-            },
-            {
-              "type": "th",
-              "colspan": "1",
               "cell": [
                 {
                   "kind": "paragraph",
                   "text": [
                     {
-                      "text": " ",
+                      "text": "I would know when I will be attended",
                       "attrs": {
                         "strong": false,
                         "cursive": false,
@@ -3712,22 +3591,22 @@
               ]
             },
             {
+              "type": "th",
+              "colspan": "1",
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": []
+                }
+              ]
+            },
+            {
               "type": "td",
               "colspan": "1",
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -3801,7 +3680,17 @@
                 },
                 {
                   "kind": "paragraph",
-                  "text": []
+                  "text": [
+                    {
+                      "text": "\n",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
                 }
               ]
             },
@@ -3811,17 +3700,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             },
@@ -3831,17 +3710,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -3851,11 +3720,21 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "textelement",
-      "element": "h2",
+      "element": "h1",
       "text": [
         {
           "text": "Epic 3. Manage queue",
@@ -3898,7 +3777,7 @@
     },
     {
       "kind": "textelement",
-      "element": "h3",
+      "element": "h2",
       "text": [
         {
           "text": "User story 8. Configure queue",
@@ -4039,7 +3918,22 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": [
+                    {
+                      "text": "jump the queue owner of the queue",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "th",
@@ -4067,17 +3961,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -4106,7 +3990,22 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": [
+                    {
+                      "text": "personalize the logo and description showed to users",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "th",
@@ -4134,17 +4033,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -4173,17 +4062,12 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
-            },
-            {
-              "type": "th",
-              "colspan": "1",
               "cell": [
                 {
                   "kind": "paragraph",
                   "text": [
                     {
-                      "text": " ",
+                      "text": "I can personalize my business",
                       "attrs": {
                         "strong": false,
                         "cursive": false,
@@ -4196,22 +4080,22 @@
               ]
             },
             {
+              "type": "th",
+              "colspan": "1",
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": []
+                }
+              ]
+            },
+            {
               "type": "td",
               "colspan": "1",
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -4271,11 +4155,31 @@
                 },
                 {
                   "kind": "paragraph",
-                  "text": []
+                  "text": [
+                    {
+                      "text": "\n",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
                 },
                 {
                   "kind": "paragraph",
-                  "text": []
+                  "text": [
+                    {
+                      "text": "\n",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
                 }
               ]
             },
@@ -4285,17 +4189,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             },
@@ -4305,17 +4199,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -4325,11 +4209,21 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "textelement",
-      "element": "h3",
+      "element": "h2",
       "text": [
         {
           "text": "User story 9. Attend queue",
@@ -4470,7 +4364,22 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": [
+                    {
+                      "text": "jump the queue owner of the queue",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "th",
@@ -4498,17 +4407,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -4537,7 +4436,22 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": [
+                    {
+                      "text": "know the current turn of the queue",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "th",
@@ -4565,17 +4479,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -4604,17 +4508,12 @@
             {
               "type": "td",
               "colspan": "1",
-              "cell": []
-            },
-            {
-              "type": "th",
-              "colspan": "1",
               "cell": [
                 {
                   "kind": "paragraph",
                   "text": [
                     {
-                      "text": " ",
+                      "text": "I can attend it",
                       "attrs": {
                         "strong": false,
                         "cursive": false,
@@ -4627,22 +4526,22 @@
               ]
             },
             {
+              "type": "th",
+              "colspan": "1",
+              "cell": [
+                {
+                  "kind": "paragraph",
+                  "text": []
+                }
+              ]
+            },
+            {
               "type": "td",
               "colspan": "1",
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -4730,7 +4629,17 @@
                 },
                 {
                   "kind": "paragraph",
-                  "text": []
+                  "text": [
+                    {
+                      "text": "\n",
+                      "attrs": {
+                        "strong": false,
+                        "cursive": false,
+                        "underline": false,
+                        "script": "normal"
+                      }
+                    }
+                  ]
                 }
               ]
             },
@@ -4740,17 +4649,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             },
@@ -4760,17 +4659,7 @@
               "cell": [
                 {
                   "kind": "paragraph",
-                  "text": [
-                    {
-                      "text": " ",
-                      "attrs": {
-                        "strong": false,
-                        "cursive": false,
-                        "underline": false,
-                        "script": "normal"
-                      }
-                    }
-                  ]
+                  "text": []
                 }
               ]
             }
@@ -4780,7 +4669,7 @@
     },
     {
       "kind": "textelement",
-      "element": "h1",
+      "element": "title",
       "text": [
         {
           "text": "5. Site Map",
@@ -4818,7 +4707,17 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "paragraph",
@@ -4882,7 +4781,17 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "paragraph",
@@ -4909,15 +4818,35 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "textelement",
-      "element": "h1",
+      "element": "title",
       "text": [
         {
           "text": "6. Entity relationship diagram",
@@ -4955,11 +4884,31 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "paragraph",
@@ -4977,7 +4926,17 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "table",
@@ -6032,11 +5991,21 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "textelement",
-      "element": "h1",
+      "element": "title",
       "text": [
         {
           "text": "7. Bounded context",
@@ -6238,7 +6207,17 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "paragraph",
@@ -6251,11 +6230,21 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     },
     {
       "kind": "textelement",
-      "element": "h1",
+      "element": "title",
       "text": [
         {
           "text": "8. Glossary of terms",
@@ -6537,7 +6526,7 @@
     },
     {
       "kind": "textelement",
-      "element": "h2",
+      "element": "h1",
       "text": [
         {
           "text": "Recent space activity",
@@ -6581,6 +6570,15 @@
           }
         },
         {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        },
+        {
           "text": "\n    ",
           "attrs": {
             "strong": false,
@@ -6626,9 +6624,13 @@
           }
         },
         {
-          "kind": "inlineimage",
-          "img": "/confluence/download/attachments/2163018/user-avatar",
-          "title": ""
+          "kind": "link",
+          "ref": "/confluence/display/~lperezde",
+          "text": {
+            "kind": "inlineimage",
+            "img": "/confluence/download/attachments/2163018/user-avatar",
+            "title": ""
+          }
         },
         {
           "text": "\n        ",
@@ -6658,12 +6660,21 @@
           }
         },
         {
-          "text": "Luisa Perez Devesa",
-          "attrs": {
-            "strong": false,
-            "cursive": false,
-            "underline": false,
-            "script": "normal"
+          "kind": "link",
+          "ref": "/confluence/display/~lperezde",
+          "text": {
+            "kind": "paragraph",
+            "text": [
+              {
+                "text": "Luisa Perez Devesa",
+                "attrs": {
+                  "strong": false,
+                  "cursive": false,
+                  "underline": false,
+                  "script": "normal"
+                }
+              }
+            ]
           }
         },
         {
@@ -6686,15 +6697,6 @@
         },
         {
           "text": "\n                    ",
-          "attrs": {
-            "strong": false,
-            "cursive": false,
-            "underline": false,
-            "script": "normal"
-          }
-        },
-        {
-          "text": " ",
           "attrs": {
             "strong": false,
             "cursive": false,
@@ -6739,12 +6741,21 @@
           }
         },
         {
-          "text": "Jump the queue Home",
-          "attrs": {
-            "strong": false,
-            "cursive": false,
-            "underline": false,
-            "script": "normal"
+          "kind": "link",
+          "ref": "/confluence/display/JQ/Jump+the+queue+Home",
+          "text": {
+            "kind": "paragraph",
+            "text": [
+              {
+                "text": "Jump the queue Home",
+                "attrs": {
+                  "strong": false,
+                  "cursive": false,
+                  "underline": false,
+                  "script": "normal"
+                }
+              }
+            ]
           }
         },
         {
@@ -6784,21 +6795,21 @@
           }
         },
         {
-          "text": " ",
-          "attrs": {
-            "strong": false,
-            "cursive": false,
-            "underline": false,
-            "script": "normal"
-          }
-        },
-        {
-          "text": "view change",
-          "attrs": {
-            "strong": false,
-            "cursive": false,
-            "underline": false,
-            "script": "normal"
+          "kind": "link",
+          "ref": "/confluence/pages/diffpagesbyversion.action?pageId=2163154&amp;selectedPageVersions=8&amp;selectedPageVersions=7",
+          "text": {
+            "kind": "paragraph",
+            "text": [
+              {
+                "text": "view change",
+                "attrs": {
+                  "strong": false,
+                  "cursive": false,
+                  "underline": false,
+                  "script": "normal"
+                }
+              }
+            ]
           }
         },
         {
@@ -6865,9 +6876,13 @@
           }
         },
         {
-          "kind": "inlineimage",
-          "img": "/confluence/s/en_GB/7109/fbbcac5a2a6382e2f6a78d491af75161a7840bc8/_/images/icons/profilepics/default.png",
-          "title": ""
+          "kind": "link",
+          "ref": "",
+          "text": {
+            "kind": "inlineimage",
+            "img": "/confluence/s/en_GB/7109/fbbcac5a2a6382e2f6a78d491af75161a7840bc8/_/images/icons/profilepics/default.png",
+            "title": ""
+          }
         },
         {
           "text": "\n        ",
@@ -6897,12 +6912,21 @@
           }
         },
         {
-          "text": "Félix Murillo García-bermejo",
-          "attrs": {
-            "strong": false,
-            "cursive": false,
-            "underline": false,
-            "script": "normal"
+          "kind": "link",
+          "ref": "/confluence/display/~fmurillo",
+          "text": {
+            "kind": "paragraph",
+            "text": [
+              {
+                "text": "Félix Murillo García-bermejo",
+                "attrs": {
+                  "strong": false,
+                  "cursive": false,
+                  "underline": false,
+                  "script": "normal"
+                }
+              }
+            ]
           }
         },
         {
@@ -6925,15 +6949,6 @@
         },
         {
           "text": "\n                    ",
-          "attrs": {
-            "strong": false,
-            "cursive": false,
-            "underline": false,
-            "script": "normal"
-          }
-        },
-        {
-          "text": " ",
           "attrs": {
             "strong": false,
             "cursive": false,
@@ -6978,12 +6993,21 @@
           }
         },
         {
-          "text": "Jump the queue Home",
-          "attrs": {
-            "strong": false,
-            "cursive": false,
-            "underline": false,
-            "script": "normal"
+          "kind": "link",
+          "ref": "/confluence/display/JQ/Jump+the+queue+Home",
+          "text": {
+            "kind": "paragraph",
+            "text": [
+              {
+                "text": "Jump the queue Home",
+                "attrs": {
+                  "strong": false,
+                  "cursive": false,
+                  "underline": false,
+                  "script": "normal"
+                }
+              }
+            ]
           }
         },
         {
@@ -7023,21 +7047,21 @@
           }
         },
         {
-          "text": " ",
-          "attrs": {
-            "strong": false,
-            "cursive": false,
-            "underline": false,
-            "script": "normal"
-          }
-        },
-        {
-          "text": "view change",
-          "attrs": {
-            "strong": false,
-            "cursive": false,
-            "underline": false,
-            "script": "normal"
+          "kind": "link",
+          "ref": "/confluence/pages/diffpagesbyversion.action?pageId=2163154&amp;selectedPageVersions=7&amp;selectedPageVersions=6",
+          "text": {
+            "kind": "paragraph",
+            "text": [
+              {
+                "text": "view change",
+                "attrs": {
+                  "strong": false,
+                  "cursive": false,
+                  "underline": false,
+                  "script": "normal"
+                }
+              }
+            ]
           }
         },
         {
@@ -7093,12 +7117,30 @@
             "underline": false,
             "script": "normal"
           }
+        },
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        },
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
         }
       ]
     },
     {
       "kind": "textelement",
-      "element": "h2",
+      "element": "h1",
       "text": [
         {
           "text": "Space contributors",
@@ -7127,7 +7169,17 @@
     },
     {
       "kind": "paragraph",
-      "text": []
+      "text": [
+        {
+          "text": "\n",
+          "attrs": {
+            "strong": false,
+            "cursive": false,
+            "underline": false,
+            "script": "normal"
+          }
+        }
+      ]
     }
   ]
 }

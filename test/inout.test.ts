@@ -17,14 +17,6 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 const assert = chai.assert;
 
-// Per user configuration (for now; in the upcoming version path will be relatives)
-
-// Path
-const pathBaseJURUBIOG = 'C:/Projects/Compendium/compendium';
-const pathBaseSBADENES = 'C:/Users/sbadenes/Desktop/Compendium/compendium';
-const pathBaseAREDOMAR = 'C:/Users/aredomar/Desktop/repos/compendium';
-
-const pathBase = pathBaseSBADENES;
 
 let merger: Merger;
 let textin: TextIn;
@@ -125,10 +117,10 @@ describe('Testing if Asciidoc Output is the expected ', () => {
                 textoutAsciidoc2.generate(arrayTranscript);
                 if (fs.existsSync('result.adoc')) {
 
-                    const outputStream = fs.readFileSync('result.adoc', 'utf-8');
+                    const outputStream = fs.readFileSync('result.adoc', 'utf8');
                     const outputArray = outputStream.split('\n');
                     if (outputArray) {
-                        expect(outputArray[9]).equals('The ~quick~ *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#');
+                        expect(outputArray[9]).equals('The ~quick~ *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#\r');
                         done();
                     } else {
                         done(new Error('Incorrect content'));
@@ -148,10 +140,10 @@ describe('Testing if Asciidoc Output is the expected ', () => {
                 arrayTranscript.push(transcript);
                 textoutAsciidoc2.generate(arrayTranscript);
                 if (fs.existsSync('result.adoc')) {
-                  const outputStream = fs.readFileSync('result.adoc', 'utf-8');
+                  const outputStream = fs.readFileSync('result.adoc', 'utf8');
                   const outputArray = outputStream.split('\n');
                   if (outputArray) {
-                    expect(outputArray[16]).equals('| 4 | Item 4 | link:http://www.google.es[Google] ');
+                    expect(outputArray[16]).equals('| 4 | Item 4 | link:http://www.google.es[Google] \r');
                     done();
                   } else {
                     done(new Error('Incorrect content'));
@@ -184,10 +176,10 @@ describe('Testing if HTML Output is the expected ', () => {
           arrayTranscript.push(transcript);
           textoutHtml2.generate(arrayTranscript);
           if (fs.existsSync('result.html')) {
-            const outputStream = fs.readFileSync('result.html', 'utf-8');
+            const outputStream = fs.readFileSync('result.html', 'utf8');
             const outputArray = outputStream.split('\n');
             if (outputArray) {
-              expect(outputArray[21]).equals('<p>The <sub>quick</sub> <strong>brown fox</strong> <strong><em>jumps</em></strong> <strong>over</strong> the lazy <span class="underline">dog.</span></p>');
+              expect(outputArray[21]).equals('<p>The <sub>quick</sub> <strong>brown fox</strong> <strong><em>jumps</em></strong> <strong>over</strong> the lazy <span class="underline">dog.</span></p>\r');
               done();
             } else {
               done(new Error('Incorrect content'));
@@ -275,8 +267,8 @@ describe('Testing the merge of two files ', () => {
 
             let textinsources: TextInSources = {};
 
-            textinsources['input-data1'] = new AsciiDocFileTextIn(pathBase + '/src/mocks/input-data1');
-            textinsources['input-data2'] = new AsciiDocFileTextIn(pathBase + '/src/mocks/input-data2');
+            textinsources['input-data1'] = new AsciiDocFileTextIn('./src/mocks/input-data1');
+            textinsources['input-data2'] = new AsciiDocFileTextIn('./src/mocks/input-data2');
 
             const merger = new MergerImpl();
             let textoutMerger: TextOut = new AsciiDocFileTextOut('mergerResult');
