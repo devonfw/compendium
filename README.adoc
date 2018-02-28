@@ -76,7 +76,7 @@ Options:
   --version   Show version number
   -f          Input type: JSON Config file (This is by default)
   --asciidoc  Output type: asciidoc file
-  --html      Output type: Html fileno
+  --html      Output type: Html file
   --pdf       Output type: PDF file
   --multiple  Create multiple output files
   -h, --help  Show help

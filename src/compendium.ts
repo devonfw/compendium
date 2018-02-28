@@ -10,7 +10,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
 (async () => {
 
     const cli = require('yargs')
-        .usage('Usage:\n$0 [-f|-j|-c] <config file | base URL> [--asciidoc|--html|--pdf] <output file>\nor\n$0 [-f|-j|-c] <config file | base URL> <--multiple> files')
+        .usage('Usage:\n$0 [-f|-j] <config file | base URL> [--asciidoc|--html|--pdf] <output file>\nor\n$0 [-f|-j] <config file | base URL> <--multiple> files')
         .example('$0 -f config.json --html out', 'Use a config file in current directory and write the result in file out.html')
         .describe('f', 'Input type: JSON Config file (default)')
         .describe('j', 'Input type: Jira Base URL')
@@ -29,7 +29,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
         .alias('v', 'version')
         .argv;
 
-    if ((cli.f && !cli.j && !cli.c) || (!cli.f && cli.j && !cli.c)) {
+    if ((cli.f && !cli.j) || (!cli.f && cli.j)) {
 
         let myCredentials: Credentials;
 
