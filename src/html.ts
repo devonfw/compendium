@@ -62,10 +62,39 @@ export class HtmlFileTextOut implements TextOut {
                 }
                 outputString = outputString + '\n\n';
             }
-            // console.log(outputString);
-            outputString = this.asciidoctor.convert(outputString);
+            outputString = this.asciidoctor.convert(outputString, { attributes: { showtitle: true, doctype: 'book' } });
+            const docWithStyle =
+                `<!DOCTYPE html>
+            <html>
+            <head>
+            <style>
+            table {
+                font-family: arial, sans-serif;
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            td{
+                border: 1px solid #dddddd;
+                text-align: left;
+            }
+            th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                background-color: #dddddd;
+            }
+            img {
+                width:90%;
+            }
+
+            </style>
+            </head>
+            <body>
+            ` + outputString + `
+            </body>
+            </html>`;
             try {
-                fs.writeFileSync(this.outputFile + '.html', outputString);
+                fs.writeFileSync(this.outputFile + '.html', outputString, {encoding: 'utf8'});
             } catch (err) {
                 throw err;
             }

@@ -17,16 +17,11 @@ export class ConfluenceServiceImpl implements ConfluenceService {
                     if (err) {
                         reject(err.message);
                     } else if (res && res.ok && res.header['content-type'] === 'application/json' && res.body) {
-                        // console.log('Response from confluenceService:');
-                        // console.log(res);
-                        // console.log(JSON.stringify(res.body));
                         resolve(res.body);
                     } else {
                         console.log('-> rejecting manually in getContentbyCookies!!');
-                        // Something went wrong with received data. If there are problems with authentication, a html-content/type response is given.
-                        const sth = new Error('It\'s not possible to get info from \'' + URL + '\'' + '. Make sure you have authorization.');
-                        reject(sth);
-                        //reject('It\'s not possible to get info from \'' + URL + '\'' + '. Make sure you have authorization.');
+                        const erinfo = new Error('It\'s not possible to get info from \'' + URL + '\'' + '. Make sure you have authorization.');
+                        reject(erinfo);
                     }
                 });
         });
@@ -42,20 +37,14 @@ export class ConfluenceServiceImpl implements ConfluenceService {
                 .auth(credentials.username, credentials.password)
                 .end((err: any, res: any) => {
                     if (err) {
-                        // Something was wrong with the request
                         reject(err.message);
                     } else if (res && res.statusCode === 200 && res.headers['content-type'] === 'application/json' && res.body) {
-                        // console.log('Response from confluenceService:');
-                        // console.log(res);
-                        // console.log(JSON.stringify(res.body));
                         resolve(res.body);
                     } else {
                         console.log('-> rejecting manually in getContentbyCredentials!');
-                        // Something went wrong with the received data. If the there are problems with authentication, a html-content/type response is given.
                         reject(new Error('It\'s not possible to get info from \'' + URL + '\'' + '. Make sure you have authorization.'));
                     }
                 });
-
         });
     }
 
@@ -72,4 +61,3 @@ export class ConfluenceServiceImpl implements ConfluenceService {
     }
 
 }
-

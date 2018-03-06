@@ -53,8 +53,6 @@ describe('Confluence01 Testing the Input of Text and doc generation', () => {
 
     describe('ConfluenceTextIn', () => {
 
-        //const id = 'Jump+the+queue+Home+(Edited+for+Demo)';
-        //const id1 = 'Jump the queue Home (Edited for Demo)'; // ! Doubt: Shall we allow that? In that case, a replace function is required in confluence.ts -> createURIbyTitle(). If not, a new ERROR is required.
         it('should return the Transcript from the external source', (done) => {
             const textinConfluence01 = new ConfluenceTextIn(basepath, space, credentials, isMock);
             textinConfluence01.getTranscript(id).then((transcript) => {
@@ -97,8 +95,6 @@ describe('Confluence02 Testing common fails', () => {
     // Input parameters
     describe('ConfluenceTextIn', () => {
 
-        // Good case
-        //const id = 'Jump+the+queue+Home+(Edited+for+Demo)';
         it('getTranscript should work with the proper input parameters', (done) => {
             const textinConfluence02 = new ConfluenceTextIn('http://localhost:8090/', 'JQ', credentials, true);
             textinConfluence02.getTranscript(id).then((transcript) => {

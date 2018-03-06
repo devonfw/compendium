@@ -2,10 +2,9 @@
 
 import chalk from 'chalk';
 import { Credentials } from './types';
-import { doCompendium, askInPrompt } from './myApp';
+import { doCompendium, askInPrompt } from './clinterpreter';
 
-let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
-
+let configFile, outputFile, multiple, outputFormat, inputFormat;
 
 (async () => {
 
@@ -72,7 +71,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
                 } else {
                   console.log('Input file type: ' + inputFormat + '\nOutput file type: ' + outputFormat + '\nConfig: ' + configFile + '\nOutput: ' + outputFile);
                   try {
-                    await doCompendium(configFile, outputFormat, outputFile); // Logic
+                    await doCompendium(configFile, outputFormat, outputFile);
                   } catch (e) {
                     console.error(chalk.red(e.message));
                   }
@@ -83,7 +82,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
                 console.error('Found extra parameters: ' + cli._);
             }
 
-        } else if (inputFormat === 'confluence' || inputFormat === 'jira') {
+        } else if (inputFormat === 'jira') {
             console.log('Not implemented yet');
         } else {
             console.error('Internal error with input format. Please try again.');
@@ -96,7 +95,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat, user, pass;
         outputFile = cli._[1];
         console.log('Input file type: ' + inputFormat + '\nOutput file type: ' + outputFormat + '\nConfig: ' + configFile + '\nOutput: ' + outputFile);
         try {
-            await doCompendium(configFile, outputFormat, outputFile); // Logic
+            await doCompendium(configFile, outputFormat, outputFile);
         } catch (e) {
             console.error(chalk.red(e.message));
         }

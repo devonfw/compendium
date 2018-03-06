@@ -14,13 +14,9 @@ const expect = chai.expect;
 const assert = chai.assert;
 const should = chai.should();
 
-
-
-// Properly written configuration files
 const configMock = '../compendium/src/mocks/configMock.json';
 const configTest1 = '../compendium/test-data/confiles/good/configTest1.json';
 
-// Configuration files intentionally misspelled
 const duplicatesSources_config = '../compendium/test-data/confiles/bad/duplicateSources.json';
 const orphanNodes_config = '../compendium/test-data/confiles/bad/orphanNodes.json';
 const badProperties_config = '../compendium/test-data/confiles/bad/badProperties.json';
@@ -67,48 +63,6 @@ describe('Testing the config and index creation', () => {
                 done(error);
             });
         });
-    });
-
-    after(() => {
-        // clean fixture
-    });
-});
-
-xdescribe('Testing that the configuration validation is working properly (config.test.ts)', () => {
-    before(() => {
-        //setup fixture
-    });
-
-    describe('ConfigFile', () => {
-
-        // Good case
-        it('should generate an index when is properly written', (done) => {
-            docConfigOK.getIndex().then((index) => {
-                //console.log(index);
-                done();
-            }).catch((error) => {
-                done(error);
-            });
-        });
-
-        // Required properties/values
-        it('must necessarily have some properties and values', (done) => {
-            expect(docConfigBadProperties.getIndex()).to.eventually.throw('don\'t have a valid property/value');
-            done();
-        });
-
-        // Duplicate keys
-        it('shouldn\'t have duplicate source keys', (done) => {
-            expect(docConfigDuplicateSources.getIndex()).to.eventually.throw('some sources have the same key');
-            done();
-        });
-
-        // Orphan nodes
-        it('shouldn\'t have orphan nodes', (done) => {
-            expect(docConfigOrphanNodes.getIndex()).to.eventually.throw('doesn\'t have a linked source.');
-            done();
-        });
-
     });
 
     after(() => {

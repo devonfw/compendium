@@ -17,11 +17,11 @@ export class ConfigFile implements DocConfig {
         const data = JSON.parse(config);
 
         // Sources
-        let indexSources: IndexSource[] = [];
+        const indexSources: IndexSource[] = [];
         for (const source of data.sources) {
             if (this.checkSourceValuesJSON(source)) {
 
-                let indexSource: IndexSource = {
+                const indexSource: IndexSource = {
                     key: source.key,
                     kind: source.kind,
                     source: source.source,
@@ -42,7 +42,7 @@ export class ConfigFile implements DocConfig {
         }
 
         // Nodes
-        let indexNodes: IndexNode[] = [];
+        const indexNodes: IndexNode[] = [];
         for (const node of data.nodes) {
             if (this.checkNodeValuesJSON(node)) {
 
@@ -72,14 +72,11 @@ export class ConfigFile implements DocConfig {
 
         let valid = true;
 
-        // I. Common values
-        if (sourceJSON.key && sourceJSON.key !== '' && sourceJSON.kind && (sourceJSON.kind === 'asciidoc' || sourceJSON.kind === 'confluence')) { // ! Checking kind content isn't scalable         
+        if (sourceJSON.key && sourceJSON.key !== '' && sourceJSON.kind && (sourceJSON.kind === 'asciidoc' || sourceJSON.kind === 'confluence')) {
 
-            // II. Confluence values
             if (sourceJSON.kind === 'confluence') {
                 if (sourceJSON.space && sourceJSON.space !== '' && sourceJSON.context) { // TODO: Specify possible context values Ie: ( 'sso' || 'basic' || ...) && (sourceJSON.context === 'sso' || sourceJSON.context === 'basic')
                     valid = true;
-                    //return true;
                 } else {
                     valid = false;
                 }
@@ -107,7 +104,7 @@ export class ConfigFile implements DocConfig {
         const source: any = {};
 
         indexSources.map((item) => {
-            const key = item['key'];
+            const key = item.key;
             if (key in source) {
                 duplicate = true;
             }
@@ -133,19 +130,14 @@ export class ConfigFile implements DocConfig {
         return kind;
     }
 
-    // To delete when changes are solid
     private checkNodeValuesJSON_Old(nodeJSON: any): boolean {
 
         let valid = true;
 
-        // I. Common values
         if (nodeJSON.key && nodeJSON.key !== '' && nodeJSON.index && nodeJSON.index !== '') {
-
-            // II. Confluence values
-            if (nodeJSON.kind && nodeJSON.kind === 'confluence' && nodeJSON.index.indexOf(' ') !== -1) { // Blancspaces are forbiden
+            if (nodeJSON.kind && nodeJSON.kind === 'confluence' && nodeJSON.index.indexOf(' ') !== -1) {
                 valid = false;
             }
-
         } else {
             valid = false;
         }

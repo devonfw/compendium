@@ -62,7 +62,6 @@ export class AsciiDocFileTextOut implements TextOut {
                 }
                 outputString = outputString + '\n\n';
             }
-            // console.log(outputString);
             try {
                 fs.writeFileSync(this.outputFile + '.adoc', outputString);
             } catch (err) {
@@ -266,22 +265,20 @@ export class AsciiDocFileTextIn implements TextIn {
         doc = doc.replace(':toc: macro', '');
         doc = doc.replace('toc::[]', '');
         let dochtml: string = '';
-        //console.log(doc);
         try {
             dochtml = this.asciidoctor.convert(doc, { attributes: {showtitle: true, doctype: 'book'}} );
         } catch (err) {
             console.log(err.code);
             throw err;
         }
-        // console.log(dochtml);
 
         const tree = this.htmlparse.parse(dochtml);
 
-        let transcript: Transcript = { segments: [] };
-        let end: Array<TextSegment> = [];
+        const transcript: Transcript = { segments: [] };
+        const end: Array<TextSegment> = [];
 
         for (const branch of tree) {
-            let temp = this.recursive(branch, sections);
+            const temp = this.recursive(branch, sections);
             for (const final of temp) {
                 end.push(final);
             }
@@ -289,15 +286,12 @@ export class AsciiDocFileTextIn implements TextIn {
 
         transcript.segments = end;
 
-        //console.dir(JSON.stringify(transcript));
-
         return transcript;
 
     }
 
     public recursive(node: any, filter?: string[]): Array<TextSegment> {
-        //console.log(params);
-        let result: Array<TextSegment> = [];
+        const result: Array<TextSegment> = [];
         let out: TextSegment;
         if (node.children) {
             if (node.name === 'h1') {
@@ -336,7 +330,7 @@ export class AsciiDocFileTextIn implements TextIn {
 
                 if (sectionFound) {
                     result.pop();
-                    let inter = this.recursive(node.parent);
+                    const inter = this.recursive(node.parent);
                     if (inter && inter.length > 0) {
                         for (const temp of inter) {
                             result.push(temp);
@@ -345,7 +339,7 @@ export class AsciiDocFileTextIn implements TextIn {
 
                 } else {
                     for (const child of node.children) {
-                        let inter = this.recursive(child, filter);
+                        const inter = this.recursive(child, filter);
                         if (inter && inter.length > 0) {
                             for (const temp of inter) {
                                 result.push(temp);
@@ -389,9 +383,8 @@ export class AsciiDocFileTextIn implements TextIn {
                     result.push(out);
 
                 } else if (node.name === 'br') {
-                     const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' }; // "bold" // "italic"
-                     const br: RichString = { text: '\n', attrs: attrs };
-                     // console.dir(out, { depth: null });  // <------
+                     const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' };
+                     const br: RichString = { text: '\n', attrs };
                      out = { kind: 'paragraph', text: [br] };
                      result.push(out);
                 } else if (node.name === 'div' && node.attribs.class === 'content') {
@@ -401,10 +394,8 @@ export class AsciiDocFileTextIn implements TextIn {
 
                 } else {
                     for (const child of node.children) {
-                        let inter = this.recursive(child);
+                        const inter = this.recursive(child);
                         if (inter && inter.length > 0) {
-                            // console.log('Concat recursive: (Node length: ' + node.children.length + ')'); // OK? NO! Concat the same value for
-                            // console.dir(inter[0], { depth: null });
                             for (const temp of inter) {
                                 result.push(temp);
                             }
@@ -436,7 +427,7 @@ export class AsciiDocFileTextIn implements TextIn {
     }
 
     public list(node: Array<any>): Array<RichText | List | Paragraph | Link | Code> {
-        let result: Array<RichText | List | Paragraph | Link | Code> = [];
+        const result: Array<RichText | List | Paragraph | Link | Code> = [];
         let out: RichText | List | Paragraph | Link | Code;
         for (const li of node) {
             if (li.name === 'li') {
@@ -486,15 +477,15 @@ export class AsciiDocFileTextIn implements TextIn {
     public table(node: Array<any>): TableBody {
 
         let result: TableBody;
-        let colspan: Array<Col>;
-        let colRow: Array<Col> = [];
-        let bodyRows: Array<Row> = [];
+        const colspan: Array<Col> = [];
+        const colRow: Array<Col> = [];
+        const bodyRows: Array<Row> = [];
 
         for (const child of node) {
             if (child.name === 'tbody' || child.name === 'thead') {
                 for (const row of child.children) {
                     if (row.name === 'tr') {
-                        let resultRow: Row = [];
+                        const resultRow: Row = [];
                         for (const cell of row.children) {
                             let element: Cell;
                             let colespan: string = '1';
@@ -519,7 +510,6 @@ export class AsciiDocFileTextIn implements TextIn {
                                     colespan = cell.attribs.colspan;
                                 }
                                 if (cell.children && cell.children.length > 0 && cell.children[0].name !== 'br') {
-                                    // console.dir(cell.children);
                                     const contentCell = this.tableTd(cell.children);
                                     if (contentCell) {
                                         element = { type: 'td', colspan: colespan, cell: contentCell };
@@ -554,7 +544,7 @@ export class AsciiDocFileTextIn implements TextIn {
                     }
                 }
             } else if (child.name === 'tr') {
-                let resultRow: Row = [];
+                const resultRow: Row = [];
                 for (const cell of child.children) {
                     let element: Cell;
                     let colespan: string = '1';
@@ -604,14 +594,14 @@ export class AsciiDocFileTextIn implements TextIn {
     }
 
     public tableTd(node: any): Array<TableSegment>{
-        let result: Array<TableSegment> = [];
+        const result: Array<TableSegment> = [];
         for (const child of node) {
             let out: TableSegment;
             if (child.name === 'p') {
               out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
               result.push(out);
             } else if (child.name === 'img') {
-              let img: InlineImage = { kind: 'inlineimage', img: child.attribs.src, title: child.attribs.alt };
+              const img: InlineImage = { kind: 'inlineimage', img: child.attribs.src, title: child.attribs.alt };
               this.copyImage(child.attribs.src);
               result.push(img);
             } else if (child.name === 'table') {
@@ -662,9 +652,7 @@ export class AsciiDocFileTextIn implements TextIn {
 
     public pharagraphs( node: Array<any>): RichText {
 
-        let result: RichText = [];
-        //console.log('My params ' + myParams + '\n');
-        //console.dir(node, { depth: null });
+        const result: RichText = [];
         for (const child of node) {
             if (child.name === 'img') {
                 const img: InlineImage = {
@@ -678,9 +666,8 @@ export class AsciiDocFileTextIn implements TextIn {
                 const out: Link = { kind: 'link', ref: child.attribs.href, text: this.linkContent(child.children) };
                 result.push(out);
             } else if (child.name === 'br') {
-                const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' }; // "bold" // "italic"
-                const out: RichString = { text: '\n', attrs: attrs };
-                // console.dir(out, { depth: null });  // <------
+                const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' };
+                const out: RichString = { text: '\n', attrs };
                 result.push(out);
             } else if (child.name === 'code') {
 
@@ -702,17 +689,14 @@ export class AsciiDocFileTextIn implements TextIn {
                     para = this.putMyAttribute((para as Array<RichString>), newParam.name);
                 }
                 if (para && para.length > 0) {
-                    //console.log('Concat paragraph: (Node length: ' + para.length + ')'); // OK
-                    // console.dir(para, { depth: null });
                     for (const temp of para) {
                         result.push(temp);
                     }
                 }
 
             } else if (child.type === 'text' && child.data !== '' && child.data !== ' ') {
-                     const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' }; // "bold" // "italic"
-                     const out: RichString = { text: child.data, attrs: attrs };
-                     // console.dir(out, { depth: null });  // <------
+                     const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' };
+                     const out: RichString = { text: child.data, attrs };
                      result.push(out);
             }
         }
@@ -720,9 +704,7 @@ export class AsciiDocFileTextIn implements TextIn {
 
     }
     public putMyAttribute(para: Array<RichString>, myParam: string): Array<RichString> {
-        let paragraph: Array<RichString> = [];
-        // console.log(myParam);
-        // tslint:disable-next-line:forin
+        const paragraph: Array<RichString> = [];
         for (const par of para) {
             if (myParam === 'strong') {
                 par.attrs.strong = true;

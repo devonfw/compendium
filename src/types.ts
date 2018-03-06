@@ -10,11 +10,10 @@ export interface TextInSources {
     [key: string]: TextIn;
 }
 export interface TextAttributes {
-    strong?: boolean;  // "bold"
-    cursive?: boolean;   // "italic"
+    strong?: boolean;
+    cursive?: boolean;
     underline?: boolean;
     script: ScriptType;
-    // more in the future
 }
 
 export interface RichString {
@@ -37,7 +36,7 @@ export interface Paragraph {
 
 export interface InlineImage {
     kind: 'inlineimage';
-    img: string; //url
+    img: string;
     title: string;
 }
 
@@ -84,7 +83,7 @@ export interface Cell {
 export type CellType = 'th' | 'td';
 
 //"Sum type" o "Discriminated Union" o "Tagged Union" todo nombres para
-// lomismo type:  https://blog.mariusschulz.com/2016/11/03/typescript-2-0-tagged-union-types
+// lo mismo type:  https://blog.mariusschulz.com/2016/11/03/typescript-2-0-tagged-union-types
 export type TextSegment = TextElement | Paragraph | InlineImage | Table | List | Link | Code;
 export type TableSegment = Paragraph | InlineImage | Table | List | Link | Code;
 
@@ -99,13 +98,13 @@ export interface Merger {
 
 }
 
-export interface IndexSource {  // Updated
+export interface IndexSource {
 
     key: string;
     kind: TextInSource;
     source: string;
-    space?: string | undefined; // For confluence
-    context?: string | undefined; // For confluence
+    space?: string | undefined;
+    context?: string | undefined;
 }
 
 export interface IndexNode {
@@ -131,8 +130,6 @@ export interface TextOut {
 
     generate(data: Array<Transcript>): Promise<void>;
 }
-
-// New types for confluence implementation
 
 export interface Cookie {
     name: string;

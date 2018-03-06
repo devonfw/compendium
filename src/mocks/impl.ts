@@ -40,7 +40,6 @@ export class TextInMock implements TextIn {
     public async getTranscript(id: string): Promise<Transcript> {
 
         if (id === 'test-data/brownfox.adoc'){
-            //The quick *brown fox _jumps_ over* the lazy dog.
             const paragraph: Paragraph =  {
                 kind: 'paragraph',
                 text: [],
@@ -96,22 +95,14 @@ export class ConfluenceServiceImplMock implements ConfluenceService {
         const URI_LOCAL = 'http://localhost:8090/rest/api/content?spaceKey=CP&title=Jump+the+queue+Home+(Edited+for+Demo)&expand=body.view';
 
         const goodContent_path = 'test-data/input/confluence/good/JumpTheQueueHome_capgemini.json';
-        //const goodContent1_path = 'test-data/input/confluence/good/JumpTheQueueHome_local.json'; // Not used
         const multiplesPagesContent_path = 'test-data/input/confluence/bad/multiplePages.json';
         const badFormatContent_path = 'test-data/input/confluence/bad/badFormat.json';
 
         return new Promise<JSON>((resolve, reject) => {
 
-            // No URL and credentials filter for now
-            // if (URI !== URI_CAPGEMINI ) {
-            //     throw new Error('Bad URL');
-            // } else if (credentials.username !== 'Admin' && credentials.password !== 'Admin123') {
-            //     throw new Error('Bad credentials');
-            // } else { ...
-
             const id_multiplePages = 'multiple+pages';
             const id_badFormat = 'bad+format';
-            let path = goodContent_path; // Default
+            let path = goodContent_path;
 
             if (URL.indexOf(id_multiplePages) > -1) {
                 path = multiplesPagesContent_path;

@@ -50,7 +50,7 @@ export class ConfluenceTextIn implements TextIn {
         if (this.baseURL === '') {
             throw new Error('ConfluenceTextIn: BaseURL cannot be blank.');
         } else if (this.spaceKey === undefined) {
-            throw new Error('ConfluenceTextIn: SpaceKey is undefined.'); // Logically, this should never happen
+            throw new Error('ConfluenceTextIn: SpaceKey is undefined.');
         } else if (this.spaceKey === '') {
             throw new Error('ConfluenceTextIn: SpaceKey cannot be blank.');
         }
@@ -64,8 +64,7 @@ export class ConfluenceTextIn implements TextIn {
 
         // I. Create URI
         const uri = this.createURIbyTitle(title);
-        const url = this.createURLbyTitle(title); // Optional for console messages
-        //console.log(uri);
+        const url = this.createURLbyTitle(title);
 
         // II. ConfluenceService
         let content;
@@ -91,7 +90,6 @@ export class ConfluenceTextIn implements TextIn {
                 }
             }
         } else {
-            // Logically, this never should be shown.
             throw new Error('Credentials are mandatory to access confluence resources');
         }
 
@@ -133,32 +131,27 @@ export class ConfluenceTextIn implements TextIn {
         let htmlContent;
         let error = false;
 
-        const parsed_content = JSON.parse(JSON.stringify(content)); // It's mandatory
-        if (parsed_content.id) { // By Id
-            // console.log(' -> Content by id!');
+        const parsed_content = JSON.parse(JSON.stringify(content));
+        if (parsed_content.id) {
             if (parsed_content.body.view.value) {
                 htmlContent = parsed_content.body.view.value;
             } else {
                 error = true;
             }
         } else if (parsed_content.results) {
-            if (parsed_content.size === 1 && parsed_content.results[0].id) { // By Search (title) & [1 page]
-                // console.log(' -> Content by Title!');
+            if (parsed_content.size === 1 && parsed_content.results[0].id) {
                 if (parsed_content.results[0].body.view.value) {
                     htmlContent = parsed_content.results[0].body.view.value;
                 } else {
                     error = true;
                 }
             } else {
-                // At the moment (What should we do with full workspaces? They have several pages. Include all the content? It's easy to iterate over the JSON and get every body.view page values)
                 throw new Error('Only one Confluence page is allowed at once in this version. Check your request please.');
             }
         }
-
         if (error) {
             throw new Error('Received JSON from Confluence is not in a proper format.');
         }
-
         return htmlContent;
     }
 
@@ -174,6 +167,7 @@ export class ConfluenceTextIn implements TextIn {
         pathNameRest: rest/api/content?spaceKey=JQ&title=Jump+the+queue+Home&expand=body.view
 
     */
+
     private createURIbyTitle(title: string): string {
 
         let outputURI = '';
@@ -201,35 +195,24 @@ export class ConfluenceTextIn implements TextIn {
     // ------------------
 
     public recursive(node: any, filter?: string[]): Array<TextSegment> {
-        //console.log(params);
-        let result: Array<TextSegment> = [];
+        const result: Array<TextSegment> = [];
         let out: TextSegment;
         if (node.children) {
             if (node.name === 'h1') {
-
                 out = { kind: 'textelement', element: 'title', text: this.pharagraphs(node.children) };
                 result.push(out);
-
             } else if (node.name === 'h2') {
-
                 out = { kind: 'textelement', element: 'h1', text: this.pharagraphs(node.children) };
                 result.push(out);
-
             } else if (node.name === 'h3') {
-
                 out = { kind: 'textelement', element: 'h2', text: this.pharagraphs(node.children) };
                 result.push(out);
-
             } else if (node.name === 'h4') {
-
                 out = { kind: 'textelement', element: 'h3', text: this.pharagraphs(node.children) };
                 result.push(out);
-
             } else if (node.name === 'h5') {
-
                 out = { kind: 'textelement', element: 'h4', text: this.pharagraphs(node.children) };
                 result.push(out);
-
             }
             if (filter !== [] && filter !== null && filter !== undefined) {
                 let sectionFound = false;
@@ -238,19 +221,17 @@ export class ConfluenceTextIn implements TextIn {
                         sectionFound = true;
                     }
                 }
-
                 if (sectionFound) {
                     result.pop();
-                    let inter = this.recursive(node.parent);
+                    const inter = this.recursive(node.parent);
                     if (inter && inter.length > 0) {
                         for (const temp of inter) {
                             result.push(temp);
                         }
                     }
-
                 } else {
                     for (const child of node.children) {
-                        let inter = this.recursive(child, filter);
+                        const inter = this.recursive(child, filter);
                         if (inter && inter.length > 0) {
                             for (const temp of inter) {
                                 result.push(temp);
@@ -258,12 +239,10 @@ export class ConfluenceTextIn implements TextIn {
                         }
                     }
                 }
-
             } else {
                 if (node.name === 'p') {
                     out = { kind: 'paragraph', text: this.pharagraphs(node.children) };
                     result.push(out);
-
                 } else if (node.name === 'a') {
                     out = { kind: 'link', ref: node.attribs.href, text: this.linkContent(node.children) };
                     result.push(out);
@@ -275,40 +254,29 @@ export class ConfluenceTextIn implements TextIn {
                     };
                     result.push(img);
                 } else if (node.name === 'table') {
-
                     out = { kind: 'table', content: this.table(node.children) };
                     result.push(out);
-
                 } else if (node.name === 'ul') {
-
                     out = { kind: 'list', ordered: false, elements: this.list(node.children) };
                     result.push(out);
-
                 } else if (node.name === 'code') {
-
                     out = { kind: 'code', content: node.children[0].data };
                     if (node.attribs['data-lang']) {
                         out.languaje = node.attribs['data-lang'];
                     }
                     result.push(out);
-
                 } else if (node.name === 'br') {
-                     const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' }; // "bold" // "italic"
-                     const br: RichString = { text: '\n', attrs: attrs };
-                     // console.dir(out, { depth: null });  // <------
+                     const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' };
+                     const br: RichString = { text: '\n', attrs };
                      out = { kind: 'paragraph', text: [br] };
                      result.push(out);
                 } else if (node.name === 'div' && node.attribs.class === 'content') {
-
                     out = { kind: 'paragraph', text: this.pharagraphs(node.children) };
                     result.push(out);
-
                 } else {
                     for (const child of node.children) {
-                        let inter = this.recursive(child);
+                        const inter = this.recursive(child);
                         if (inter && inter.length > 0) {
-                            // console.log('Concat recursive: (Node length: ' + node.children.length + ')'); // OK? NO! Concat the same value for
-                            // console.dir(inter[0], { depth: null });
                             for (const temp of inter) {
                                 result.push(temp);
                             }
@@ -339,7 +307,7 @@ export class ConfluenceTextIn implements TextIn {
     }
 
     public list(node: Array<any>): Array<RichText | List | Paragraph | Link | Code> {
-        let result: Array<RichText | List | Paragraph | Link | Code> = [];
+        const result: Array<RichText | List | Paragraph | Link | Code> = [];
         let out: RichText | List | Paragraph | Link | Code;
         for (const li of node) {
             if (li.name === 'li') {
@@ -370,13 +338,11 @@ export class ConfluenceTextIn implements TextIn {
                         out = { kind: 'link', ref: child.attribs.href, text: this.linkContent(child.children) };
                         result.push(out);
                     } else if (child.name === 'code') {
-
                         out = { kind: 'code', content: child.children[0].data };
                         if (child.attribs['data-lang']) {
                             out.languaje = child.attribs['data-lang'];
                         }
                         result.push(out);
-
                     } else if (!child.data){
                         out = this.pharagraphs(child.children);
                         result.push(out);
@@ -389,15 +355,15 @@ export class ConfluenceTextIn implements TextIn {
     public table(node: Array<any>): TableBody {
 
         let result: TableBody;
-        let colspan: Array<Col>;
-        let colRow: Array<Col> = [];
-        let bodyRows: Array<Row> = [];
+        const colspan: Array<Col> = [];
+        const colRow: Array<Col> = [];
+        const bodyRows: Array<Row> = [];
 
         for (const child of node) {
             if (child.name === 'tbody' || child.name === 'thead') {
                 for (const row of child.children) {
                     if (row.name === 'tr') {
-                        let resultRow: Row = [];
+                        const resultRow: Row = [];
                         for (const cell of row.children) {
                             let element: Cell;
                             let colespan: string = '1';
@@ -422,7 +388,6 @@ export class ConfluenceTextIn implements TextIn {
                                     colespan = cell.attribs.colspan;
                                 }
                                 if (cell.children && cell.children.length > 0 && cell.children[0].name !== 'br') {
-                                    // console.dir(cell.children);
                                     const contentCell = this.tableTd(cell.children);
                                     if (contentCell) {
                                         element = { type: 'td', colspan: colespan, cell: contentCell };
@@ -457,7 +422,7 @@ export class ConfluenceTextIn implements TextIn {
                     }
                 }
             } else if (child.name === 'tr') {
-                let resultRow: Row = [];
+                const resultRow: Row = [];
                 for (const cell of child.children) {
                     let element: Cell;
                     let colespan: string = '1';
@@ -507,14 +472,14 @@ export class ConfluenceTextIn implements TextIn {
     }
 
     public tableTd(node: any): Array<TableSegment>{
-        let result: Array<TableSegment> = [];
+        const result: Array<TableSegment> = [];
         for (const child of node) {
             let out: TableSegment;
             if (child.name === 'p') {
               out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
               result.push(out);
             } else if (child.name === 'img') {
-              let img: InlineImage = { kind: 'inlineimage', img: child.attribs.src, title: child.attribs.alt };
+              const img: InlineImage = { kind: 'inlineimage', img: child.attribs.src, title: child.attribs.alt };
               result.push(img);
             } else if (child.name === 'table') {
               out = { kind: 'table', content: this.table(child.children) };
@@ -564,9 +529,7 @@ export class ConfluenceTextIn implements TextIn {
 
     public pharagraphs( node: Array<any>): RichText {
 
-        let result: RichText = [];
-        //console.log('My params ' + myParams + '\n');
-        //console.dir(node, { depth: null });
+        const result: RichText = [];
         for (const child of node) {
             if (child.name === 'img') {
                 const img: InlineImage = {
@@ -579,41 +542,33 @@ export class ConfluenceTextIn implements TextIn {
                 const out: Link = { kind: 'link', ref: child.attribs.href, text: this.linkContent(child.children) };
                 result.push(out);
             } else if (child.name === 'br') {
-                const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' }; // "bold" // "italic"
-                const out: RichString = { text: '\n', attrs: attrs };
-                // console.dir(out, { depth: null });  // <------
+                const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' };
+                const out: RichString = { text: '\n', attrs };
                 result.push(out);
             } else if (child.name === 'code') {
-
                 const out: Code = { kind: 'code', content: child.children[0].data };
                 if (child.attribs['data-lang']) {
                     out.languaje = child.attribs['data-lang'];
                 }
                 result.push(out);
-
             } else if (child.children) {
                 let para: Array<RichString | InlineImage | Link | Table | Code> = this.pharagraphs(child.children);
-
                 if (child.name) {
                     const newParam = child;
-
                     if (child.name === 'span' && child.attribs.class === 'underline') {
                         newParam.name = 'underline';
                     }
                     para = this.putMyAttribute((para as Array<RichString>), newParam.name);
                 }
                 if (para && para.length > 0) {
-                    //console.log('Concat paragraph: (Node length: ' + para.length + ')'); // OK
-                    // console.dir(para, { depth: null });
                     for (const temp of para) {
                         result.push(temp);
                     }
                 }
 
             } else if (child.type === 'text' && child.data !== '' && child.data !== ' ') {
-                     const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' }; // "bold" // "italic"
-                     const out: RichString = { text: child.data, attrs: attrs };
-                     // console.dir(out, { depth: null });  // <------
+                     const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' };
+                     const out: RichString = { text: child.data, attrs };
                      result.push(out);
             }
         }
@@ -621,9 +576,7 @@ export class ConfluenceTextIn implements TextIn {
 
     }
     public putMyAttribute(para: Array<RichString>, myParam: string): Array<RichString> {
-        let paragraph: Array<RichString> = [];
-        // console.log(myParam);
-        // tslint:disable-next-line:forin
+        const paragraph: Array<RichString> = [];
         for (const par of para) {
             if (myParam === 'strong') {
                 par.attrs.strong = true;
@@ -638,7 +591,6 @@ export class ConfluenceTextIn implements TextIn {
             }
             paragraph.push(par);
         }
-
         return paragraph;
     }
 
