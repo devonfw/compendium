@@ -1,7 +1,15 @@
 import {Merger, DocConfig, TextOut, TextInSources, Index, Transcript} from './types';
 
 export class MergerImpl implements Merger {
-
+    /**
+     * merger
+     * Merges all the transcripts recieved in one single file.
+     * @param {TextInSources} textinSources
+     * @param {Index} index
+     * @param {TextOut} textout
+     * @returns {Promise<void>}
+     * @memberof MergerImpl
+     */
     public async merge(textinSources: TextInSources, index: Index, textout: TextOut): Promise<void> {
 
         const transcripts: Array<Transcript> = [];

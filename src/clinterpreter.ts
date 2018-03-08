@@ -9,6 +9,14 @@ import { ConfigFile } from './config';
 import { ConfluenceTextIn } from './confluence';
 import chalk from 'chalk';
 
+/**
+ * doCompendium
+ * Read the information introduced in the CLI to interpreted it and create the final file
+ * @export
+ * @param {string} configFile
+ * @param {string} format
+ * @param {(string | undefined)} outputFile
+ */
 export async function doCompendium(configFile: string, format: string, outputFile: string | undefined) {
 
     let docconfig: ConfigFile;
@@ -89,6 +97,12 @@ export async function doCompendium(configFile: string, format: string, outputFil
 
 }
 
+/**
+ * askInPrompt
+ * Ask for the username and password if you introduce an input file that needs credentials to read it
+ * @export
+ * @returns {Promise<Credentials>}
+ */
 export async function askInPrompt(): Promise<Credentials> {
     const prompt = require('prompt');
     let credentials: Credentials;
@@ -123,6 +137,12 @@ export async function askInPrompt(): Promise<Credentials> {
     return promise;
 }
 
+/**
+ * dirExists
+ * Check if the directory introduce exist
+ * @param {string} filename
+ * @returns
+ */
 function dirExists(filename: string) {
     try {
         fs.accessSync(filename);

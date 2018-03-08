@@ -9,7 +9,13 @@ export class AsciiDocFileTextOut implements TextOut {
     public constructor(file: string) {
         this.outputFile = file;
     }
-
+    /**
+     * generate
+     * Create the final file parsing the different elements that the input files have
+     * @param {Array<Transcript>} data
+     * @returns {Promise<void>}
+     * @memberof AsciiDocFileTextOut
+     */
     public async generate(data: Array<Transcript>): Promise<void> {
 
         if (this.dirExists('./imageTemp/')) {
@@ -71,6 +77,14 @@ export class AsciiDocFileTextOut implements TextOut {
 
         this.done = true;
     }
+    /**
+     * codeParsed
+     * Parse the parts with code
+     * @private
+     * @param {Code} myText
+     * @returns
+     * @memberof AsciiDocFileTextOut
+     */
     private codeParsed(myText: Code) {
         let out: string = '';
         if (myText.languaje) {
@@ -81,15 +95,30 @@ export class AsciiDocFileTextOut implements TextOut {
 
         return out;
     }
-
+    /**
+     * textElementParsed
+     * Parse the different textElement
+     * @private
+     * @param {TextElement} myText
+     * @returns
+     * @memberof AsciiDocFileTextOut
+     */
     private textElementParsed(myText: TextElement) {
-        const textelement = myText.element;
-        if (textelement === 'title') { return '= ' + this.paragraphParsed(myText); }
-        if (textelement === 'h1') { return '== ' + this.paragraphParsed(myText); }
-        if (textelement === 'h2') { return '=== ' + this.paragraphParsed(myText); }
-        if (textelement === 'h3') { return '==== ' + this.paragraphParsed(myText); }
-        if (textelement === 'h4') { return '===== ' + this.paragraphParsed(myText); }
+            const textelement = myText.element;
+            if (textelement === 'title') { return '= ' + this.paragraphParsed(myText); }
+            if (textelement === 'h1') { return '== ' + this.paragraphParsed(myText); }
+            if (textelement === 'h2') { return '=== ' + this.paragraphParsed(myText); }
+            if (textelement === 'h3') { return '==== ' + this.paragraphParsed(myText); }
+            if (textelement === 'h4') { return '===== ' + this.paragraphParsed(myText); }
     }
+    /**
+     * paragraphParsed
+     * Parse the content that you can find in a paragraph
+     * @private
+     * @param {(Paragraph | TextElement)} myText
+     * @returns
+     * @memberof AsciiDocFileTextOut
+     */
     private paragraphParsed(myText: Paragraph | TextElement) {
         let output: string = '';
         for (const content of myText.text) {
@@ -146,96 +175,132 @@ export class AsciiDocFileTextOut implements TextOut {
         }
         return output;
     }
-
+    /**
+     * linkParsed
+     * Parse the links or inlineImage
+     * @private
+     * @param {Link} myLink
+     * @returns
+     * @memberof AsciiDocFileTextOut
+     */
     private linkParsed(myLink: Link) {
-        let output: string = '';
-        if ((myLink.text as InlineImage).kind === 'inlineimage'){
-            output = 'image::' + (myLink.text as InlineImage).img + '[' + (myLink.text as InlineImage).title + ', link="' + myLink.ref + '"]';
-        } else {
-            output = 'link:' + myLink.ref + '[' + this.paragraphParsed((myLink.text as Paragraph)) + ']';
+            let output: string = '';
+            if ((myLink.text as InlineImage).kind === 'inlineimage'){
+                output = 'image::' + (myLink.text as InlineImage).img + '[' + (myLink.text as InlineImage).title + ', link="' + myLink.ref + '"]';
+            } else {
+                output = 'link:' + myLink.ref + '[' + this.paragraphParsed((myLink.text as Paragraph)) + ']';
+            }
+            return output;
         }
-        return output;
-    }
-
+    /**
+     * imageParsed
+     * To parse the images
+     * @private
+     * @param {InlineImage} myText
+     * @returns
+     * @memberof AsciiDocFileTextOut
+     */
     private imageParsed(myText: InlineImage) {
-        return 'image::' + myText.img + '[' + myText.title + ']';
-    }
-
-    private tableParsed(content: TableBody) {
-        let output: string;
-        if (content.body[0][0].type === 'th'){
-            output = '[options="header"]\n';
+            return 'image::' + myText.img + '[' + myText.title + ']';
         }
-        output = '|==================\n';
-        for (const row of content.body) {
-            for (const cell of row) {
-                if (cell.colspan && cell.colspan !== '1') {
-                    output = output + cell.colspan + '+^';
-                }
-                for (const inside of cell.cell) {
-                    if (inside.kind === 'paragraph') {
-                      output = output;
-                      output = output + '| ' + this.paragraphParsed(inside) + ' ';
-                    } else if (inside.kind === 'inlineimage') {
-                      output = output + 'a| ' + this.imageParsed(inside) + ' ';
-                    } else if (inside.kind === 'table') {
-                      output = output + 'a| ' + this.tableParsed(inside.content) + ' ';
-                    } else if (inside.kind === 'list') {
-                      output = output + 'a| ' + this.listParsed(inside) + ' ';
-                    } else if (inside.kind === 'link') {
-                      output = output + 'a| ' + this.linkParsed(inside) + ' ';
-                    } else if (inside.kind === 'code') {
-                      output = output + 'a| ' + this.codeParsed(inside) + ' ';
+    /**
+     * tableParsed
+     * To parse the table and the different elements that we can have inside.
+     * @private
+     * @param {TableBody} content
+     * @returns
+     * @memberof AsciiDocFileTextOut
+     */
+    private tableParsed(content: TableBody) {
+            let output: string;
+            if (content.body[0][0].type === 'th'){
+                output = '[options="header"]\n';
+            }
+            output = '|==================\n';
+            for (const row of content.body) {
+                for (const cell of row) {
+                    if (cell.colspan && cell.colspan !== '1') {
+                        output = output + cell.colspan + '+^';
+                    }
+                    for (const inside of cell.cell) {
+                        if (inside.kind === 'paragraph') {
+                          output = output;
+                          output = output + '| ' + this.paragraphParsed(inside) + ' ';
+                        } else if (inside.kind === 'inlineimage') {
+                          output = output + 'a| ' + this.imageParsed(inside) + ' ';
+                        } else if (inside.kind === 'table') {
+                          output = output + 'a| ' + this.tableParsed(inside.content) + ' ';
+                        } else if (inside.kind === 'list') {
+                          output = output + 'a| ' + this.listParsed(inside) + ' ';
+                        } else if (inside.kind === 'link') {
+                          output = output + 'a| ' + this.linkParsed(inside) + ' ';
+                        } else if (inside.kind === 'code') {
+                          output = output + 'a| ' + this.codeParsed(inside) + ' ';
+                        }
                     }
                 }
+                output = output + '\n';
             }
-            output = output + '\n';
+            output = output + '|==================\n';
+            return output;
         }
-        output = output + '|==================\n';
-        return output;
-    }
-
+    /**
+     * listParsed
+     * To parse the list and the different element that we can find on it.
+     * @private
+     * @param {List} list
+     * @param {string} [notation]
+     * @returns
+     * @memberof AsciiDocFileTextOut
+     */
     private listParsed(list: List, notation?: string) {
-        let output: string = '';
-        if (!notation) {
-            notation = '*';
-            if (list.ordered) {
-                notation = '.';
-            }
-        } else {
-
-            if (list.ordered) {
-                notation = notation + '.';
+            let output: string = '';
+            if (!notation) {
+                notation = '*';
+                if (list.ordered) {
+                    notation = '.';
+                }
             } else {
-                notation = notation + '*';
-            }
-        }
-        for (const element of list.elements) {
-            if ((element as List).kind === 'list'){
-                output = output + this.listParsed((element as List), notation);
-            } else if ((element as Link).kind === 'link') {
-                output = output + this.linkParsed((element as Link));
-            } else if ((element as Paragraph).kind === 'paragraph') {
-                output = output + notation + ' ' + this.paragraphParsed((element as Paragraph)) + '\n';
-            } else if ((element as Code).kind === 'code') {
-                output = output + this.codeParsed((element as Code));
-            } else if ((element as RichText)[0]) {
-                const temp: Paragraph = { kind: 'paragraph', text: (element as RichText) };
-                output = output + notation + ' ' + this.paragraphParsed(temp) + '\n';
-            }
-        }
-        return output;
-    }
-    private dirExists(filename: string) {
-    try {
-        fs.accessSync(filename);
-        return true;
-    } catch (e) {
-        return false;
-    }
-}
 
-}
+                if (list.ordered) {
+                    notation = notation + '.';
+                } else {
+                    notation = notation + '*';
+                }
+            }
+            for (const element of list.elements) {
+                if ((element as List).kind === 'list'){
+                    output = output + this.listParsed((element as List), notation);
+                } else if ((element as Link).kind === 'link') {
+                    output = output + this.linkParsed((element as Link));
+                } else if ((element as Paragraph).kind === 'paragraph') {
+                    output = output + notation + ' ' + this.paragraphParsed((element as Paragraph)) + '\n';
+                } else if ((element as Code).kind === 'code') {
+                    output = output + this.codeParsed((element as Code));
+                } else if ((element as RichText)[0]) {
+                    const temp: Paragraph = { kind: 'paragraph', text: (element as RichText) };
+                    output = output + notation + ' ' + this.paragraphParsed(temp) + '\n';
+                }
+            }
+            return output;
+        }
+        /**
+         * dirExists
+         * Check if the directory exist
+         * @private
+         * @param {string} filename
+         * @returns
+         * @memberof AsciiDocFileTextOut
+         */
+        private dirExists(filename: string) {
+        try {
+            fs.accessSync(filename);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+    }
 
 export class AsciiDocFileTextIn implements TextIn {
 
@@ -246,8 +311,15 @@ export class AsciiDocFileTextIn implements TextIn {
     public constructor(basepath: string) {
         this.base = basepath;
     }
-
-    public async getTranscript(id: string, sections?: string[]): Promise<Transcript> {
+/**
+ * getTrancript
+ * Get the transcript file to write on a single file
+ * @param {string} id
+ * @param {string[]} [sections]
+ * @returns {Promise<Transcript>}
+ * @memberof AsciiDocFileTextIn
+ */
+public async getTranscript(id: string, sections?: string[]): Promise<Transcript> {
 
         const dir = this.base + '/' + id;
         let doc;
@@ -289,151 +361,170 @@ export class AsciiDocFileTextIn implements TextIn {
         return transcript;
 
     }
-
+    /**
+     * recursive
+     * Read the elements on the tree recursively since find a known node
+     * @param {*} node
+     * @param {string[]} [filter]
+     * @returns {Array<TextSegment>}
+     * @memberof AsciiDocFileTextIn
+     */
     public recursive(node: any, filter?: string[]): Array<TextSegment> {
-        const result: Array<TextSegment> = [];
-        let out: TextSegment;
-        if (node.children) {
-            if (node.name === 'h1') {
+            const result: Array<TextSegment> = [];
+            let out: TextSegment;
+            if (node.children) {
+                if (node.name === 'h1') {
 
-                out = { kind: 'textelement', element: 'title', text: this.pharagraphs(node.children) };
-                result.push(out);
+                    out = { kind: 'textelement', element: 'title', text: this.paragraphs(node.children) };
+                    result.push(out);
 
-            } else if (node.name === 'h2') {
+                } else if (node.name === 'h2') {
 
-                out = { kind: 'textelement', element: 'h1', text: this.pharagraphs(node.children) };
-                result.push(out);
+                    out = { kind: 'textelement', element: 'h1', text: this.paragraphs(node.children) };
+                    result.push(out);
 
-            } else if (node.name === 'h3') {
+                } else if (node.name === 'h3') {
 
-                out = { kind: 'textelement', element: 'h2', text: this.pharagraphs(node.children) };
-                result.push(out);
+                    out = { kind: 'textelement', element: 'h2', text: this.paragraphs(node.children) };
+                    result.push(out);
 
-            } else if (node.name === 'h4') {
+                } else if (node.name === 'h4') {
 
-                out = { kind: 'textelement', element: 'h3', text: this.pharagraphs(node.children) };
-                result.push(out);
+                    out = { kind: 'textelement', element: 'h3', text: this.paragraphs(node.children) };
+                    result.push(out);
 
-            } else if (node.name === 'h5') {
+                } else if (node.name === 'h5') {
 
-                out = { kind: 'textelement', element: 'h4', text: this.pharagraphs(node.children) };
-                result.push(out);
+                    out = { kind: 'textelement', element: 'h4', text: this.paragraphs(node.children) };
+                    result.push(out);
 
-            }
-            if (filter !== [] && filter !== null && filter !== undefined) {
-                let sectionFound = false;
-                for (const section of filter) {
-                    if (node.children[0].data === section) {
-                        sectionFound = true;
-                    }
                 }
-
-                if (sectionFound) {
-                    result.pop();
-                    const inter = this.recursive(node.parent);
-                    if (inter && inter.length > 0) {
-                        for (const temp of inter) {
-                            result.push(temp);
+                if (filter !== [] && filter !== null && filter !== undefined) {
+                    let sectionFound = false;
+                    for (const section of filter) {
+                        if (node.children[0].data === section) {
+                            sectionFound = true;
                         }
                     }
 
-                } else {
-                    for (const child of node.children) {
-                        const inter = this.recursive(child, filter);
+                    if (sectionFound) {
+                        result.pop();
+                        const inter = this.recursive(node.parent);
                         if (inter && inter.length > 0) {
                             for (const temp of inter) {
                                 result.push(temp);
                             }
                         }
+
+                    } else {
+                        for (const child of node.children) {
+                            const inter = this.recursive(child, filter);
+                            if (inter && inter.length > 0) {
+                                for (const temp of inter) {
+                                    result.push(temp);
+                                }
+                            }
+                        }
                     }
-                }
-
-            } else {
-                if (node.name === 'p') {
-                    out = { kind: 'paragraph', text: this.pharagraphs(node.children) };
-                    result.push(out);
-
-                } else if (node.name === 'a') {
-                    out = { kind: 'link', ref: node.attribs.href, text: this.linkContent(node.children) };
-                    result.push(out);
-                } else if (node.name === 'img') {
-                    const img: InlineImage = {
-                        kind: 'inlineimage',
-                        img: node.attribs.src,
-                        title: node.attribs.alt,
-                    };
-                    this.copyImage(node.attribs.src);
-                    result.push(img);
-                } else if (node.name === 'table') {
-
-                    out = { kind: 'table', content: this.table(node.children) };
-                    result.push(out);
-
-                } else if (node.name === 'ul') {
-
-                    out = { kind: 'list', ordered: false, elements: this.list(node.children) };
-                    result.push(out);
-
-                } else if (node.name === 'code') {
-
-                    out = { kind: 'code', content: node.children[0].data };
-                    if (node.attribs['data-lang']) {
-                        out.languaje = node.attribs['data-lang'];
-                    }
-                    result.push(out);
-
-                } else if (node.name === 'br') {
-                     const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' };
-                     const br: RichString = { text: '\n', attrs };
-                     out = { kind: 'paragraph', text: [br] };
-                     result.push(out);
-                } else if (node.name === 'div' && node.attribs.class === 'content') {
-
-                    out = { kind: 'paragraph', text: this.pharagraphs(node.children) };
-                    result.push(out);
 
                 } else {
-                    for (const child of node.children) {
-                        const inter = this.recursive(child);
-                        if (inter && inter.length > 0) {
-                            for (const temp of inter) {
-                                result.push(temp);
+                    if (node.name === 'p') {
+                        out = { kind: 'paragraph', text: this.paragraphs(node.children) };
+                        result.push(out);
+
+                    } else if (node.name === 'a') {
+                        out = { kind: 'link', ref: node.attribs.href, text: this.linkContent(node.children) };
+                        result.push(out);
+                    } else if (node.name === 'img') {
+                        const img: InlineImage = {
+                            kind: 'inlineimage',
+                            img: node.attribs.src,
+                            title: node.attribs.alt,
+                        };
+                        this.copyImage(node.attribs.src);
+                        result.push(img);
+                    } else if (node.name === 'table') {
+
+                        out = { kind: 'table', content: this.table(node.children) };
+                        result.push(out);
+
+                    } else if (node.name === 'ul') {
+
+                        out = { kind: 'list', ordered: false, elements: this.list(node.children) };
+                        result.push(out);
+
+                    } else if (node.name === 'code') {
+
+                        out = { kind: 'code', content: node.children[0].data };
+                        if (node.attribs['data-lang']) {
+                            out.languaje = node.attribs['data-lang'];
+                        }
+                        result.push(out);
+
+                    } else if (node.name === 'br') {
+                         const attrs: TextAttributes = { strong: false, cursive: false, underline: false, script: 'normal' };
+                         const br: RichString = { text: '\n', attrs };
+                         out = { kind: 'paragraph', text: [br] };
+                         result.push(out);
+                    } else if (node.name === 'div' && node.attribs.class === 'content') {
+
+                        out = { kind: 'paragraph', text: this.paragraphs(node.children) };
+                        result.push(out);
+
+                    } else {
+                        for (const child of node.children) {
+                            const inter = this.recursive(child);
+                            if (inter && inter.length > 0) {
+                                for (const temp of inter) {
+                                    result.push(temp);
+                                }
                             }
                         }
                     }
                 }
             }
+
+            return result;
         }
-
-        return result;
-    }
-
+    /**
+     * linkContent
+     * Create links with the differents parts of the file
+     * @param {Array<any>} node
+     * @returns {(Paragraph | InlineImage)}
+     * @memberof AsciiDocFileTextIn
+     */
     public linkContent(node: Array<any>): Paragraph | InlineImage {
-        let result: Paragraph | InlineImage;
-        if (node.length === 1 && node[0].name === 'img') {
-            const img: InlineImage = {
-                kind: 'inlineimage',
-                img: node[0].attribs.src,
-                title: node[0].attribs.alt,
-            };
-            this.copyImage(node[0].attribs.src);
-            result = img;
-        } else {
-            const out: Paragraph = { kind: 'paragraph', text: this.pharagraphs(node) };
-            result = out;
+            let result: Paragraph | InlineImage;
+            if (node.length === 1 && node[0].name === 'img') {
+                const img: InlineImage = {
+                    kind: 'inlineimage',
+                    img: node[0].attribs.src,
+                    title: node[0].attribs.alt,
+                };
+                this.copyImage(node[0].attribs.src);
+                result = img;
+            } else {
+                const out: Paragraph = { kind: 'paragraph', text: this.paragraphs(node) };
+                result = out;
+            }
+
+            return result;
         }
-
-        return result;
-    }
-
-    public list(node: Array<any>): Array<RichText | List | Paragraph | Link | Code> {
+/**
+ * list
+ * If node received is a list, this method get all the elements in there and copy it in the final file.
+ * @param {Array<any>} node
+ * @returns {(Array<RichText | List | Paragraph | Link | Code>)}
+ * @memberof AsciiDocFileTextIn
+ */
+public list(node: Array<any>): Array<RichText | List | Paragraph | Link | Code> {
         const result: Array<RichText | List | Paragraph | Link | Code> = [];
         let out: RichText | List | Paragraph | Link | Code;
         for (const li of node) {
             if (li.name === 'li') {
                 for (const child of li.children)
                     if (child.type === 'text' && child.data !== '\n') {
-                        out = this.pharagraphs([child]);
+                        out = this.paragraphs([child]);
                         result.push(out);
                     } else if (child.name === 'ul') {
                         out = { kind: 'list', ordered: false, elements: this.list(child.children) };
@@ -442,7 +533,7 @@ export class AsciiDocFileTextIn implements TextIn {
                         out = { kind: 'list', ordered: true, elements: this.list(child.children) };
                         result.push(out);
                     } else if (child.name === 'p') {
-                        out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
+                        out = { kind: 'paragraph', text: this.paragraphs(child.children) };
                         result.push(out);
                     } else if (child.name === 'div') {
                         for (const element of child.children) {
@@ -466,15 +557,21 @@ export class AsciiDocFileTextIn implements TextIn {
                         result.push(out);
 
                     } else if (!child.data){
-                        out = this.pharagraphs(child.children);
+                        out = this.paragraphs(child.children);
                         result.push(out);
                     }
             }
         }
         return result;
     }
-
-    public table(node: Array<any>): TableBody {
+/**
+ * table
+ * If node received is a table, this method get all the elements in there and copy it in the final file.
+ * @param {Array<any>} node
+ * @returns {TableBody}
+ * @memberof AsciiDocFileTextIn
+ */
+public table(node: Array<any>): TableBody {
 
         let result: TableBody;
         const colspan: Array<Col> = [];
@@ -501,7 +598,7 @@ export class AsciiDocFileTextIn implements TextIn {
                                       resultRow.push(element);
                                     }
                                 } else {
-                                    const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([{ data: ' ', type: 'text' }]) };
+                                    const p: Paragraph = { kind: 'paragraph', text: this.paragraphs([{ data: ' ', type: 'text' }]) };
                                     element = { type: 'th', colspan: colespan, cell: [p] };
                                     resultRow.push(element);
                                 }
@@ -516,7 +613,7 @@ export class AsciiDocFileTextIn implements TextIn {
                                         resultRow.push(element);
                                     }
                                 } else {
-                                    const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([{ data: ' ', type: 'text' }]) };
+                                    const p: Paragraph = { kind: 'paragraph', text: this.paragraphs([{ data: ' ', type: 'text' }]) };
                                     element = { type: 'td', colspan: colespan, cell: [p] };
                                     resultRow.push(element);
                                 }
@@ -560,7 +657,7 @@ export class AsciiDocFileTextIn implements TextIn {
                                resultRow.push(element);
                              }
                         } else {
-                            const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([{ data: ' ', type: 'text' }]) };
+                            const p: Paragraph = { kind: 'paragraph', text: this.paragraphs([{ data: ' ', type: 'text' }]) };
                             element = { type: 'th', colspan: colespan, cell: [p] };
                             resultRow.push(element);
                         }
@@ -575,7 +672,7 @@ export class AsciiDocFileTextIn implements TextIn {
                                 resultRow.push(element);
                             }
                         } else {
-                            const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([{ data: ' ', type: 'text' }]) };
+                            const p: Paragraph = { kind: 'paragraph', text: this.paragraphs([{ data: ' ', type: 'text' }]) };
                             element = { type: 'td', colspan: colespan, cell: [p] };
                             resultRow.push(element);
                         }
@@ -592,13 +689,19 @@ export class AsciiDocFileTextIn implements TextIn {
 
         return result;
     }
-
-    public tableTd(node: any): Array<TableSegment>{
+/**
+ * tableTd
+ * If node received is a table, this method get all the elements in there and copy it in the final file.
+ * @param {*} node
+ * @returns {Array<TableSegment>}
+ * @memberof AsciiDocFileTextIn
+ */
+public tableTd(node: any): Array<TableSegment>{
         const result: Array<TableSegment> = [];
         for (const child of node) {
             let out: TableSegment;
             if (child.name === 'p') {
-              out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
+              out = { kind: 'paragraph', text: this.paragraphs(child.children) };
               result.push(out);
             } else if (child.name === 'img') {
               const img: InlineImage = { kind: 'inlineimage', img: child.attribs.src, title: child.attribs.alt };
@@ -608,7 +711,7 @@ export class AsciiDocFileTextIn implements TextIn {
               out = { kind: 'table', content: this.table(child.children) };
               result.push(out);
             } else if (child.name === 'span') {
-              out = { kind: 'paragraph', text: this.pharagraphs(child.children) };
+              out = { kind: 'paragraph', text: this.paragraphs(child.children) };
               result.push(out);
             } else if (child.name === 'ul') {
               out = { kind: 'list', ordered: false, elements: this.list(child.children) };
@@ -636,21 +739,27 @@ export class AsciiDocFileTextIn implements TextIn {
                       result.push(inside);
                     }
                   } else if (element.type === 'text') {
-                    const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([element]) };
+                    const p: Paragraph = { kind: 'paragraph', text: this.paragraphs([element]) };
                     result.push(p);
                   }
                 }
               }
             } else if ((child.type === 'text' && child.data !== '\n') || (child.type === 'tag')) {
-              const p: Paragraph = { kind: 'paragraph', text: this.pharagraphs([child]) };
+              const p: Paragraph = { kind: 'paragraph', text: this.paragraphs([child]) };
               result.push(p);
             }
         }
 
         return result;
     }
-
-    public pharagraphs( node: Array<any>): RichText {
+/**
+ * paragraphs
+ * If node received is a paragraph, this method get all the elements in there and copy it in the final file.
+ * @param {Array<any>} node
+ * @returns {RichText}
+ * @memberof AsciiDocFileTextIn
+ */
+public paragraphs( node: Array<any>): RichText {
 
         const result: RichText = [];
         for (const child of node) {
@@ -678,7 +787,7 @@ export class AsciiDocFileTextIn implements TextIn {
                 result.push(out);
 
             } else if (child.children) {
-                let para: Array<RichString | InlineImage | Link | Table | Code> = this.pharagraphs(child.children);
+                let para: Array<RichString | InlineImage | Link | Table | Code> = this.paragraphs(child.children);
 
                 if (child.name) {
                     const newParam = child;
@@ -701,8 +810,15 @@ export class AsciiDocFileTextIn implements TextIn {
             }
         }
         return result;
-
     }
+    /**
+     * putMyAttribute
+     * Write the different attributes on the paragraph
+     * @param {Array<RichString>} para
+     * @param {string} myParam
+     * @returns {Array<RichString>}
+     * @memberof AsciiDocFileTextIn
+     */
     public putMyAttribute(para: Array<RichString>, myParam: string): Array<RichString> {
         const paragraph: Array<RichString> = [];
         for (const par of para) {
@@ -722,8 +838,13 @@ export class AsciiDocFileTextIn implements TextIn {
 
         return paragraph;
     }
-
-    public copyImage(dir: string){
+/**
+ * copyImage
+ * Copy the image in a folder for later, we can use it in the final file
+ * @param {string} dir
+ * @memberof AsciiDocFileTextIn
+ */
+public copyImage(dir: string){
         const arrayDir = dir.split('/');
         let outputDir: string = '';
 

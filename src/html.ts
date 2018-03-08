@@ -10,8 +10,14 @@ export class HtmlFileTextOut implements TextOut {
     public constructor(file: string) {
         this.outputFile = file;
     }
-
-    public async generate(data: Array<Transcript>): Promise<void> {
+/**
+ * generate
+ * Create the final file parsing the different elements that the input files have
+ * @param {Array<Transcript>} data
+ * @returns {Promise<void>}
+ * @memberof HtmlFileTextOut
+ */
+public async generate(data: Array<Transcript>): Promise<void> {
 
         if (this.dirExists('./imageTemp/')) {
             const arrayDir = this.outputFile.split('/');
@@ -102,8 +108,15 @@ export class HtmlFileTextOut implements TextOut {
 
         this.done = true;
     }
-
-    private codeParsed(myText: Code) {
+/**
+ * codeParsed
+ * Parse the parts with code
+ * @private
+ * @param {Code} myText
+ * @returns
+ * @memberof HtmlFileTextOut
+ */
+private codeParsed(myText: Code) {
         let out: string = '';
         if (myText.languaje) {
             out = '```' + myText.languaje + '\n' + myText.content + '\n```';
@@ -113,7 +126,14 @@ export class HtmlFileTextOut implements TextOut {
 
         return out;
     }
-
+    /**
+     * textElementParsed
+     * Parse the different textElement
+     * @private
+     * @param {TextElement} myText
+     * @returns
+     * @memberof HtmlFileTextOut
+     */
     private textElementParsed(myText: TextElement) {
         const textelement = myText.element;
         if (textelement === 'title') { return '= ' + this.paragraphParsed(myText); }
@@ -122,6 +142,14 @@ export class HtmlFileTextOut implements TextOut {
         if (textelement === 'h3') { return '==== ' + this.paragraphParsed(myText); }
         if (textelement === 'h4') { return '===== ' + this.paragraphParsed(myText); }
     }
+    /**
+     * paragraphParsed
+     * Parse the content that you can find in a paragraph
+     * @private
+     * @param {(Paragraph | TextElement)} myText
+     * @returns
+     * @memberof HtmlFileTextOut
+     */
     private paragraphParsed(myText: Paragraph | TextElement) {
         let output: string = '';
         for (const content of myText.text) {
@@ -178,7 +206,14 @@ export class HtmlFileTextOut implements TextOut {
         }
         return output;
     }
-
+    /**
+     * linkParsed
+     * Parse the links or inlineImage
+     * @private
+     * @param {Link} myLink
+     * @returns
+     * @memberof HtmlFileTextOut
+     */
     private linkParsed(myLink: Link) {
         let output: string = '';
         if ((myLink.text as InlineImage).kind === 'inlineimage'){
@@ -188,11 +223,25 @@ export class HtmlFileTextOut implements TextOut {
         }
         return output;
     }
-
+    /**
+     * imageParsed
+     * To parse the images
+     * @private
+     * @param {InlineImage} myText
+     * @returns
+     * @memberof HtmlFileTextOut
+     */
     private imageParsed(myText: InlineImage) {
         return 'image::' + myText.img + '[' + myText.title + ']';
     }
-
+    /**
+     * tableParsed
+     * To parse the table and the different elements that we can have inside.
+     * @private
+     * @param {TableBody} content
+     * @returns
+     * @memberof HtmlFileTextOut
+     */
     private tableParsed(content: TableBody) {
         let output: string;
         if (content.body[0][0].type === 'th'){
@@ -226,7 +275,15 @@ export class HtmlFileTextOut implements TextOut {
         output = output + '|==================\n';
         return output;
     }
-
+    /**
+     * listParsed
+     * To parse the list and the different element that we can find on it.
+     * @private
+     * @param {List} list
+     * @param {string} [notation]
+     * @returns
+     * @memberof HtmlFileTextOut
+     */
     private listParsed(list: List, notation?: string) {
         let output: string = '';
         if (!notation) {
@@ -258,6 +315,14 @@ export class HtmlFileTextOut implements TextOut {
         }
         return output;
     }
+    /**
+     * dirExists
+     * Check if the directory exist
+     * @private
+     * @param {string} filename
+     * @returns
+     * @memberof HtmlFileTextOut
+     */
     private dirExists(filename: string) {
     try {
         fs.accessSync(filename);

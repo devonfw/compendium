@@ -2,8 +2,15 @@ import { ConfluenceService, Cookies, Credentials } from './types';
 import * as request from 'superagent';
 
 export class ConfluenceServiceImpl implements ConfluenceService {
-
-    public getContentbyCookies(URL: string, cookies: Cookies): Promise<JSON> {
+/**
+ * getContentbyCookies
+ * get the content in Confluences by the cookies
+ * @param {string} URL
+ * @param {Cookies} cookies
+ * @returns {Promise<JSON>}
+ * @memberof ConfluenceServiceImpl
+ */
+public getContentbyCookies(URL: string, cookies: Cookies): Promise<JSON> {
 
         return new Promise<JSON>((resolve, reject) => {
 
@@ -26,8 +33,15 @@ export class ConfluenceServiceImpl implements ConfluenceService {
                 });
         });
     }
-
-    public getContentbyCredentials(URL: string, credentials: Credentials): Promise<JSON> {
+/**
+ * getContentbyCredentials
+ * get the content in confluence by credentials
+ * @param {string} URL
+ * @param {Credentials} credentials
+ * @returns {Promise<JSON>}
+ * @memberof ConfluenceServiceImpl
+ */
+public getContentbyCredentials(URL: string, credentials: Credentials): Promise<JSON> {
 
         return new Promise<JSON>((resolve, reject) => {
 
@@ -47,8 +61,15 @@ export class ConfluenceServiceImpl implements ConfluenceService {
                 });
         });
     }
-
-    private serializeCookies(cookies: Cookies): string {
+/**
+ * serializeCookies
+ * Serelized the cookies received
+ * @private
+ * @param {Cookies} cookies
+ * @returns {string}
+ * @memberof ConfluenceServiceImpl
+ */
+private serializeCookies(cookies: Cookies): string {
 
         let out = '';
         for (const myCookie of cookies) {
