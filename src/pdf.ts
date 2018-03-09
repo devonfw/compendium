@@ -10,14 +10,14 @@ export class PdfFileTextOut implements TextOut {
     public constructor(file: string) {
         this.outputFile = file;
     }
-/**
- * generate
- * Create the final file parsing the different elements that the input files have
- * @param {Array<Transcript>} data
- * @returns {Promise<void>}
- * @memberof PdfFileTextOut
- */
-public async generate(data: Array<Transcript>): Promise<void> {
+    /**
+     * generate
+     * Create the final file parsing the different elements that the input files have
+     * @param {Array<Transcript>} data
+     * @returns {Promise<void>}
+     * @memberof PdfFileTextOut
+     */
+    public async generate(data: Array<Transcript>): Promise<void> {
 
         try {
             await this.moveTheImages();
@@ -32,7 +32,6 @@ public async generate(data: Array<Transcript>): Promise<void> {
         } else {
             for (const node of data) {
                 for (const segment of node.segments) {
-
                     if (segment.kind === 'textelement') {
                         outputString = outputString + this.textElementParsed(segment) + '\n\n';
                     } else if (segment.kind === 'paragraph') {
@@ -51,39 +50,37 @@ public async generate(data: Array<Transcript>): Promise<void> {
                 }
                 outputString = outputString + '\n\n<<<<\n\n';
             }
-
             const dochtml = this.asciidoctor.convert(outputString, { attributes: {showtitle: true, doctype: 'book'}} );
             const docWithStyle =
-            `<!DOCTYPE html>
-            <html>
-            <head>
-            <style>
-            table {
-                font-family: arial, sans-serif;
-                border-collapse: collapse;
-                width: 100%;
-            }
+                `<!DOCTYPE html>
+                <html>
+                <head>
+                <style>
+                table {
+                    font-family: arial, sans-serif;
+                    border-collapse: collapse;
+                    width: 100%;
+                }
 
-            td{
-                border: 1px solid #dddddd;
-                text-align: left;
-            }
-            th {
-                border: 1px solid #dddddd;
-                text-align: left;
-                background-color: #dddddd;
-            }
-            img {
-                width:90%;
-            }
+                td{
+                    border: 1px solid #dddddd;
+                    text-align: left;
+                }
+                th {
+                    border: 1px solid #dddddd;
+                    text-align: left;
+                    background-color: #dddddd;
+                }
+                img {
+                    width:90%;
+                }
 
-            </style>
-            </head>
-            <body>
-            ` + dochtml + `
-            </body>
-            </html>`;
-
+                </style>
+                </head>
+                <body>
+                ` + dochtml + `
+                </body>
+                </html>`;
             const htmlToPdf = require('html-to-pdf');
             htmlToPdf.setInputEncoding('UTF-8');
             htmlToPdf.setOutputEncoding('UTF-8');
@@ -93,43 +90,41 @@ public async generate(data: Array<Transcript>): Promise<void> {
                 }
             });
         }
-
         this.done = true;
     }
-/**
- * codeParsed
- * Parse the parts with code
- * @private
- * @param {Code} myText
- * @returns
- * @memberof PdfFileTextOut
- */
-private codeParsed(myText: Code) {
+    /**
+     * codeParsed
+     * Parse the parts with code
+     * @private
+     * @param {Code} myText
+     * @returns
+     * @memberof PdfFileTextOut
+     */
+    private codeParsed(myText: Code) {
         let out: string = '';
         if (myText.languaje) {
             out = '```' + myText.languaje + '\n' + myText.content + '\n```';
         } else {
             out = '`' + myText.content + '`';
         }
-
         return out;
     }
-/**
- * textElementParsed
- * Parse the different textElement
- * @private
- * @param {TextElement} myText
- * @returns
- * @memberof PdfFileTextOut
- */
-private textElementParsed(myText: TextElement) {
+    /**
+     * textElementParsed
+     * Parse the different textElement
+     * @private
+     * @param {TextElement} myText
+     * @returns
+     * @memberof PdfFileTextOut
+     */
+    private textElementParsed(myText: TextElement) {
         const textelement = myText.element;
         if (textelement === 'title') { return '= ' + this.paragraphParsed(myText); }
         if (textelement === 'h1') { return '== ' + this.paragraphParsed(myText); }
         if (textelement === 'h2') { return '=== ' + this.paragraphParsed(myText); }
         if (textelement === 'h3') { return '==== ' + this.paragraphParsed(myText); }
         if (textelement === 'h4') { return '===== ' + this.paragraphParsed(myText); }
-}
+    }
     /**
      * paragraphParsed
      * Parse the content that you can find in a paragraph
@@ -194,15 +189,15 @@ private textElementParsed(myText: TextElement) {
         }
         return output;
     }
-/**
- * linkParsed
- * Parse the links or inlineImage
- * @private
- * @param {Link} myLink
- * @returns
- * @memberof PdfFileTextOut
- */
-private linkParsed(myLink: Link) {
+    /**
+     * linkParsed
+     * Parse the links or inlineImage
+     * @private
+     * @param {Link} myLink
+     * @returns
+     * @memberof PdfFileTextOut
+     */
+    private linkParsed(myLink: Link) {
         let output: string = '';
         if ((myLink.text as InlineImage).kind === 'inlineimage'){
             output = 'image::' + (myLink.text as InlineImage).img + '[' + (myLink.text as InlineImage).title + ', link="' + myLink.ref + '"]';
@@ -211,30 +206,30 @@ private linkParsed(myLink: Link) {
         }
         return output;
     }
-/**
- * imageParsed
- * To parse the images
- * @private
- * @param {InlineImage} myText
- * @returns
- * @memberof PdfFileTextOut
- */
-private imageParsed(myText: InlineImage) {
+    /**
+     * imageParsed
+     * To parse the images
+     * @private
+     * @param {InlineImage} myText
+     * @returns
+     * @memberof PdfFileTextOut
+     */
+    private imageParsed(myText: InlineImage) {
         return 'image::' + myText.img + '[' + myText.title + ']';
     }
-/**
- * tableParsed
- * To parse the table and the different elements that we can have inside.
- * @private
- * @param {TableBody} content
- * @returns
- * @memberof PdfFileTextOut
- */
-private tableParsed(content: TableBody) {
+    /**
+     * tableParsed
+     * To parse the table and the different elements that we can have inside.
+     * @private
+     * @param {TableBody} content
+     * @returns
+     * @memberof PdfFileTextOut
+     */
+    private tableParsed(content: TableBody) {
         let output: string;
         if (content.body[0][0].type === 'th'){
-            output = '[options="header"]\n';
-        }
+                output = '[options="header"]\n';
+            }
         output = '|==================\n';
         for (const row of content.body) {
             for (const cell of row) {
@@ -243,18 +238,18 @@ private tableParsed(content: TableBody) {
                 }
                 for (const inside of cell.cell) {
                     if (inside.kind === 'paragraph') {
-                      output = output;
-                      output = output + '| ' + this.paragraphParsed(inside) + ' ';
+                        output = output;
+                        output = output + '| ' + this.paragraphParsed(inside) + ' ';
                     } else if (inside.kind === 'inlineimage') {
-                      output = output + 'a| ' + this.imageParsed(inside) + ' ';
+                        output = output + 'a| ' + this.imageParsed(inside) + ' ';
                     } else if (inside.kind === 'table') {
-                      output = output + 'a| ' + this.tableParsed(inside.content) + ' ';
+                        output = output + 'a| ' + this.tableParsed(inside.content) + ' ';
                     } else if (inside.kind === 'list') {
-                      output = output + 'a| ' + this.listParsed(inside) + ' ';
+                        output = output + 'a| ' + this.listParsed(inside) + ' ';
                     } else if (inside.kind === 'link') {
-                      output = output + 'a| ' + this.linkParsed(inside) + ' ';
+                        output = output + 'a| ' + this.linkParsed(inside) + ' ';
                     } else if (inside.kind === 'code') {
-                      output = output + 'a| ' + this.codeParsed(inside) + ' ';
+                        output = output + 'a| ' + this.codeParsed(inside) + ' ';
                     }
                 }
             }
@@ -263,30 +258,27 @@ private tableParsed(content: TableBody) {
         output = output + '|==================\n';
         return output;
     }
-/**
- * listParsed
- * To parse the list and the different element that we can find on it.
- * @private
- * @param {List} list
- * @param {string} [notation]
- * @returns
- * @memberof PdfFileTextOut
- */
-private listParsed(list: List, notation?: string) {
+    /**
+     * listParsed
+     * To parse the list and the different element that we can find on it.
+     * @private
+     * @param {List} list
+     * @param {string} [notation]
+     * @returns
+     * @memberof PdfFileTextOut
+     */
+    private listParsed(list: List, notation?: string) {
         let output: string = '';
         if (!notation) {
             notation = '*';
             if (list.ordered) {
                 notation = '.';
             }
-        } else {
-
-            if (list.ordered) {
-                notation = notation + '.';
-            } else {
-                notation = notation + '*';
-            }
-        }
+            } else if (list.ordered) {
+                    notation = notation + '.';
+                    } else {
+                            notation = notation + '*';
+                    }
         for (const element of list.elements) {
             if ((element as List).kind === 'list'){
                 output = output + this.listParsed((element as List), notation);
@@ -312,43 +304,42 @@ private listParsed(list: List, notation?: string) {
      * @memberof PdfFileTextOut
      */
     private dirExists(filename: string) {
-    try {
-        fs.accessSync(filename);
-        return true;
-    } catch (e) {
-        return false;
+        try {
+            fs.accessSync(filename);
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
-}
-/**
- * moveTheImages
- * Move the images and remove the folder
- * @private
- * @returns {Promise<void>}
- * @memberof PdfFileTextOut
- */
-private async moveTheImages(): Promise<void> {
+    /**
+     * moveTheImages
+     * Move the images and remove the folder
+     * @private
+     * @returns {Promise<void>}
+     * @memberof PdfFileTextOut
+     */
+    private async moveTheImages(): Promise<void> {
         if (this.dirExists('./imageTemp/')) {
             const arrayDir = this.outputFile.split('/');
             let outputDir: string = '';
             if (arrayDir.length > 1) {
                 arrayDir.splice(-1, 1);
                 for (const piece of arrayDir) {
-                  outputDir = outputDir + piece;
+                    outputDir = outputDir + piece;
                 }
             }
             try {
                 const ncp = require('ncp').ncp;
                 ncp('./imageTemp/', outputDir, (err: Error) => {
                     if (err) {
-                    return console.error(err);
+                        return console.error(err);
                     }
                     const shell = require('shelljs');
                     shell.rm('-rf', 'imageTemp');
                 });
-            } catch (err) {
-                console.log(err.message);
-            }
+                } catch (err) {
+                    console.log(err.message);
+                }
         }
     }
-
 }

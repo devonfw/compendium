@@ -61,7 +61,6 @@ export class ConfluenceTextIn implements TextIn {
             } else if (this.spaceKey === '') {
                 throw new Error('ConfluenceTextIn: SpaceKey cannot be blank.');
             }
-
             if (this.mock) {
                 confluenceService = new ConfluenceServiceImplMock();
             } else {
@@ -115,11 +114,9 @@ export class ConfluenceTextIn implements TextIn {
             } else {
                 error = true;
             }
-
             if (error) {
                 throw new Error('It isn\'t possible to get transcript from ' + url);
             }
-
             return transcript;
     }
 /**
@@ -207,15 +204,15 @@ private processDataFromConfluence(content: JSON): string {
             }
             return outputURL;
     }
-/**
- * recursive
- * Read the elements on the tree recursively since find a known node
- * @param {*} node
- * @param {string[]} [filter]
- * @returns {Array<TextSegment>}
- * @memberof ConfluenceTextIn
- */
-public recursive(node: any, filter?: string[]): Array<TextSegment> {
+    /**
+     * recursive
+     * Read the elements on the tree recursively since find a known node
+     * @param {*} node
+     * @param {string[]} [filter]
+     * @returns {Array<TextSegment>}
+     * @memberof ConfluenceTextIn
+     */
+    public recursive(node: any, filter?: string[]): Array<TextSegment> {
         const result: Array<TextSegment> = [];
         let out: TextSegment;
         if (node.children) {
@@ -309,14 +306,14 @@ public recursive(node: any, filter?: string[]): Array<TextSegment> {
 
         return result;
     }
-/**
- * linkContent
- * Create links with the differents parts of the file
- * @param {Array<any>} node
- * @returns {(Paragraph | InlineImage)}
- * @memberof ConfluenceTextIn
- */
-public linkContent(node: Array<any>): Paragraph | InlineImage {
+    /**
+     * linkContent
+     * Create links with the differents parts of the file
+     * @param {Array<any>} node
+     * @returns {(Paragraph | InlineImage)}
+     * @memberof ConfluenceTextIn
+     */
+    public linkContent(node: Array<any>): Paragraph | InlineImage {
         let result: Paragraph | InlineImage;
         if (node.length === 1 && node[0].name === 'img') {
             const img: InlineImage = {
@@ -332,14 +329,14 @@ public linkContent(node: Array<any>): Paragraph | InlineImage {
 
         return result;
     }
-/**
- * list
- * If node received is a list, this method get all the elements in there and copy it in the final file.
- * @param {Array<any>} node
- * @returns {(Array<RichText | List | Paragraph | Link | Code>)}
- * @memberof ConfluenceTextIn
- */
-public list(node: Array<any>): Array<RichText | List | Paragraph | Link | Code> {
+    /**
+     * list
+     * If node received is a list, this method get all the elements in there and copy it in the final file.
+     * @param {Array<any>} node
+     * @returns {(Array<RichText | List | Paragraph | Link | Code>)}
+     * @memberof ConfluenceTextIn
+     */
+    public list(node: Array<any>): Array<RichText | List | Paragraph | Link | Code> {
         const result: Array<RichText | List | Paragraph | Link | Code> = [];
         let out: RichText | List | Paragraph | Link | Code;
         for (const li of node) {

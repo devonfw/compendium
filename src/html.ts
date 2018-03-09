@@ -331,5 +331,4 @@ private codeParsed(myText: Code) {
         return false;
     }
 }
-
 }

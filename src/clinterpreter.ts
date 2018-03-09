@@ -96,7 +96,6 @@ export async function doCompendium(configFile: string, format: string, outputFil
     console.log('\n Process finished!');
 
 }
-
 /**
  * askInPrompt
  * Ask for the username and password if you introduce an input file that needs credentials to read it
@@ -136,7 +135,6 @@ export async function askInPrompt(): Promise<Credentials> {
 
     return promise;
 }
-
 /**
  * dirExists
  * Check if the directory introduce exist
