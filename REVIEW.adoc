@@ -1,0 +1,45 @@
+= Review Compendium
+
+== Code smells
+
+The code contains quite a few "Code Smells". See: https://en.wikipedia.org/wiki/Code_smell
+That should not be considered lightly. There are serious deficiencies noticeable at first glance.
+
+== Code duplication
+
+There is *massive* duplication of code. Not just apparent utility functions like `dirExists - with separate definitions in 4 files - but also the whole HTML generations seems to be duplicated.
+
+There is the same (!) code for HTML generation in `asciidoc.ts`, `html.ts` and `pdf.ts`. That MUST be refactored in a separate HTML generation backend (utility component).
+
+== Lack of design
+
+The code is nicely structured according to the initial design as defined by the interfaces in `types.ts`. From that moment on there is *no apparent thought on how the code is supposed to be structured*. The different implementations like `AsciiDocFileTextOut` are just large buckets of private methods without any apparent thought on code design or structure.
+
+== Sloppy naming, a smell of sloppy coding
+
+There are a number of instances where not a lot of attention has been spend to the quality of the code as reflected by, for example, the sloppy naming of:
+
+```typescript
+export interface Code {
+   kind: 'code';
+   languaje?: string;
+   content: string;
+}
+```
+
+Coding standard in the _ADCenter_ is "English" for code unless specified otherwise.
+
+== Invalid usage and inconsistent usage of patterns
+
+There are *sync calls* used which is the biggest anti-pattern that can be used in node.js. It _may_ be permissible but the reasons for the usage should have been documented. Furthermore, there is little coherence in patterns used. THere is no consistency in usage of _Promises_, like in `confluenceservice.ts` and the usage of _async/await_.
+
+== Incomplete and incorrect tests
+
+The tests are insufficient and plainly badly done. To sum up:
+
+- There is a mix-up of unit tests and integration tests (confluence.test.ts)
+- The unit tests are not really _unit_ tests
+https://en.wikipedia.org/wiki/Unit_testing
+    There is no clear test strategy nor plan visible on how to
+    encircle a unit with tests to validate its functionality
+- It is *very* apparent by the test coverage and structure of the tests that little if no TDD has been applied.
