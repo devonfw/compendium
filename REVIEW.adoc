@@ -1,4 +1,4 @@
-= Review Compendium
+= Code Review Compendium
 
 == Code smells
 
@@ -47,7 +47,35 @@ For the remainder, the tests are insufficient and plainly badly done. To sum up:
 
 Housekeeping (https://en.wikipedia.org/wiki/Housekeeping) is used metaphorically in Computer Science and Programming for a variety of different purposes. One is the describe the way how at a project and file-level things are organized. That should improve in Compendium as just at first glance there are to be found:
 
-- Two README files (one AsciiDOc and one Markdown)
+- Two README files (one AsciiDoc and one Markdown)
 - files in the root who do not belong there. Apparent files from the development process included in Git 
 - remnants of MyThaiStar, for example in ´.gitignore´
 - testdata/output is incorporated in Git (temporary and/or output files should NEVER be included in Git)
+- Still local references incorporated in files. See: `config.json` with `"C:/Users/sbadenes/Desktop/devonm/devon-methodology"`
+
+== Case: config.ts - method getIndex
+
+Method `getIndex` on the `ConfigFile` class in file `config.ts` is a good example of rather flaky programming:
+
+- the interface `DocConfig` (implemented in `ConfigFile`) has the single method `getIndex` which should return a promise. But the actual implementation does not use _async_ functionality. It is actually using the anti-pattern of getting the synchronous `fs.readFileSync`. 
+
+- There is a substantial amount of needless pseudo-defensive programming. Checks of the existence of particular properties ("Confluence"; "asciidoc") etc. which is all useless and besides created a tight coupling between distinct components within the application. Any failure would have been generated anyway (for example: a "conPLUENCE" property would have failed as there is no "conPLUENCE TextInSource"). In other words: "it is better to ask forgiveness rather than permission".
+
+== Case: asciidoc.ts - method generate
+
+Method `generate` on the `AsciiDocFileTextOut` class in file `asciidoc.ts` does harbour a series of problems as well:
+
+- Principally the way a temporary directory file is created and treated is non-standard. There is an API available for that. 
+
+- a critical error is the string concatenation used for building up am output string (i.e. s3 = s2 + s1). The correct way is to use a String Builder or equivalent. In Javascript a similar way would be to use an array of text chunks, add the new output to the tail of the array (method `push`) and than to join the elements into one item (method `join`).
+
+- A component is loaded using `require` syntax
+
+```typescript
+const ncp = require('ncp').ncp;
+```
+however, the `import` syntax in TypeScript should be used.
+
+- the continuous usage of the word "parse(d)" indicates that there is no real understanding of what parsing actually _means_ in Computer Science. From text to an AST (Abstract Syntax Tree) or Intermediate Representation (EM) is done by a Parser. However, in `AsciiDocFileTextOut` an EM is taken as input and real source code, textual information, is being generated. So: `EM ➞ Text` rather than `Text ➞ EM`, therefore the inverse of parsing. That process is called "emit". The methods should therefore be called `emit*` rather than `*Parsed`, so `emitTextElement` rather than `textElementParsed`.
+
+
