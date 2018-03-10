@@ -7,7 +7,7 @@ That should not be considered lightly. There are serious deficiencies noticeable
 
 == Code duplication
 
-There is *massive* duplication of code. Not just apparent utility functions like `dirExists - with separate definitions in 4 files - but also the whole HTML generations seems to be duplicated.
+There is *massive* duplication of code. Not just apparent utility functions like `dirExists` - with separate definitions in 4 files - but also the whole HTML generations seems to be duplicated.
 
 There is the same (!) code for HTML generation in `asciidoc.ts`, `html.ts` and `pdf.ts`. That MUST be refactored in a separate HTML generation backend (utility component).
 
@@ -27,26 +27,27 @@ export interface Code {
 }
 ```
 
-Coding standard in the _ADCenter_ is "English" for code unless specified otherwise.
+Coding standard in the _ADCenter_ is "English" for code, naming & comments, unless specified otherwise.
 
 == Invalid usage and inconsistent usage of patterns
 
-There are *sync calls* used which is the biggest anti-pattern that can be used in node.js. It _may_ be permissible but the reasons for the usage should have been documented. Furthermore, there is little coherence in patterns used. THere is no consistency in usage of _Promises_, like in `confluenceservice.ts` and the usage of _async/await_.
+There are *sync calls* used which is the biggest anti-pattern that can be used in node.js. It _may_ be permissible but the reasons for the usage should have been documented. Furthermore, there is little coherence in patterns used. There is no consistency in usage of _Promises_, like in `confluenceservice.ts` and the usage of _async/await_.
 
 == Incomplete and incorrect tests
 
-The tests are insufficient and plainly badly done. To sum up:
+First of all, the test fail when getting MASTER from Gitlab. That is an absolute no-no. All Tests MUST succeed before checking in. That is not an optional thing. In a real development environment there would be a Jenkins based Continuous Integration based pipeline which would always FAIL in case of Compendium.
 
-- There is a mix-up of unit tests and integration tests (confluence.test.ts)
-- The unit tests are not really _unit_ tests
-https://en.wikipedia.org/wiki/Unit_testing
-    There is no clear test strategy nor plan visible on how to
-    encircle a unit with tests to validate its functionality
+For the remainder, the tests are insufficient and plainly badly done. To sum up:
+
+- There is a mix-up of unit tests and integration tests. Integration test with a real Confluence (look at confluence.test.ts) MUST NOT be executed in the same context as the unit tests. They will always fail on the machine of someone who does not have Confluence installed. 
+- The unit tests are not really _unit_ tests. See: https://en.wikipedia.org/wiki/Unit_testing . There is no clear test strategy nor plan visible on how to encompass a "unit" with tests to validate its functionality
 - It is *very* apparent by the test coverage and structure of the tests that little if no TDD has been applied.
 
 == Sloppy housekeeping
 
-Housekeeping (https://en.wikipedia.org/wiki/Housekeeping) is used metaphorically in Computer Science and Programming for a variety of different tasks. One is the way how at a project and file-level things are organized. That should improve in Compendium as well as just at first glance there is to be found:
+Housekeeping (https://en.wikipedia.org/wiki/Housekeeping) is used metaphorically in Computer Science and Programming for a variety of different purposes. One is the describe the way how at a project and file-level things are organized. That should improve in Compendium as just at first glance there are to be found:
 
 - Two README files (one AsciiDOc and one Markdown)
+- files in the root who do not belong there. Apparent files from the development process included in Git 
 - remnants of MyThaiStar, for example in ´.gitignore´
+- testdata/output is incorporated in Git (temporary and/or output files should NEVER be included in Git)
