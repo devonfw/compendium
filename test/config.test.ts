@@ -15,17 +15,7 @@ const assert = chai.assert;
 const should = chai.should();
 
 const configMock = '../compendium/src/mocks/configMock.json';
-const configTest1 = '../compendium/test-data/confiles/good/configTest1.json';
-
-const duplicatesSources_config = '../compendium/test-data/confiles/bad/duplicateSources.json';
-const orphanNodes_config = '../compendium/test-data/confiles/bad/orphanNodes.json';
-const badProperties_config = '../compendium/test-data/confiles/bad/badProperties.json';
-
 const docConfigMock = new ConfigFile(configMock);
-const docConfigOK = new ConfigFile(configTest1);
-const docConfigDuplicateSources = new ConfigFile(duplicatesSources_config);
-const docConfigOrphanNodes = new ConfigFile(orphanNodes_config);
-const docConfigBadProperties = new ConfigFile(badProperties_config);
 
 describe('Testing the config and index creation', () => {
     before(() => {

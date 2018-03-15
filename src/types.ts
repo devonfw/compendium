@@ -54,7 +54,7 @@ export interface List {
 
 export interface Code {
     kind: 'code';
-    languaje?: string;
+    language?: string;
     content: string;
 }
 

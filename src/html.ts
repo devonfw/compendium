@@ -118,8 +118,8 @@ public async generate(data: Array<Transcript>): Promise<void> {
  */
 private codeParsed(myText: Code) {
         let out: string = '';
-        if (myText.languaje) {
-            out = '```' + myText.languaje + '\n' + myText.content + '\n```';
+        if (myText.language) {
+            out = '```' + myText.language + '\n' + myText.content + '\n```';
         } else {
             out = '`' + myText.content + '`';
         }

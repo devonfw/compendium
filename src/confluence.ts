@@ -280,7 +280,7 @@ private processDataFromConfluence(content: JSON): string {
                 } else if (node.name === 'code') {
                     out = { kind: 'code', content: node.children[0].data };
                     if (node.attribs['data-lang']) {
-                        out.languaje = node.attribs['data-lang'];
+                        out.language = node.attribs['data-lang'];
                     }
                     result.push(out);
                 } else if (node.name === 'br') {
@@ -370,7 +370,7 @@ private processDataFromConfluence(content: JSON): string {
                     } else if (child.name === 'code') {
                         out = { kind: 'code', content: child.children[0].data };
                         if (child.attribs['data-lang']) {
-                            out.languaje = child.attribs['data-lang'];
+                            out.language = child.attribs['data-lang'];
                         }
                         result.push(out);
                     } else if (!child.data){
@@ -542,7 +542,7 @@ private processDataFromConfluence(content: JSON): string {
 
                     out = { kind: 'code', content: node.children[0].data };
                     if (node.attribs['data-lang']) {
-                        out.languaje = node.attribs['data-lang'];
+                        out.language = node.attribs['data-lang'];
                     }
                     result.push(out);
 
@@ -596,7 +596,7 @@ private processDataFromConfluence(content: JSON): string {
                 } else if (child.name === 'code') {
                     const out: Code = { kind: 'code', content: child.children[0].data };
                     if (child.attribs['data-lang']) {
-                        out.languaje = child.attribs['data-lang'];
+                        out.language = child.attribs['data-lang'];
                     }
                     result.push(out);
                 } else if (child.children) {

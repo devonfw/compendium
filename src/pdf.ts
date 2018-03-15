@@ -33,19 +33,19 @@ export class PdfFileTextOut implements TextOut {
             for (const node of data) {
                 for (const segment of node.segments) {
                     if (segment.kind === 'textelement') {
-                        outputString = outputString + this.textElementParsed(segment) + '\n\n';
+                        outputString = outputString + this.emitTextElement(segment) + '\n\n';
                     } else if (segment.kind === 'paragraph') {
-                        outputString = outputString + this.paragraphParsed(segment) + '\n\n';
+                        outputString = outputString + this.emitParagraph(segment) + '\n\n';
                     } else if (segment.kind === 'inlineimage') {
-                        outputString = outputString + '\n' + this.imageParsed(segment) + '\n\n';
+                        outputString = outputString + '\n' + this.emitImage(segment) + '\n\n';
                     } else if (segment.kind === 'table') {
-                        outputString = outputString + this.tableParsed(segment.content) + '\n\n';
+                        outputString = outputString + this.emitTable(segment.content) + '\n\n';
                     } else if (segment.kind === 'list') {
-                        outputString = outputString + this.listParsed(segment) + '\n\n';
+                        outputString = outputString + this.emitList(segment) + '\n\n';
                     } else if (segment.kind === 'link') {
-                        outputString = outputString + this.linkParsed(segment) + '\n\n';
+                        outputString = outputString + this.emitLink(segment) + '\n\n';
                     } else if (segment.kind === 'code') {
-                        outputString = outputString + this.codeParsed(segment) + '\n\n';
+                        outputString = outputString + this.emitCode(segment) + '\n\n';
                     }
                 }
                 outputString = outputString + '\n\n<<<<\n\n';
@@ -93,59 +93,59 @@ export class PdfFileTextOut implements TextOut {
         this.done = true;
     }
     /**
-     * codeParsed
+     * emitCode
      * Parse the parts with code
      * @private
      * @param {Code} myText
      * @returns
      * @memberof PdfFileTextOut
      */
-    private codeParsed(myText: Code) {
+    private emitCode(myText: Code) {
         let out: string = '';
-        if (myText.languaje) {
-            out = '```' + myText.languaje + '\n' + myText.content + '\n```';
+        if (myText.language) {
+            out = '```' + myText.language + '\n' + myText.content + '\n```';
         } else {
             out = '`' + myText.content + '`';
         }
         return out;
     }
     /**
-     * textElementParsed
+     * emitTextElement
      * Parse the different textElement
      * @private
      * @param {TextElement} myText
      * @returns
      * @memberof PdfFileTextOut
      */
-    private textElementParsed(myText: TextElement) {
+    private emitTextElement(myText: TextElement) {
         const textelement = myText.element;
-        if (textelement === 'title') { return '= ' + this.paragraphParsed(myText); }
-        if (textelement === 'h1') { return '== ' + this.paragraphParsed(myText); }
-        if (textelement === 'h2') { return '=== ' + this.paragraphParsed(myText); }
-        if (textelement === 'h3') { return '==== ' + this.paragraphParsed(myText); }
-        if (textelement === 'h4') { return '===== ' + this.paragraphParsed(myText); }
+        if (textelement === 'title') { return '= ' + this.emitParagraph(myText); }
+        if (textelement === 'h1') { return '== ' + this.emitParagraph(myText); }
+        if (textelement === 'h2') { return '=== ' + this.emitParagraph(myText); }
+        if (textelement === 'h3') { return '==== ' + this.emitParagraph(myText); }
+        if (textelement === 'h4') { return '===== ' + this.emitParagraph(myText); }
     }
     /**
-     * paragraphParsed
+     * emitParagraph
      * Parse the content that you can find in a paragraph
      * @private
      * @param {(Paragraph | TextElement)} myText
      * @returns
      * @memberof PdfFileTextOut
      */
-    private paragraphParsed(myText: Paragraph | TextElement) {
+    private emitParagraph(myText: Paragraph | TextElement) {
         let output: string = '';
         for (const content of myText.text) {
 
             if ((content as InlineImage).kind === 'inlineimage') {
-                output = output + this.imageParsed((content as InlineImage));
+                output = output + this.emitImage((content as InlineImage));
 
             } else if ((content as Link).kind === 'link') {
-                output = output + this.linkParsed((content as Link));
+                output = output + this.emitLink((content as Link));
             } else if ((content as Code).kind === 'code') {
-                output = output + this.codeParsed((content as Code));
+                output = output + this.emitCode((content as Code));
             } else if ((content as Table).kind === 'table') {
-                output = output + this.tableParsed((content as Table).content);
+                output = output + this.emitTable((content as Table).content);
             } else if ((content as RichString).text) {
 
                 const attrs = (content as RichString).attrs;
@@ -190,42 +190,42 @@ export class PdfFileTextOut implements TextOut {
         return output;
     }
     /**
-     * linkParsed
+     * emitLink
      * Parse the links or inlineImage
      * @private
      * @param {Link} myLink
      * @returns
      * @memberof PdfFileTextOut
      */
-    private linkParsed(myLink: Link) {
+    private emitLink(myLink: Link) {
         let output: string = '';
         if ((myLink.text as InlineImage).kind === 'inlineimage'){
             output = 'image::' + (myLink.text as InlineImage).img + '[' + (myLink.text as InlineImage).title + ', link="' + myLink.ref + '"]';
         } else {
-            output = 'link:' + myLink.ref + '[' + this.paragraphParsed((myLink.text as Paragraph)) + ']';
+            output = 'link:' + myLink.ref + '[' + this.emitParagraph((myLink.text as Paragraph)) + ']';
         }
         return output;
     }
     /**
-     * imageParsed
+     * emitImage
      * To parse the images
      * @private
      * @param {InlineImage} myText
      * @returns
      * @memberof PdfFileTextOut
      */
-    private imageParsed(myText: InlineImage) {
+    private emitImage(myText: InlineImage) {
         return 'image::' + myText.img + '[' + myText.title + ']';
     }
     /**
-     * tableParsed
+     * emitTable
      * To parse the table and the different elements that we can have inside.
      * @private
      * @param {TableBody} content
      * @returns
      * @memberof PdfFileTextOut
      */
-    private tableParsed(content: TableBody) {
+    private emitTable(content: TableBody) {
         let output: string;
         if (content.body[0][0].type === 'th'){
                 output = '[options="header"]\n';
@@ -239,17 +239,17 @@ export class PdfFileTextOut implements TextOut {
                 for (const inside of cell.cell) {
                     if (inside.kind === 'paragraph') {
                         output = output;
-                        output = output + '| ' + this.paragraphParsed(inside) + ' ';
+                        output = output + '| ' + this.emitParagraph(inside) + ' ';
                     } else if (inside.kind === 'inlineimage') {
-                        output = output + 'a| ' + this.imageParsed(inside) + ' ';
+                        output = output + 'a| ' + this.emitImage(inside) + ' ';
                     } else if (inside.kind === 'table') {
-                        output = output + 'a| ' + this.tableParsed(inside.content) + ' ';
+                        output = output + 'a| ' + this.emitTable(inside.content) + ' ';
                     } else if (inside.kind === 'list') {
-                        output = output + 'a| ' + this.listParsed(inside) + ' ';
+                        output = output + 'a| ' + this.emitList(inside) + ' ';
                     } else if (inside.kind === 'link') {
-                        output = output + 'a| ' + this.linkParsed(inside) + ' ';
+                        output = output + 'a| ' + this.emitLink(inside) + ' ';
                     } else if (inside.kind === 'code') {
-                        output = output + 'a| ' + this.codeParsed(inside) + ' ';
+                        output = output + 'a| ' + this.emitCode(inside) + ' ';
                     }
                 }
             }
@@ -259,7 +259,7 @@ export class PdfFileTextOut implements TextOut {
         return output;
     }
     /**
-     * listParsed
+     * emitList
      * To parse the list and the different element that we can find on it.
      * @private
      * @param {List} list
@@ -267,7 +267,7 @@ export class PdfFileTextOut implements TextOut {
      * @returns
      * @memberof PdfFileTextOut
      */
-    private listParsed(list: List, notation?: string) {
+    private emitList(list: List, notation?: string) {
         let output: string = '';
         if (!notation) {
             notation = '*';
@@ -281,16 +281,16 @@ export class PdfFileTextOut implements TextOut {
                     }
         for (const element of list.elements) {
             if ((element as List).kind === 'list'){
-                output = output + this.listParsed((element as List), notation);
+                output = output + this.emitList((element as List), notation);
             } else if ((element as Link).kind === 'link') {
-                output = output + this.linkParsed((element as Link));
+                output = output + this.emitLink((element as Link));
             } else if ((element as Paragraph).kind === 'paragraph') {
-                output = output + notation + ' ' + this.paragraphParsed((element as Paragraph)) + '\n';
+                output = output + notation + ' ' + this.emitParagraph((element as Paragraph)) + '\n';
             } else if ((element as Code).kind === 'code') {
-                output = output + this.codeParsed((element as Code));
+                output = output + this.emitCode((element as Code));
             } else if ((element as RichText)[0]) {
                 const temp: Paragraph = { kind: 'paragraph', text: (element as RichText) };
-                output = output + notation + ' ' + this.paragraphParsed(temp) + '\n';
+                output = output + notation + ' ' + this.emitParagraph(temp) + '\n';
             }
         }
         return output;
