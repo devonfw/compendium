@@ -1,11 +1,12 @@
-import { TextOut, Transcript, TextElement, Paragraph, InlineImage, List, RichText, TableBody, RichString, Link, Code, Table } from './types';
+import { DocConfig, IndexSource, Index, TextOut, TextIn, Transcript, Paragraph, TextSegment, TextElement, InlineImage, TextInSources, RichString, RichText, TextAttributes, Table, TableBody, Col, Row, Cell, Code, TableSegment, List, Link } from './types';
 import { EmitElement } from './emitFunctions';
 import * as fs from 'fs';
+import * as ncp from 'ncp';
+import * as shelljs from 'shelljs';
 
-export class HtmlFileTextOut implements TextOut {
+export class AsciiDocFileTextOut implements TextOut {
 
     public done: boolean = false;
-    public asciidoctor = require('asciidoctor.js')();
     private outputFile: string;
 
     public constructor(file: string) {
@@ -16,34 +17,31 @@ export class HtmlFileTextOut implements TextOut {
      * Create the final file parsing the different elements that the input files have
      * @param {Array<Transcript>} data
      * @returns {Promise<void>}
-     * @memberof HtmlFileTextOut
+     * @memberof AsciiDocFileTextOut
      */
     public async generate(data: Array<Transcript>): Promise<void> {
 
         if (EmitElement.dirExists('./imageTemp/')) {
             const arrayDir = this.outputFile.split('/');
-            let outputDir: string = '';
+            const outputDir: Array<string> = [];
             if (arrayDir.length > 1) {
                 arrayDir.splice(-1, 1);
                 for (const piece of arrayDir) {
-                    outputDir = outputDir + piece;
+                    outputDir.push(piece);
                 }
             }
             try {
-                const ncp = require('ncp').ncp;
-                ncp('./imageTemp/', outputDir, (err: Error) => {
+                ncp.ncp('./imageTemp/', outputDir[outputDir.length - 1], (err: Error) => {
                     if (err) {
                         return console.error(err);
                     }
-                    const shell = require('shelljs');
-                    shell.rm('-rf', 'imageTemp');
+                    shelljs.rm('-rf', 'imageTemp');
                 });
             } catch (err) {
                 console.log(err.message);
             }
         }
-
-        const outputString: Array<any> = [];
+        const outputString: Array<string> = [];
         outputString.push(':toc: macro\ntoc::[]\n\n');
         if (data.length < 1) {
             throw new Error('No Text instances passed');
@@ -75,47 +73,14 @@ export class HtmlFileTextOut implements TextOut {
                     }
                 }
                 outputString.push('\n\n');
-
             }
 
-            const myOutput = this.asciidoctor.convert(outputString.join(''), { attributes: { showtitle: true, doctype: 'book' } });
-            const docWithStyle =
-                `<!DOCTYPE html>
-            <html>
-            <head>
-            <style>
-            table {
-                font-family: arial, sans-serif;
-                border-collapse: collapse;
-                width: 100%;
-            }
-
-            td{
-                border: 1px solid #dddddd;
-                text-align: left;
-            }
-            th {
-                border: 1px solid #dddddd;
-                text-align: left;
-                background-color: #dddddd;
-            }
-            img {
-                width:90%;
-            }
-
-            </style>
-            </head>
-            <body>
-            ` + myOutput + `
-            </body>
-            </html>`;
             try {
-                fs.writeFileSync(this.outputFile + '.html', docWithStyle, { encoding: 'utf8' });
+                fs.writeFileSync(this.outputFile + '.adoc', outputString.join(''));
             } catch (err) {
                 throw err;
             }
         }
-
         this.done = true;
     }
 }

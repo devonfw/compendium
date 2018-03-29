@@ -16,6 +16,7 @@
   "private": true,
   "dependencies": {
     "@types/chai-as-promised": "^7.1.0",
+    "@types/ncp": "^2.0.1",
     "asciidoctor-docbook.js": "^1.5.6-preview.2",
     "asciidoctor.js": "^1.5.6-preview.4",
     "chai-as-promised": "^7.1.1",
@@ -32,9 +33,11 @@
   },
   "devDependencies": {
     "@types/chai": "^4.1.0",
-    "@types/superagent": "^3.5.7",
     "@types/mocha": "^2.2.46",
     "@types/node": "^8.5.7",
+    "@types/shelljs": "^0.7.8",
+    "@types/superagent": "^3.5.7",
+    "@types/yargs": "^11.0.0",
     "chai": "^4.1.2",
     "mocha": "^4.1.0",
     "nodemon": "^1.14.7",

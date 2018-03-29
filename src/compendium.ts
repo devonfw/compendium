@@ -3,12 +3,13 @@
 import chalk from 'chalk';
 import { Credentials } from './types';
 import { doCompendium, askInPrompt } from './clinterpreter';
+import * as yargs from 'yargs';
 
 let configFile, outputFile, multiple, outputFormat, inputFormat;
 
 (async () => {
 
-    const cli = require('yargs')
+    const cli = yargs
         .usage('Usage:\n$0 [-f|-j] <config file | base URL> [--asciidoc|--html|--pdf] <output file>\nor\n$0 [-f|-j] <config file | base URL> <--multiple> files')
         .example('$0 -f config.json --html out', 'Use a config file in current directory and write the result in file out.html')
         .describe('f', 'Input type: JSON Config file (default)')

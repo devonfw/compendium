@@ -26,7 +26,6 @@ public getContentbyCookies(URL: string, cookies: Cookies): Promise<JSON> {
                     } else if (res && res.ok && res.header['content-type'] === 'application/json' && res.body) {
                         resolve(res.body);
                     } else {
-                        console.log('-> rejecting manually in getContentbyCookies!!');
                         const erinfo = new Error('It\'s not possible to get info from \'' + URL + '\'' + '. Make sure you have authorization.');
                         reject(erinfo);
                     }
@@ -55,7 +54,6 @@ public getContentbyCredentials(URL: string, credentials: Credentials): Promise<J
                     } else if (res && res.statusCode === 200 && res.headers['content-type'] === 'application/json' && res.body) {
                         resolve(res.body);
                     } else {
-                        console.log('-> rejecting manually in getContentbyCredentials!');
                         reject(new Error('It\'s not possible to get info from \'' + URL + '\'' + '. Make sure you have authorization.'));
                     }
                 });

@@ -1,13 +1,15 @@
 import { COOKIES_TEST, isConfluenceTest } from './mocks/confluence/auth';
 import * as fs from 'fs';
 import { IndexSource, IndexNode, Index, TextInSources, Transcript, TextOut, Merger, DocConfig, Cookie, Cookies, Credentials } from './types';
-import { AsciiDocFileTextIn, AsciiDocFileTextOut } from './asciidoc';
+import { AsciiDocFileTextIn } from './asciidocInput';
+import { AsciiDocFileTextOut } from './asciidocOutput';
 import { HtmlFileTextOut } from './html';
 import { PdfFileTextOut } from './pdf';
 import { MergerImpl } from './merger';
 import { ConfigFile } from './config';
 import { ConfluenceTextIn } from './confluence';
 import chalk from 'chalk';
+import * as shelljs from 'shelljs';
 
 /**
  * doCompendium
@@ -76,8 +78,7 @@ export async function doCompendium(configFile: string, format: string, outputFil
     if (output.split('/').length > 1) {
         const myOutput = output.replace(output.split('/').splice(-1, 1)[0], '');
         try {
-            const shell = require('shelljs');
-            shell.mkdir('-p', myOutput);
+            shelljs.mkdir('-p', myOutput);
         } catch (err) {
             if (err.code !== 'EEXIST') {
                 throw err;
