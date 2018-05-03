@@ -42,7 +42,8 @@ const assert = chai.assert;
 let docconfig: ConfigFile;
 let index1: Index;
 const textinSources: TextInSources = {};
-const transcripts: Array<Transcript> = [];
+let transcripts: Array<Transcript> = [];
+let outputResult: string;
 
 //paths only test
 let testDir1: string = './mocks';
@@ -104,7 +105,7 @@ This project does something. (C) I haven´t done it yet.
 
 [source,java]
 ----
-include::{sourcedir}/sample.java[]
+Scanner s = new Scanner( new File("scores.dat") );
 ----
 
 == Images
@@ -300,6 +301,8 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
       textinSources[index1[1][1].key]
         .getTranscript(index1[1][1].index)
         .then(transcript => {
+          transcripts = [];
+          transcripts.push(transcript);
           //test h2
           const h2: TextSegment = transcript.segments[0];
           const h2richString = ((h2 as TextElement).text[0] as RichString).text;
@@ -319,71 +322,50 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
         });
     });
     it('link and image', done => {
-      textinSources[index1[1][1].key]
-        .getTranscript(index1[1][1].index)
-        .then(transcript => {
-          const imageLine = transcript.segments[2];
-          const link = (imageLine as Paragraph).text[1];
-          expect((link as Link).ref).equals('http://www.google.com');
-          const image = (link as Link).text as InlineImage;
-          expect(image.img).equals('images/fox.png');
-          expect(image.title).equals('Red Fox');
-          done();
-        })
-        .catch(error => {
-          done(error);
-        });
+      const transcript = transcripts[0];
+      const imageLine = transcript.segments[2];
+      const link = (imageLine as Paragraph).text[1];
+      expect((link as Link).ref).equals('http://www.google.com');
+      const image = (link as Link).text as InlineImage;
+      expect(image.img).equals('images/fox.png');
+      expect(image.title).equals('Red Fox');
+      done();
     });
     it('p, sub and span', done => {
-      textinSources[index1[1][1].key]
-        .getTranscript(index1[1][1].index)
-        .then(transcript => {
-          const p: TextSegment = transcript.segments[3];
-          const prichString = ((p as TextElement).text[0] as RichString).text;
-          expect(prichString).equals('The ');
-          const psub = ((p as TextElement).text[1] as RichString).text;
-          expect(psub).equals('quick');
-          const pspan = ((p as TextElement).text[6] as RichString).text;
-          expect(pspan).equals('dog.');
-          done();
-        })
-        .catch(error => {
-          done(error);
-        });
+      const transcript = transcripts[0];
+      const p: TextSegment = transcript.segments[3];
+      const prichString = ((p as TextElement).text[0] as RichString).text;
+      expect(prichString).equals('The ');
+      const psub = ((p as TextElement).text[1] as RichString).text;
+      expect(psub).equals('quick');
+      const pspan = ((p as TextElement).text[6] as RichString).text;
+      expect(pspan).equals('dog.');
+      done();
     });
 
     it('Table and List', done => {
-      textinSources[index1[1][1].key]
-        .getTranscript(index1[1][1].index)
-        .then(transcript => {
-          //test table column width
-          const tableObject1: TextSegment = transcript.segments[4];
-          const tableObject2 = ((tableObject1 as TableSegment) as Table)
-            .content;
-          expect(tableObject2.colgroup[0].style).equals('width: 33.3333%;');
-          //test table cell paragraph tex
-          const tableRow1 = tableObject2.body[5] as Row;
-          const cell1 = (tableRow1[0] as Cell).cell[0] as Paragraph;
-          const cell1Text = cell1.text[0] as RichString;
-          expect(cell1Text.text).equals('footer 1');
-          //test table cell list
-          const cellList = (tableRow1[2] as Cell).cell[0] as List;
-          const cellListNested1 = cellList.elements[2] as List;
-          const cellListNested2 = cellListNested1.elements[2] as List;
-          const textCellNested2 = (cellListNested2.elements[1] as Paragraph)
-            .text[0];
-          expect((textCellNested2 as RichString).text).equals(
-            'anidadaotravez2',
-          );
-          done();
-        })
-        .catch(error => {
-          done(error);
-        });
+      const transcript = transcripts[0];
+      //test table column width
+      const tableObject1: TextSegment = transcript.segments[4];
+      const tableObject2 = ((tableObject1 as TableSegment) as Table).content;
+      expect(tableObject2.colgroup[0].style).equals('width: 33.3333%;');
+      //test table cell paragraph tex
+      const tableRow1 = tableObject2.body[5] as Row;
+      const cell1 = (tableRow1[0] as Cell).cell[0] as Paragraph;
+      const cell1Text = cell1.text[0] as RichString;
+      expect(cell1Text.text).equals('footer 1');
+      //test table cell list
+      const cellList = (tableRow1[2] as Cell).cell[0] as List;
+      const cellListNested1 = cellList.elements[2] as List;
+      const cellListNested2 = cellListNested1.elements[2] as List;
+      const textCellNested2 = (cellListNested2.elements[1] as Paragraph)
+        .text[0];
+      expect((textCellNested2 as RichString).text).equals('anidadaotravez2');
+      done();
     });
   });
   //MANUAL.ADOC---------------------------------------------------------------------------------------
-  describe('Asciidoc input with node manual.adoc', () => {
+  describe('Asciidoc input with a wider example, manual.adoc', () => {
     it('Code: sample.java', done => {
       textinSources[index1[0][0].key] = new AsciiDocFileTextIn(
         index1[0][0].source,
@@ -391,11 +373,12 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
       textinSources[index1[1][0].key]
         .getTranscript(index1[1][0].index)
         .then(transcript => {
-          //test <>
+          transcripts = [];
+          transcripts.push(transcript);
           const telement1 = (transcript.segments[3] as Paragraph)
             .text[1] as Code;
           if (telement1.language) expect(telement1.language).equals('java');
-          expect(telement1.content).equals('link:java/sample.java[]');
+          expect(telement1.content).includes('Scanner');
           done();
         })
         .catch(error => {
@@ -403,32 +386,23 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
         });
     });
     it('Image jpeg', done => {
-      textinSources[index1[1][0].key]
-        .getTranscript(index1[1][0].index)
-        .then(transcript => {
-          const image = (transcript.segments[5] as Paragraph)
-            .text[1] as InlineImage;
-          expect(image.kind).equals('inlineimage');
-          expect(image.img).equals('images/sunset.jpg');
-          done();
-        })
-        .catch(error => {
-          done(error);
-        });
+      const transcript = transcripts[0];
+      const image = (transcript.segments[5] as Paragraph)
+        .text[1] as InlineImage;
+      expect(image.kind).equals('inlineimage');
+      expect(image.img).equals('images/sunset.jpg');
+      done();
     });
-    //not working
-    it('Ordered List', done => {
-      textinSources[index1[1][0].key]
-        .getTranscript(index1[1][0].index)
-        .then(transcript => {
-          /* const listObject1: TextSegment = transcript.segments[7];
-          console.log(listObject1);
-          expect(listObject1.kind).equals('list'); */
-          done();
-        })
-        .catch(error => {
-          done(error);
-        });
+    it('Ordered List 2 levels and Code inside', done => {
+      const transcript = transcripts[0];
+      const listObject1: TextSegment = transcript.segments[7];
+      expect(listObject1.kind).equals('list');
+      expect((listObject1 as List).ordered).true;
+      const list2Level = (listObject1 as List).elements[1] as List;
+      const listItem1 = list2Level.elements[1] as Paragraph;
+      const codeItem1 = listItem1.text[1] as Code;
+      expect(codeItem1.content).includes('gem');
+      done();
     });
   });
   //---------OUTPUT-----------------------------------------------------------------------------------------
@@ -440,7 +414,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
       textinSources[index1[1][1].key]
         .getTranscript(index1[1][1].index)
         .then(transcript => {
-          let transcripts: Transcript[] = [];
+          transcripts = [];
           transcripts.push(transcript);
           let out: AsciiDocFileTextOut = new AsciiDocFileTextOut(
             'outBrownfox2',
@@ -448,14 +422,17 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
           out.generate(transcripts).then(() => {
             try {
               //read the output file
-              let result = fs.readFileSync('outBrownfox2.adoc', 'utf8');
-              const outputArray = result.split('\n');
+              outputResult = fs.readFileSync('outBrownfox2.adoc', 'utf8');
+              const outputArray = outputResult.split('\n');
+              //paragraph
               expect(outputArray[9]).equals(
                 'The ~quick~ *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#',
               );
+              //table
               expect(outputArray[16]).equals(
                 '| 4 | Item 4 | link:http://www.google.es[Google] ',
               );
+              //list
               expect(outputArray[21]).equals('*** anidadaotravez1');
               done();
             } catch (error) {
@@ -468,23 +445,25 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
         });
     });
   });
-  //not implemented yet
+  //wider example
   describe('Output to Asciidoc manual.adoc', () => {
-    it('Testing include, code', done => {
+    it('Testing code', done => {
       textinSources[index1[0][0].key] = new AsciiDocFileTextIn(
         index1[0][0].source,
       );
       textinSources[index1[1][0].key]
         .getTranscript(index1[1][0].index)
         .then(transcript => {
-          let transcripts: Transcript[] = [];
+          transcripts = [];
           transcripts.push(transcript);
           let out: AsciiDocFileTextOut = new AsciiDocFileTextOut('outManual');
           out.generate(transcripts).then(() => {
             try {
               //read the output file
-              //let result = fs.readFileSync('outManual.adoc', 'utf8');
-              //const outputArray = result.split('\n');
+              outputResult = fs.readFileSync('outManual.adoc', 'utf8');
+              const outputArray = outputResult.split('\n');
+              //code
+              expect(outputArray[9]).equals('```java');
               done();
             } catch (error) {
               throw error;
@@ -494,6 +473,18 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
         .catch(error => {
           done(error);
         });
+    });
+    it('Testing ol', done => {
+      try {
+        const outputArray = outputResult.split('\n');
+        //list
+        expect(outputArray[20]).equals(
+          '.. Clone the github repository locally `git clone `',
+        );
+        done();
+      } catch (error) {
+        done(error + ' an error to read the outManual.adoc');
+      }
     });
   });
   //-----------------------------------------------------------------------------------------
@@ -505,15 +496,15 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
       textinSources[index1[1][1].key]
         .getTranscript(index1[1][1].index)
         .then(transcript => {
-          let transcripts: Transcript[] = [];
+          transcripts = [];
           transcripts.push(transcript);
           let out: HtmlFileTextOut = new HtmlFileTextOut('outBrownfox2');
           out.generate(transcripts).then(() => {
             try {
               //read the output file
-              let result = fs.readFileSync('outBrownfox2.html', 'utf8');
+              outputResult = fs.readFileSync('outBrownfox2.html', 'utf8');
               //compare strings
-              const outputArray = result.split('\n');
+              const outputArray = outputResult.split('\n');
               expect(outputArray[20].trim()).equals('width:90%;');
               expect(outputArray[108].trim()).equals('<p>anidadaotravez2</p>');
               done();
@@ -536,7 +527,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
       textinSources[index1[1][1].key]
         .getTranscript(index1[1][1].index)
         .then(transcript => {
-          let transcripts: Transcript[] = [];
+          transcripts = [];
           transcripts.push(transcript);
           let out: PdfFileTextOut = new PdfFileTextOut('outBrownfox2');
           out.generate(transcripts).then(() => {

@@ -25,7 +25,6 @@ import {
 } from './types';
 import { EmitElement } from './emitFunctions';
 import * as fs from 'fs';
-import * as ncp from 'ncp';
 import * as shelljs from 'shelljs';
 import * as util from 'util';
 import * as extrafs from 'fs-extra';

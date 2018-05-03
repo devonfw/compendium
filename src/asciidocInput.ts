@@ -26,7 +26,6 @@ import {
 import { ParseLocal } from './parseLocal';
 import * as fs from 'fs';
 import * as util from 'util';
-import * as ncp from 'ncp';
 import * as shelljs from 'shelljs';
 
 export class AsciiDocFileTextIn implements TextIn {

@@ -10,6 +10,7 @@ import {
   Link,
   Paragraph,
   InlineImage,
+  List,
 } from '../src/types';
 import { ConfluenceTextIn } from '../src/confluence';
 import { ParseLocal } from '../src/parseLocal';
@@ -143,9 +144,10 @@ describe('Confluence02 from html to Transcript', () => {
           }
         }
         transcript.segments = end;
-        expect(transcript.segments[0].kind).equals('link');
-        let link = transcript.segments[0] as Link;
-        expect(link.ref).equals('index.html');
+        expect(transcript.segments[0].kind).equals('list');
+        let listObject1 = transcript.segments[0] as List;
+        expect(listObject1.ordered).true;
+
         done();
       } catch (error) {
         done(error);
@@ -178,7 +180,7 @@ describe('Confluence03 from Transcript to asciidoc', () => {
     // clean fixture
   });
 });
-xdescribe('Confluence03 from Transcript to html', () => {
+xdescribe('Confluence04 from Transcript to html', () => {
   before(() => {
     //setup fixture
   });

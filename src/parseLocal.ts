@@ -24,7 +24,6 @@ import {
   Link,
 } from './types';
 import * as fs from 'fs';
-import * as ncp from 'ncp';
 import * as shelljs from 'shelljs';
 import * as util from 'util';
 import { EmitElement } from './emitFunctions';
@@ -134,6 +133,13 @@ export class ParseLocal {
           out = {
             kind: 'list',
             ordered: false,
+            elements: this.list(node.children),
+          };
+          result.push(out);
+        } else if (node.name === 'ol') {
+          out = {
+            kind: 'list',
+            ordered: true,
             elements: this.list(node.children),
           };
           result.push(out);
@@ -550,7 +556,13 @@ export class ParseLocal {
           throw err;
         }
       }
-      const exist = await this.dirExists('imageTemp/' + dir);
+      let exist;
+      try {
+        exist = await this.dirExists('imageTemp/' + dir);
+      } catch (error) {
+        console.log(error);
+      }
+
       if (!exist) {
         try {
           let copyPromisify = util.promisify(fs.copyFile);
@@ -572,7 +584,7 @@ export class ParseLocal {
   private static async dirExists(filename: string) {
     try {
       let accessPromisify = util.promisify(fs.access);
-      await accessPromisify(filename);
+      await accessPromisify(filename, fs.constants.F_OK);
       return true;
     } catch (e) {
       return false;

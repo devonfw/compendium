@@ -16,7 +16,6 @@ import { EmitElement } from './emitFunctions';
 import { Utilities } from './utils';
 import * as fs from 'fs';
 import { emit } from 'cluster';
-import * as ncp from 'ncp';
 import * as shelljs from 'shelljs';
 import * as util from 'util';
 import * as extrafs from 'fs-extra';

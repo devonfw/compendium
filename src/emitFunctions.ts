@@ -24,7 +24,6 @@ import {
   Link,
 } from './types';
 import * as fs from 'fs';
-import * as ncp from 'ncp';
 import * as shelljs from 'shelljs';
 import * as util from 'util';
 
