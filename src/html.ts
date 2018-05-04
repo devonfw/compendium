@@ -38,15 +38,17 @@ export class HtmlFileTextOut implements TextOut {
       const arrayDir = this.outputFile.split('/');
       const outputDir: Array<string> = [];
       outputDir.push('./');
+      let outputDir2 = '';
       if (arrayDir.length > 1) {
         arrayDir.splice(-1, 1);
         for (const piece of arrayDir) {
           outputDir.push(piece);
         }
+        outputDir2 = outputDir.join('/');
       }
       try {
         let copyPromisify = util.promisify(extrafs.copy);
-        await copyPromisify('./imageTemp', outputDir[outputDir.length - 1]);
+        await copyPromisify('./imageTemp', outputDir2);
         shelljs.rm('-rf', 'imageTemp');
       } catch (err) {
         console.log(err.message);

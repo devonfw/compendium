@@ -44,6 +44,7 @@ let index1: Index;
 const textinSources: TextInSources = {};
 let transcripts: Array<Transcript> = [];
 let outputResult: string;
+let outputArray: string[];
 
 //paths only test
 let testDir1: string = './mocks';
@@ -51,203 +52,33 @@ let testDir2: string = './mocks/input-data1';
 let testDir3: string = './mocks/input-data2';
 let testDir4: string = './mocks/input-data2/images';
 let testDir5: string = './mocks/input-data1/images';
-let testDir6: string = './mocks/input-data1/java';
 let testFile1: string = './mocks/config.json';
-let testFile2: string = './mocks/input-data1/manual.adoc';
-let testFile3: string = './mocks/input-data2/brownfox2.adoc';
-let testFile4: string = './mocks/input-data1/java/sample.java';
-let pathImage: string = './test/images/fox.png';
-const pathImageSunset: string = './test/images/sunset.jpg';
+let testFile3: string = './mocks/input-data1/manual.adoc';
+let testFile2: string = './mocks/input-data2/brownfox2.adoc';
+let pathImage: string = './test-data/input/images/fox.png';
+const pathImageSunset: string = './test-data/input/images/sunset.jpg';
+const pathConfigFile = './test-data/input/config.json';
+const pathAdoc1 = './test-data/input/brownfox2.adoc';
+const pathAdoc2 = './test-data/input/manual.adoc';
+const outputFolder = './test-data/output/';
 
-let testListFiles: string[] = [testFile1, testFile2, testFile3, testFile4];
-let testListDir: string[] = [
-  testDir1,
-  testDir2,
-  testDir3,
-  testDir4,
-  testDir5,
-  testDir6,
-];
-
-let contentTestFile1: string = `{
-  "sources": [
-    {
-      "key": "input-data1",
-      "kind": "asciidoc",
-      "source": "./mocks/input-data1"
-    },
-    {
-      "key": "input-data2",
-      "kind": "asciidoc",
-      "source": "./mocks/input-data2"
-    }
-  ],
-  "nodes": [
-    {
-      "key": "input-data1",
-      "index": "manual.adoc"
-    },
-    {
-      "key": "input-data2",
-      "index": "brownfox2.adoc"
-    }
-  ]
-}`;
-let contentTestFile2: string = `
-
-= Example Manual
-
-This project does something. (C) I haven´t done it yet.
-
-== Source Code
-
-:sourcedir: java
-
-[source,java]
-----
-Scanner s = new Scanner( new File("scores.dat") );
-----
-
-== Images
-
-image::images/sunset.jpg[scaledwidth=75%]
-
-== Ordered List
-[start=4]
-. Install the gem locally (at the moment it has not been publish to rubygem)
-.. Clone the github repository locally \`git clone https://github.com/gscheibel/asciidoctor-confluence.git\`
-.. Built it \`gem build asciidoctor-confluence.gemspec\`
-.. Install it \`gem install ./asciidoctor-confluence.{version}.gem\`
-.. To check it has been done correctly \`asciidoctor-confluence -v\` should display \`asciidoctor-confluence: {version}\`
-. Have a Confluence instance
-.. If you don't have a Confluence server, you can use a Docker container (e.i.: https://registry.hub.docker.com/u/cptactionhank/atlassian-confluence/), the option requires therefore an Atlassian account so it can generate a trial licence key.
-
-NOTE: An admonition paragraph draws the reader's attention to
-auxiliary information.
-Its purpose is determined by the label
-at the beginning of the paragraph.
-
-== Admonition types
-
-TIP: Pro tip...
-
-IMPORTANT: Don't forget...
-
-WARNING: Watch out for...
-
-CAUTION: Ensure that...
-
-== Image 
-
-[#img-sunset]
-.A mountain sunset
-[link=http://www.flickr.com/photos/javh/5448336655]
-image::images/sunset.jpg[scaledwidth=75%]
-
-== Other Table
-
-[cols=2*]
-|===
-|Firefox
-|Web Browser
-
-|Ruby
-|Programming Language
-
-|TorqueBox
-|Application Server
-|===
-
-== Labeled list
-
-[horizontal]
-CPU:: The brain of the computer.
-Hard drive:: Permanent storage for operating system and/or user files.
-RAM:: Temporarily stores information the CPU uses during operation.
-
-== Hybrid list
-
-Operating Systems::
-  Linux:::
-    1. Fedora
-      * Desktop
-    2. Ubuntu
-      * Desktop
-      * Server
-  BSD:::
-    1. FreeBSD
-    2. NetBSD
-
-Cloud Providers::
-  PaaS:::
-    1. OpenShift
-    2. CloudBees
-  IaaS:::
-    1. Amazon EC2
-    2. Rackspace
-
-== Paragraph attached
-
-* grandparent list item
-+
---
-** parent list item
-*** child list item
---
-+
-paragraph attached to grandparent list item
-
-== Link
-
-link:protocol.json[Open the JSON file]
-
-== Cross reference
-
-The text at the end of this sentence is cross referenced to <<_other_table,Table>>
-
-`;
-let contentTestFile3 = `
-== The fox
-
-=== The *real _fox_*
-
-image::images/fox.png[Red Fox, link="http://www.google.com"]
-
-The ~quick~ *brown fox _jumps_ over* the lazy [.underline]#dog.#
-
-|==========================
-|Column 1 |Columns 2 | and 3
-|1 | |        
-|2       |Item 2  |Item 2
-|3       |Item 3  |Item 3
-|4       |Item 4  a|link:http://www.google.es[Google]
-|footer 1|footer 2
-a| * hola1
-* hola2
-** anidada1
-** anidada2
-*** anidadaotravez1
-*** anidadaotravez2
-** anidada3
-* hola3
-|==========================`;
-const contentTestFileJava = `
-public static void main(String[] args){	
-  go();
-	}`;
+let testListFiles: string[] = [testFile1, testFile2, testFile3];
+let testListDir: string[] = [testDir1, testDir2, testDir3, testDir4, testDir5];
 
 // TEST01
 // Should get content from a mock Service
-describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => {
+describe('Testing the asciidoc input and the pdf, html, asciidoc Output with good case scenarios', () => {
   before(() => {
     //build the mocks with config file
     try {
       shelljs.mkdir('-p', testListDir);
       shelljs.touch(testListFiles);
-      fs.writeFileSync(testFile1, contentTestFile1);
-      fs.writeFileSync(testFile2, contentTestFile2);
-      fs.writeFileSync(testFile3, contentTestFile3, 'utf8');
-      fs.writeFileSync(testFile4, contentTestFileJava);
+      const content1 = fs.readFileSync(pathConfigFile);
+      fs.writeFileSync(testFile1, content1);
+      const content2 = fs.readFileSync(pathAdoc1);
+      fs.writeFileSync(testFile2, content2);
+      const content3 = fs.readFileSync(pathAdoc2);
+      fs.writeFileSync(testFile3, content3, 'utf8');
       //images
       shelljs.cp(pathImage, './mocks/input-data2/images/fox.png');
       shelljs.cp(pathImageSunset, './mocks/input-data1/images/sunset.jpg');
@@ -256,7 +87,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
     }
   });
 
-  describe('Configfile built with getIndex', () => {
+  describe('Testing Config File function', () => {
     it('Should show', done => {
       docconfig = new ConfigFile(testFile1);
       docconfig
@@ -407,7 +238,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
   });
   //---------OUTPUT-----------------------------------------------------------------------------------------
   describe('Output to Asciidoc brownfox2', () => {
-    it('Testing table, list and paragraphs', done => {
+    it('Testing Generate asciidoc function', done => {
       textinSources[index1[0][1].key] = new AsciiDocFileTextIn(
         index1[0][1].source,
       );
@@ -417,26 +248,21 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
           transcripts = [];
           transcripts.push(transcript);
           let out: AsciiDocFileTextOut = new AsciiDocFileTextOut(
-            'outBrownfox2',
+            outputFolder + 'outBrownfox2',
           );
           out.generate(transcripts).then(() => {
             try {
               //read the output file
-              outputResult = fs.readFileSync('outBrownfox2.adoc', 'utf8');
-              const outputArray = outputResult.split('\n');
-              //paragraph
-              expect(outputArray[9]).equals(
-                'The ~quick~ *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#',
+              outputResult = fs.readFileSync(
+                outputFolder + 'outBrownfox2.adoc',
+                'utf8',
               );
-              //table
-              expect(outputArray[16]).equals(
-                '| 4 | Item 4 | link:http://www.google.es[Google] ',
-              );
-              //list
-              expect(outputArray[21]).equals('*** anidadaotravez1');
+              outputArray = [];
+              outputArray = outputResult.split('\n');
+              expect(outputResult).length.to.not.equal(0);
               done();
             } catch (error) {
-              throw error;
+              done(error);
             }
           });
         })
@@ -444,10 +270,29 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
           done(error);
         });
     });
+    it('Testing Table', done => {
+      //table
+      expect(outputArray[16]).equals(
+        '| 4 | Item 4 | link:http://www.google.es[Google] ',
+      );
+      done();
+    });
+    it('Testing list', done => {
+      //list
+      expect(outputArray[21]).equals('*** anidadaotravez1');
+      done();
+    });
+    it('Testing paragraphs, cursive, bold', done => {
+      //paragraph
+      expect(outputArray[9]).equals(
+        'The ~quick~ *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#',
+      );
+      done();
+    });
   });
   //wider example
   describe('Output to Asciidoc manual.adoc', () => {
-    it('Testing code', done => {
+    it('Testing generate adoc', done => {
       textinSources[index1[0][0].key] = new AsciiDocFileTextIn(
         index1[0][0].source,
       );
@@ -456,17 +301,22 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
         .then(transcript => {
           transcripts = [];
           transcripts.push(transcript);
-          let out: AsciiDocFileTextOut = new AsciiDocFileTextOut('outManual');
+          let out: AsciiDocFileTextOut = new AsciiDocFileTextOut(
+            outputFolder + 'outManual',
+          );
           out.generate(transcripts).then(() => {
             try {
               //read the output file
-              outputResult = fs.readFileSync('outManual.adoc', 'utf8');
-              const outputArray = outputResult.split('\n');
-              //code
-              expect(outputArray[9]).equals('```java');
+              outputResult = fs.readFileSync(
+                outputFolder + 'outManual.adoc',
+                'utf8',
+              );
+              outputArray = [];
+              outputArray = outputResult.split('\n');
+              expect(outputResult).length.to.not.equal(0);
               done();
             } catch (error) {
-              throw error;
+              done(error);
             }
           });
         })
@@ -474,22 +324,22 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
           done(error);
         });
     });
+    it('Testing Code', done => {
+      //code
+      expect(outputArray[9]).equals('```java');
+      done();
+    });
     it('Testing ol', done => {
-      try {
-        const outputArray = outputResult.split('\n');
-        //list
-        expect(outputArray[20]).equals(
-          '.. Clone the github repository locally `git clone `',
-        );
-        done();
-      } catch (error) {
-        done(error + ' an error to read the outManual.adoc');
-      }
+      //list
+      expect(outputArray[20]).equals(
+        '.. Clone the github repository locally `git clone `',
+      );
+      done();
     });
   });
   //-----------------------------------------------------------------------------------------
   describe('Output to HTML brownfox2', () => {
-    it('Test the Table, List and paragraphs', done => {
+    it('Testing generate html function', done => {
       textinSources[index1[0][1].key] = new AsciiDocFileTextIn(
         index1[0][1].source,
       );
@@ -498,18 +348,22 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
         .then(transcript => {
           transcripts = [];
           transcripts.push(transcript);
-          let out: HtmlFileTextOut = new HtmlFileTextOut('outBrownfox2');
+          let out: HtmlFileTextOut = new HtmlFileTextOut(
+            outputFolder + 'outBrownfox2',
+          );
           out.generate(transcripts).then(() => {
             try {
               //read the output file
-              outputResult = fs.readFileSync('outBrownfox2.html', 'utf8');
-              //compare strings
-              const outputArray = outputResult.split('\n');
-              expect(outputArray[20].trim()).equals('width:90%;');
-              expect(outputArray[108].trim()).equals('<p>anidadaotravez2</p>');
+              outputResult = fs.readFileSync(
+                outputFolder + 'outBrownfox2.html',
+                'utf8',
+              );
+              outputArray = [];
+              outputArray = outputResult.split('\n');
+              expect(outputResult).length.to.not.equal(0);
               done();
             } catch (error) {
-              throw error;
+              done(error);
             }
           });
         })
@@ -517,10 +371,16 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
           done(error);
         });
     });
+    it('Testing style and list', done => {
+      //compare strings
+      expect(outputArray[20].trim()).equals('width:90%;');
+      expect(outputArray[108].trim()).equals('<p>anidadaotravez2</p>');
+      done();
+    });
   });
   //-----------------------------------------------------------------------------------------
   describe('Output to PDF brownfox2', () => {
-    it('Test the Table, List and paragraphs', done => {
+    it('Testing generate pdf function', done => {
       textinSources[index1[0][1].key] = new AsciiDocFileTextIn(
         index1[0][1].source,
       );
@@ -529,18 +389,27 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output', () => 
         .then(transcript => {
           transcripts = [];
           transcripts.push(transcript);
-          let out: PdfFileTextOut = new PdfFileTextOut('outBrownfox2');
+          let out: PdfFileTextOut = new PdfFileTextOut(
+            outputFolder + 'outBrownfox2',
+          );
           out.generate(transcripts).then(() => {
-            if (expect(fs.existsSync('outBrownfox2.pdf'))) {
-              done();
-            } else {
-              done(new Error('error to create pdf'));
-            }
+            //read the output file
+            outputResult = fs.readFileSync(
+              outputFolder + 'outBrownfox2.html',
+              'utf8',
+            );
+            outputArray = [];
+            outputArray = outputResult.split('\n');
+            expect(outputResult).length.to.not.equal(0);
+            done();
           });
         })
         .catch(error => {
           done(error);
         });
+    });
+    it('Testing image visualitation', done => {
+      done();
     });
   });
   /* //MERGE---------------------------------------------------------

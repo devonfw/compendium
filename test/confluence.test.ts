@@ -59,8 +59,10 @@ id_multiplePages = 'multiple+pages';
 
 // Output -> To see transcript in a file (Optional)
 const outputPath01 = 'test-data/output/confluence/output1.json';
+const outputFolder = './test-data/output/';
 //html from confluence
-let htmlFile1: string = 'test-data/JQ/Jump-the-queue-Home_2163154.html';
+let htmlFile1: string =
+  'test-data/confluence-html/Jump-the-queue-Home_2163154.html';
 let htmlparse = require('html-parse');
 const transcript: Transcript = { segments: [] };
 
@@ -136,7 +138,7 @@ describe('Confluence02 from html to Transcript', () => {
       try {
         const htmlView = fs.readFileSync(htmlFile1);
         const tree = htmlparse.parse(htmlView);
-        ParseConfluence.base = 'test-data/JQ';
+        ParseConfluence.base = 'test-data/confluence-html';
         for (const branch of tree) {
           const temp = ParseConfluence.recursive(branch);
           for (const final of temp) {
@@ -169,7 +171,9 @@ describe('Confluence03 from Transcript to asciidoc', () => {
     it('Obtaining the asciidoc', done => {
       let transcripts: Transcript[] = [];
       transcripts.push(transcript);
-      let out: AsciiDocFileTextOut = new AsciiDocFileTextOut('outJumpTheQueue');
+      let out: AsciiDocFileTextOut = new AsciiDocFileTextOut(
+        outputFolder + 'outJumpTheQueue',
+      );
       out.generate(transcripts).then(() => {
         done();
       });
@@ -189,7 +193,9 @@ xdescribe('Confluence04 from Transcript to html', () => {
     it('Obtaining the html', done => {
       let transcripts: Transcript[] = [];
       transcripts.push(transcript);
-      let out: HtmlFileTextOut = new HtmlFileTextOut('outJumpTheQueue');
+      let out: HtmlFileTextOut = new HtmlFileTextOut(
+        outputFolder + 'outJumpTheQueue',
+      );
       out.generate(transcripts).then(() => {
         done();
       });

@@ -1,0 +1,24 @@
+{
+  "sources": [
+    {
+      "key": "input-data1",
+      "kind": "asciidoc",
+      "source": "./mocks/input-data1"
+    },
+    {
+      "key": "input-data2",
+      "kind": "asciidoc",
+      "source": "./mocks/input-data2"
+    }
+  ],
+  "nodes": [
+    {
+      "key": "input-data1",
+      "index": "manual.adoc"
+    },
+    {
+      "key": "input-data2",
+      "index": "brownfox2.adoc"
+    }
+  ]
+}

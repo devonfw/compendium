@@ -109,20 +109,66 @@ export class PdfFileTextOut implements TextOut {
         `
                 </body>
                 </html>`;
+      //pdf only works in the project folder
+      const fileName = this.getNameOfFileOnly(this.outputFile);
       const htmlToPdf = require('html-to-pdf');
       htmlToPdf.setInputEncoding('UTF-8');
       htmlToPdf.setOutputEncoding('UTF-8');
-      htmlToPdf.convertHTMLString(
-        docWithStyle,
-        this.outputFile + '.pdf',
-        (error: any, success: any) => {
-          if (error) {
-            console.log(error);
-          }
-        },
-      );
+      try {
+        htmlToPdf.convertHTMLString(
+          docWithStyle,
+          fileName + '.pdf',
+          (error: any, success: any) => {
+            if (error) {
+              console.log(error);
+            }
+            if (success) {
+              //we move the path to the user output path
+              this.createPdfInRightFolder(fileName);
+            }
+          },
+        );
+      } catch (error) {
+        console.log(error + ' can not create pdf in the project folder');
+      }
     }
     this.done = true;
+  }
+  /**
+   * moveTheImages
+   * Move the images and remove the folder
+   * @private
+   * @returns {string}
+   * @memberof PdfFileTextOut
+   */
+  private getNameOfFileOnly(filename: string): string {
+    const arrayDir = filename.split('/');
+    let result = filename;
+    if (arrayDir.length > 1) {
+      result = arrayDir[arrayDir.length - 1];
+    }
+    return result;
+  }
+  /**
+   * moveTheImages
+   * Move the images and remove the folder
+   * @private
+   * @returns {boolean}
+   * @memberof PdfFileTextOut
+   */
+  public async createPdfInRightFolder(filename: string) {
+    try {
+      let copyPromisify = util.promisify(fs.copyFile);
+      await copyPromisify(filename + '.pdf', this.outputFile + '.pdf');
+    } catch (e) {
+      console.log(e);
+    }
+    try {
+      let unlinkPromisify = util.promisify(fs.unlink);
+      await unlinkPromisify(filename + '.pdf');
+    } catch (e) {
+      console.log(e);
+    }
   }
   /**
    * moveTheImages
@@ -133,18 +179,9 @@ export class PdfFileTextOut implements TextOut {
    */
   public async moveTheImages(): Promise<void> {
     if (EmitElement.dirExists('./imageTemp/')) {
-      const arrayDir = this.outputFile.split('/');
-      const outputDir: Array<string> = [];
-      outputDir.push('./'); //by Murta
-      if (arrayDir.length > 1) {
-        arrayDir.splice(-1, 1);
-        for (const piece of arrayDir) {
-          outputDir.push(piece);
-        }
-      }
       try {
         let copyPromisify = util.promisify(extrafs.copy);
-        await copyPromisify('./imageTemp', outputDir[outputDir.length - 1]);
+        await copyPromisify('./imageTemp', './');
         shelljs.rm('-rf', 'imageTemp');
       } catch (err) {
         console.log(err.message);
