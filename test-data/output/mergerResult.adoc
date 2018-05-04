@@ -1,0 +1,133 @@
+:toc: macro
+toc::[]
+
+= Example Manual
+
+This project does something. &#169; I haven´t done it yet.
+
+== Source Code
+
+```java
+Scanner s = new Scanner( new File("scores.dat") );
+``` 
+
+== Images
+
+image::images/sunset.jpg[sunset] 
+
+== Ordered List
+
+. Install the gem locally (at the moment it has not been publish to rubygem)
+.. Clone the github repository locally `git clone `
+.. Built it `gem build asciidoctor-confluence.gemspec`
+.. Install it `gem install ./asciidoctor-confluence.{version}.gem`
+.. To check it has been done correctly `asciidoctor-confluence -v` should display `asciidoctor-confluence: {version}`
+. Have a Confluence instance
+.. If you don&#8217;t have a Confluence server, you can use a Docker container (e.i.: link:https://registry.hub.docker.com/u/cptactionhank/atlassian-confluence/[https://registry.hub.docker.com/u/cptactionhank/atlassian-confluence/] ), the option requires therefore an Atlassian account so it can generate a trial licence key.
+
+
+|==================
+|==================
+
+
+== Admonition types
+
+|==================
+|==================
+
+
+|==================
+|==================
+
+
+|==================
+|==================
+
+
+|==================
+|==================
+
+
+== Image
+
+image::images/sunset.jpg[sunset, link="http://www.flickr.com/photos/javh/5448336655"] 
+
+== Other Table
+
+|==================
+| Firefox | Web Browser 
+| Ruby | Programming Language 
+| TorqueBox | Application Server 
+|==================
+
+
+== Labeled list
+
+|==================
+|==================
+
+
+== Hybrid list
+
+. Fedora
+.* Desktop
+. Ubuntu
+.* Desktop
+.* Server
+
+
+. FreeBSD
+. NetBSD
+
+
+. OpenShift
+. CloudBees
+
+
+. Amazon EC2
+. Rackspace
+
+
+== Paragraph attached
+
+* grandparent list item
+
+
+== Link
+
+link:protocol.json[Open the JSON file]
+
+== Cross reference
+
+The text at the end of this sentence is cross referenced to link:#_other_table[Table]
+
+
+
+== The fox
+
+=== The *real* *_fox_*
+
+image::images/fox.png[Red Fox, link="http://www.google.com"] 
+
+The ~quick~ *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#
+
+|==================
+| Column 1 | Columns 2 | and 3 
+| 1 |  |  
+| 2 | Item 2 | Item 2 
+| 3 | Item 3 | Item 3 
+| 4 | Item 4 | link:http://www.google.es[Google] 
+| footer 1 | footer 2 a| * hola1
+* hola2
+** anidada1
+** anidada2
+*** anidadaotravez1
+*** anidadaotravez2
+** anidada3
+* hola3
+ 
+|==================
+
+
+
+

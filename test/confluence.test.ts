@@ -41,8 +41,8 @@ let id_multiplePages: string;
 basepath = 'https://adcenter.pl.s2-eu.capgemini.com/confluence/';
 space = 'JQ';
 credentials = {
-  username: 'Admin',
-  password: 'Admin123',
+  username: '',
+  password: '',
 };
 cookies = [
   {
@@ -67,7 +67,7 @@ let htmlparse = require('html-parse');
 const transcript: Transcript = { segments: [] };
 
 // TEST01
-// Should get content from a mock Service
+// I don´t have credentials
 xdescribe('Confluence01 Testing the Input of Text and doc generation', () => {
   before(() => {
     //setup fixture
@@ -184,6 +184,7 @@ describe('Confluence03 from Transcript to asciidoc', () => {
     // clean fixture
   });
 });
+//errors in asciidoctor from ascii to html because the html file from confluence is messy
 xdescribe('Confluence04 from Transcript to html', () => {
   before(() => {
     //setup fixture

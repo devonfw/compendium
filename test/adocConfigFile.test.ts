@@ -65,8 +65,14 @@ const outputFolder = './test-data/output/';
 let testListFiles: string[] = [testFile1, testFile2, testFile3];
 let testListDir: string[] = [testDir1, testDir2, testDir3, testDir4, testDir5];
 
-// TEST01
-// Should get content from a mock Service
+/**
+ * 2 asciidoc documents: brownfox2.adoc and manual.adoc
+ * This 2 examples contains all the generic asciidoc features
+ * Testing Input and Output of the files and the images
+ *
+ * Mocks are built and unbuilt only for this test, and the source is located in the @param {string} outputFolder
+ * Libraries Mocha, util, fs, shelljs, fs-extra and chai
+ */
 describe('Testing the asciidoc input and the pdf, html, asciidoc Output with good case scenarios', () => {
   before(() => {
     //build the mocks with config file
@@ -271,23 +277,34 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
         });
     });
     it('Testing Table', done => {
-      //table
       expect(outputArray[16]).equals(
         '| 4 | Item 4 | link:http://www.google.es[Google] ',
       );
       done();
     });
     it('Testing list', done => {
-      //list
       expect(outputArray[21]).equals('*** anidadaotravez1');
       done();
     });
     it('Testing paragraphs, cursive, bold', done => {
-      //paragraph
       expect(outputArray[9]).equals(
         'The ~quick~ *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#',
       );
       done();
+    });
+    it('Testing Image output', done => {
+      expect(outputArray[7].trim()).equals(
+        'image::images/fox.png[Red Fox, link="http://www.google.com"]',
+      );
+      done();
+    });
+    it('Testing Image source file exists', done => {
+      try {
+        fs.accessSync(outputFolder + 'images/fox.png', fs.constants.R_OK);
+        done();
+      } catch (error) {
+        done(error + ' image error');
+      }
     });
   });
   //wider example
@@ -325,14 +342,40 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
         });
     });
     it('Testing Code', done => {
-      //code
       expect(outputArray[9]).equals('```java');
       done();
     });
     it('Testing ol', done => {
-      //list
       expect(outputArray[20]).equals(
         '.. Clone the github repository locally `git clone `',
+      );
+      done();
+    });
+    it('Testing Image', done => {
+      expect(outputArray[15]).includes('image::images/sunset.jpg[sunset]');
+      done();
+    });
+    it('Testing Image source file jpg exists', done => {
+      try {
+        fs.accessSync(outputFolder + 'images/sunset.jpg', fs.constants.R_OK);
+        done();
+      } catch (error) {
+        done(error + ' image error');
+      }
+    });
+    it('Testing Link', done => {
+      expect(outputArray[97]).equals('link:protocol.json[Open the JSON file]');
+      done();
+    });
+    it('Testing Cross reference', done => {
+      expect(outputArray[101]).equals(
+        'The text at the end of this sentence is cross referenced to link:#_other_table[Table]',
+      );
+      done();
+    });
+    it('Testing Link inside a List', done => {
+      expect(outputArray[25]).equals(
+        '.. If you don&#8217;t have a Confluence server, you can use a Docker container (e.i.: link:https://registry.hub.docker.com/u/cptactionhank/atlassian-confluence/[https://registry.hub.docker.com/u/cptactionhank/atlassian-confluence/] ), the option requires therefore an Atlassian account so it can generate a trial licence key.',
       );
       done();
     });
@@ -377,6 +420,38 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
       expect(outputArray[108].trim()).equals('<p>anidadaotravez2</p>');
       done();
     });
+    it('Testing Table', done => {
+      expect(outputArray[81]).equals(
+        '<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>',
+      );
+      done();
+    });
+    it('Testing Link inside a Table cell', done => {
+      expect(outputArray[83]).equals(
+        '<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.google.es">Google</a></p></td>',
+      );
+      done();
+    });
+    it('Testing paragraphs, cursive, bold', done => {
+      expect(outputArray[51]).equals(
+        '<p>The <sub>quick</sub> <strong>brown fox</strong> <strong><em>jumps</em></strong> <strong>over</strong> the lazy <span class="underline">dog.</span></p>',
+      );
+      done();
+    });
+    it('Testing Image inside a link', done => {
+      expect(outputArray[47]).equals(
+        '<a class="image" href="http://www.google.com"><img src="images/fox.png" alt="Red Fox"></a>',
+      );
+      done();
+    });
+    it('Testing Image source file exists', done => {
+      try {
+        fs.accessSync(outputFolder + 'images/fox.png', fs.constants.R_OK);
+        done();
+      } catch (error) {
+        done(error + ' image error');
+      }
+    });
   });
   //-----------------------------------------------------------------------------------------
   describe('Output to PDF brownfox2', () => {
@@ -412,9 +487,9 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
       done();
     });
   });
-  /* //MERGE---------------------------------------------------------
-  describe('Testing the merge of two files', () => {
-    it('should combine 2 asciidoc in one', done => {
+  //MERGE---------------------------------------------------------
+  describe('Testing MergerImpl.merge function', () => {
+    it('The file is created with the result of the merge', done => {
       const sources: IndexSource[] = [
         { key: 'input-data1', kind: 'asciidoc', source: 'mocks/input-data1' },
         { key: 'input-data2', kind: 'asciidoc', source: 'mocks/input-data2' },
@@ -438,12 +513,12 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
 
       const merger1 = new MergerImpl();
       const textoutMerger: TextOut = new AsciiDocFileTextOut(
-        'mocks/mergerResult',
+        outputFolder + '/mergerResult',
       );
       merger1
         .merge(textinsources, index, textoutMerger)
         .then(() => {
-          if (expect(fs.existsSync('mocks/mergerResult.adoc'))) {
+          if (expect(fs.existsSync(outputFolder + '/mergerResult.adoc'))) {
             done();
           } else {
             done(new Error("Files haven't been merged"));
@@ -454,8 +529,24 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
             done();
           } else done(error);
         });
+      it('the file created content is correct', done => {
+        //read the output file
+        outputResult = fs.readFileSync(
+          outputFolder + '/mergerResult.adoc',
+          'utf8',
+        );
+        //result file not empty
+        expect(outputResult).length.to.not.equal(0);
+        outputArray = [];
+        outputArray = outputResult.split('\n');
+        //the content file includes the first file
+        expect(outputArray[4]).includes('= Example Manual');
+        //includes the second file
+        expect(outputArray[125]).includes('*** anidadaotravez2');
+        done();
+      });
     });
-  }); */
+  });
 
   after(() => {
     try {
