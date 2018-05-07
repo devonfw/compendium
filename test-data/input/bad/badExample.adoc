@@ -1,0 +1,21 @@
+
+
+.  
+. link:index.html[Jump the queue]
+.  
+
+
+=  image::images/icons/contenttypes/home_page_16.png[Home Page] Jump the queue : Jump the queue Home 
+
+imag::images/icons/contenttypes/home_page_16.png[Home Page]
+
+= 8. Glossary of terms*
+
+|==================
+| Term | Description 
+| Access code | This is the turn number assigned to a person 
+| Validation code | It is a code used to confirm the validity of the email or telephone number informed by the user 
+ Estimated time | Stands for the time that the system calculates when the person in the queue will be attended 
+| Attention time | This is the time that it takes for a user to be attended. It is calculated as the difference between the start and the end of the attention 
+| Priority access | It is the access granted to privileged users so they can be attended earlier 
+|==================

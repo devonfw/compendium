@@ -3,12 +3,12 @@
     {
       "key": "input-data1",
       "kind": "asciidoc",
-      "source": "./mocks/input-data1"
+      "source": "./test-data/input/input-data1"
     },
     {
       "key": "input-data2",
       "kind": "asciidoc",
-      "source": "./mocks/input-data2"
+      "source": "./test-data/input/input-data2"
     }
   ],
   "nodes": [

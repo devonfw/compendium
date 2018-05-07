@@ -47,23 +47,12 @@ let outputResult: string;
 let outputArray: string[];
 
 //paths only test
-let testDir1: string = './mocks';
-let testDir2: string = './mocks/input-data1';
-let testDir3: string = './mocks/input-data2';
-let testDir4: string = './mocks/input-data2/images';
-let testDir5: string = './mocks/input-data1/images';
-let testFile1: string = './mocks/config.json';
-let testFile3: string = './mocks/input-data1/manual.adoc';
-let testFile2: string = './mocks/input-data2/brownfox2.adoc';
 let pathImage: string = './test-data/input/images/fox.png';
 const pathImageSunset: string = './test-data/input/images/sunset.jpg';
 const pathConfigFile = './test-data/input/config.json';
 const pathAdoc1 = './test-data/input/brownfox2.adoc';
 const pathAdoc2 = './test-data/input/manual.adoc';
 const outputFolder = './test-data/output/';
-
-let testListFiles: string[] = [testFile1, testFile2, testFile3];
-let testListDir: string[] = [testDir1, testDir2, testDir3, testDir4, testDir5];
 
 /**
  * 2 asciidoc documents: brownfox2.adoc and manual.adoc
@@ -74,28 +63,11 @@ let testListDir: string[] = [testDir1, testDir2, testDir3, testDir4, testDir5];
  * Libraries Mocha, util, fs, shelljs, fs-extra and chai
  */
 describe('Testing the asciidoc input and the pdf, html, asciidoc Output with good case scenarios', () => {
-  before(() => {
-    //build the mocks with config file
-    try {
-      shelljs.mkdir('-p', testListDir);
-      shelljs.touch(testListFiles);
-      const content1 = fs.readFileSync(pathConfigFile);
-      fs.writeFileSync(testFile1, content1);
-      const content2 = fs.readFileSync(pathAdoc1);
-      fs.writeFileSync(testFile2, content2);
-      const content3 = fs.readFileSync(pathAdoc2);
-      fs.writeFileSync(testFile3, content3, 'utf8');
-      //images
-      shelljs.cp(pathImage, './mocks/input-data2/images/fox.png');
-      shelljs.cp(pathImageSunset, './mocks/input-data1/images/sunset.jpg');
-    } catch (err) {
-      throw err;
-    }
-  });
+  before(() => {});
 
   describe('Testing Config File function', () => {
     it('Should show', done => {
-      docconfig = new ConfigFile(testFile1);
+      docconfig = new ConfigFile(pathConfigFile);
       docconfig
         .getIndex()
         .then(index => {
@@ -109,11 +81,11 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
 
           expect(index[0][0].key).equals('input-data1');
           expect(index[0][0].kind).equals('asciidoc');
-          expect(index[0][0].source).equals('./mocks/input-data1');
+          expect(index[0][0].source).equals('./test-data/input/input-data1');
 
           expect(index[0][1].key).equals('input-data2');
           expect(index[0][1].kind).equals('asciidoc');
-          expect(index[0][1].source).equals('./mocks/input-data2');
+          expect(index[0][1].source).equals('./test-data/input/input-data2');
 
           expect(index[1][0].key).equals('input-data1');
           expect(index[1][0].index).equals('manual.adoc');
@@ -491,8 +463,16 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
   describe('Testing MergerImpl.merge function', () => {
     it('The file is created with the result of the merge', done => {
       const sources: IndexSource[] = [
-        { key: 'input-data1', kind: 'asciidoc', source: 'mocks/input-data1' },
-        { key: 'input-data2', kind: 'asciidoc', source: 'mocks/input-data2' },
+        {
+          key: 'input-data1',
+          kind: 'asciidoc',
+          source: 'test-data/input/input-data1',
+        },
+        {
+          key: 'input-data2',
+          kind: 'asciidoc',
+          source: 'test-data/input/input-data2',
+        },
       ];
 
       const nodes: IndexNode[] = [
@@ -505,10 +485,10 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
       const textinsources: TextInSources = {};
 
       textinsources['input-data1'] = new AsciiDocFileTextIn(
-        'mocks/input-data1',
+        'test-data/input/input-data1',
       );
       textinsources['input-data2'] = new AsciiDocFileTextIn(
-        'mocks/input-data2',
+        'test-data/input/input-data2',
       );
 
       const merger1 = new MergerImpl();
@@ -548,11 +528,5 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
     });
   });
 
-  after(() => {
-    try {
-      shelljs.rm('-rf', testDir1);
-    } catch (error) {
-      throw error;
-    }
-  });
+  after(() => {});
 });
