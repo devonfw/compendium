@@ -1,0 +1,2 @@
+The text at the end of this sentence is cross referenced to <<_other_table,Table>>
+

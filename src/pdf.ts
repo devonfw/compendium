@@ -110,7 +110,7 @@ export class PdfFileTextOut implements TextOut {
                 </body>
                 </html>`;
       //pdf only works in the project folder
-      const fileName = this.getNameOfFileOnly(this.outputFile);
+      const fileName = this.getNameOfFileOnly();
       const htmlToPdf = require('html-to-pdf');
       htmlToPdf.setInputEncoding('UTF-8');
       htmlToPdf.setOutputEncoding('UTF-8');
@@ -118,13 +118,17 @@ export class PdfFileTextOut implements TextOut {
         htmlToPdf.convertHTMLString(
           docWithStyle,
           fileName + '.pdf',
-          (error: any, success: any) => {
+          async (error: any, success: any) => {
             if (error) {
               console.log(error);
             }
             if (success) {
               //we move the path to the user output path
-              this.createPdfInRightFolder(fileName);
+              try {
+                this.createPdfInRightFolder(fileName);
+              } catch (error) {
+                console.log(error);
+              }
             }
           },
         );
@@ -137,13 +141,13 @@ export class PdfFileTextOut implements TextOut {
   /**
    * moveTheImages
    * Move the images and remove the folder
-   * @private
+   * @public
    * @returns {string}
    * @memberof PdfFileTextOut
    */
-  private getNameOfFileOnly(filename: string): string {
-    const arrayDir = filename.split('/');
-    let result = filename;
+  public getNameOfFileOnly(): string {
+    const arrayDir = this.outputFile.split('/');
+    let result = this.outputFile;
     if (arrayDir.length > 1) {
       result = arrayDir[arrayDir.length - 1];
     }
@@ -152,7 +156,7 @@ export class PdfFileTextOut implements TextOut {
   /**
    * moveTheImages
    * Move the images and remove the folder
-   * @private
+   * @public
    * @returns {boolean}
    * @memberof PdfFileTextOut
    */
@@ -161,13 +165,13 @@ export class PdfFileTextOut implements TextOut {
       let copyPromisify = util.promisify(fs.copyFile);
       await copyPromisify(filename + '.pdf', this.outputFile + '.pdf');
     } catch (e) {
-      console.log(e);
+      throw e;
     }
     try {
       let unlinkPromisify = util.promisify(fs.unlink);
       await unlinkPromisify(filename + '.pdf');
     } catch (e) {
-      console.log(e);
+      throw e;
     }
   }
   /**

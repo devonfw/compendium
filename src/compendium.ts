@@ -75,29 +75,20 @@ let configFile, outputFile, multiple, outputFormat, inputFormat;
         (outputFormat && cli._.length < 1) ||
         (outputFormat === 'asciidoc' && cli._.length === 1)
       ) {
-        if (
-          outputFormat === 'pdf' &&
-          (outputFile.includes('/') || outputFile.includes('\\'))
-        ) {
-          console.error(
-            "\nThe pdf output file can't be created in other directory. Please introduce only the file name.\n",
-          );
-        } else {
-          console.log(
-            'Input file type: ' +
-              inputFormat +
-              '\nOutput file type: ' +
-              outputFormat +
-              '\nConfig: ' +
-              configFile +
-              '\nOutput: ' +
-              outputFile,
-          );
-          try {
-            await doCompendium(configFile, outputFormat, outputFile);
-          } catch (e) {
-            console.error(chalk.red(e.message));
-          }
+        console.log(
+          'Input file type: ' +
+            inputFormat +
+            '\nOutput file type: ' +
+            outputFormat +
+            '\nConfig: ' +
+            configFile +
+            '\nOutput: ' +
+            outputFile,
+        );
+        try {
+          await doCompendium(configFile, outputFormat, outputFile);
+        } catch (e) {
+          console.error(chalk.red(e.message));
         }
       } else if (multiple) {
         console.log('Not implemented yet');

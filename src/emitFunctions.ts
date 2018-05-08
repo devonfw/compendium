@@ -170,7 +170,7 @@ export class EmitElement {
   public static emitLink(myLink: Link) {
     const output: Array<string> = [];
     if ((myLink.text as InlineImage).kind === 'inlineimage') {
-      output.push('image::');
+      output.push('image:');
       output.push((myLink.text as InlineImage).img);
       output.push('[');
       output.push((myLink.text as InlineImage).title);
@@ -197,7 +197,7 @@ export class EmitElement {
   public static emitImage(myText: InlineImage) {
     const output: Array<string> = [];
 
-    output.push('image::');
+    output.push('image:');
     output.push(myText.img);
     output.push('[');
     output.push(myText.title);

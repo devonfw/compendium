@@ -6,9 +6,9 @@ toc::[]
 .  
 
 
-=  image::images/icons/contenttypes/home_page_16.png[Home Page] Jump the queue : Jump the queue Home  
+=  image:images/icons/contenttypes/home_page_16.png[Home Page] Jump the queue : Jump the queue Home  
 
-image::images/icons/contenttypes/home_page_16.png[Home Page]
+image:images/icons/contenttypes/home_page_16.png[Home Page]
 
 
 
@@ -56,7 +56,7 @@ Roughly, the entire process that a user will follow to obtain and consult the ac
 
 
 
-image::https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-36-29.png?version=1&amp;modificationDate=1516955789577&amp;api=v2&amp;effects=drop-shadow[]
+image:https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-36-29.png?version=1&amp;modificationDate=1516955789577&amp;api=v2&amp;effects=drop-shadow[]
 
 The main actors that will interact with jump the queue component will be the following:
 
@@ -72,7 +72,7 @@ In the next points, we can see the details of the user stories that define the m
 
 We can see the proposed user story map at the following figure.
 
-image::https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-37-41.png?version=1&amp;modificationDate=1516955861762&amp;api=v2[]
+image:https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-37-41.png?version=1&amp;modificationDate=1516955861762&amp;api=v2[]
 
 == *Epic 1. Get a number*
 
@@ -223,7 +223,7 @@ The user stories that define this are:
 
 We proposed the following sitemap and screen structures to support the requirements that solution shall fulfill.
 
-image::https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-48-33.png?version=1&amp;modificationDate=1516956514172&amp;api=v2[]
+image:https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-48-33.png?version=1&amp;modificationDate=1516956514172&amp;api=v2[]
 
 
 
@@ -231,17 +231,17 @@ image::https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image
 
 2º Request/ Insert code. This functionality represents the process to be followed by a user to obtain a ticket number. The proposed screen will only apply to visitor users because existing users will have a direct access to step 3.
 
-image::https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-49-10.png?version=1&amp;modificationDate=1516956550552&amp;api=v2[]
+image:https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-49-10.png?version=1&amp;modificationDate=1516956550552&amp;api=v2[]
 
 3º Assigned Order / Show Queue. Here, the user can consult its number and the list of people in the queue.
 
-image::https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-49-26.png?version=1&amp;modificationDate=1516956566623&amp;api=v2[]
+image:https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-49-26.png?version=1&amp;modificationDate=1516956566623&amp;api=v2[]
 
 
 
 Finally, the owner of the queue can consult and pass the turn with the consult screen and with a button at the screen or pressing a physical button.
 
-image::https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-49-43.png?version=1&amp;modificationDate=1516956584276&amp;api=v2[]
+image:https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-49-43.png?version=1&amp;modificationDate=1516956584276&amp;api=v2[]
 
 
 
@@ -251,7 +251,7 @@ image::https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image
 
 Starting from the list of user stories, we found the below entities to support them.
 
-image::https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-50-14.png?version=1&amp;modificationDate=1516956614879&amp;api=v2[]
+image:https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-50-14.png?version=1&amp;modificationDate=1516956614879&amp;api=v2[]
 
 
 
@@ -340,7 +340,7 @@ In the figure below we have three domains, one for each related Epic.
 
 
 
-image::https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-51-56.png?version=1&amp;modificationDate=1516956716766&amp;api=v2[]
+image:https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image2018-1-26_9-51-56.png?version=1&amp;modificationDate=1516956716766&amp;api=v2[]
 
 
 
@@ -358,7 +358,7 @@ image::https://confluence.s2-eu.capgemini.com/download/attachments/4328086/image
 
 == Recent space activity
 
-        image::images/icons/profilepics/anonymous.png[]   Anonymous       link:Jump-the-queue-Home_2163154.html[Jump the queue Home]  updated Feb 02, 2018 link:/confluence/pages/diffpagesbyversion.action?pageId=2163154&selectedPageVersions=8&selectedPageVersions=7[view change]       image::images/icons/profilepics/anonymous.png[]   Anonymous       link:Jump-the-queue-Home_2163185.html[Jump the queue Home]  updated Feb 01, 2018 link:/confluence/pages/diffpagesbyversion.action?pageId=2163154&selectedPageVersions=7&selectedPageVersions=6[view change]       
+        image:images/icons/profilepics/anonymous.png[]   Anonymous       link:Jump-the-queue-Home_2163154.html[Jump the queue Home]  updated Feb 02, 2018 link:/confluence/pages/diffpagesbyversion.action?pageId=2163154&selectedPageVersions=8&selectedPageVersions=7[view change]       image:images/icons/profilepics/anonymous.png[]   Anonymous       link:Jump-the-queue-Home_2163185.html[Jump the queue Home]  updated Feb 01, 2018 link:/confluence/pages/diffpagesbyversion.action?pageId=2163154&selectedPageVersions=7&selectedPageVersions=6[view change]       
 
 == Space contributors
 

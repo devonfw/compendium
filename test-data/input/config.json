@@ -19,6 +19,46 @@
     {
       "key": "input-data2",
       "index": "brownfox2.adoc"
+    },
+    {
+      "key": "input-data2",
+      "index": "paragraph1.adoc"
+    },
+    {
+      "key": "input-data2",
+      "index": "paragraph2.adoc"
+    },
+    {
+      "key": "input-data2",
+      "index": "image.adoc"
+    },
+    {
+      "key": "input-data2",
+      "index": "tableList.adoc"
+    },
+    {
+      "key": "input-data1",
+      "index": "code.adoc"
+    },
+    {
+      "key": "input-data1",
+      "index": "image.adoc"
+    },
+    {
+      "key": "input-data1",
+      "index": "link.adoc"
+    },
+    {
+      "key": "input-data1",
+      "index": "cross.adoc"
+    },
+    {
+      "key": "input-data1",
+      "index": "ol.adoc"
+    },
+    {
+      "key": "input-data1",
+      "index": "admonitions.adoc"
     }
   ]
 }
