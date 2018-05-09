@@ -28,14 +28,14 @@ export class MergerImpl implements Merger {
       if (textinSources[node.key]) {
         try {
           transcripts.push(
-            await textinSources[node.key].getTranscript(node.index),
+            await textinSources[node.key].getTranscript(node.file),
           );
         } catch (err) {
           throw new Error(err.message);
         }
       } else {
         const error_msg =
-          "Node with id '" + node.index + "' doesn't have an existing source";
+          "Node with id '" + node.file + "' doesn't have an existing source";
         throw new Error(error_msg);
       }
     }

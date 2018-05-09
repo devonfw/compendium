@@ -75,10 +75,10 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
           index1 = index;
           assert.isArray(index, 'Index must be an array');
           assert.isArray(index[0], 'Souces must be an array');
-          assert.isArray(index[1], 'Nodes must be an array');
+          assert.isArray(index[1], 'Files must be an array');
 
           expect(index[0]).have.lengthOf(2, 'There are two sources');
-          expect(index[1]).have.lengthOf(12, 'There are two nodes');
+          expect(index[1]).have.lengthOf(12, 'There are 12 files');
 
           expect(index[0][0].key).equals('input-data1');
           expect(index[0][0].kind).equals('asciidoc');
@@ -89,10 +89,10 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
           expect(index[0][1].source).equals('./test-data/input/input-data2');
 
           expect(index[1][0].key).equals('input-data1');
-          expect(index[1][0].index).equals('manual.adoc');
+          expect(index[1][0].file).equals('manual.adoc');
 
           expect(index[1][1].key).equals('input-data2');
-          expect(index[1][1].index).equals('brownfox2.adoc');
+          expect(index[1][1].file).equals('brownfox2.adoc');
 
           done();
         })
@@ -108,7 +108,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
         index1[0][1].source,
       );
       textinSources[index1[1][2].key]
-        .getTranscript(index1[1][2].index)
+        .getTranscript(index1[1][2].file)
         .then(transcript => {
           transcripts = [];
           transcripts.push(transcript);
@@ -160,7 +160,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
         index1[0][1].source,
       );
       textinSources[index1[1][4].key]
-        .getTranscript(index1[1][4].index)
+        .getTranscript(index1[1][4].file)
         .then(transcript => {
           transcripts.push(transcript);
           const imageLine = transcript.segments[0];
@@ -225,7 +225,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
         index1[0][1].source,
       );
       textinSources[index1[1][3].key]
-        .getTranscript(index1[1][3].index)
+        .getTranscript(index1[1][3].file)
         .then(transcript => {
           transcripts.push(transcript);
           const p: TextSegment = transcript.segments[0];
@@ -296,7 +296,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
         index1[0][1].source,
       );
       textinSources[index1[1][5].key]
-        .getTranscript(index1[1][5].index)
+        .getTranscript(index1[1][5].file)
         .then(transcript => {
           transcripts.push(transcript);
           //test table column width
@@ -383,7 +383,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
         index1[0][0].source,
       );
       textinSources[index1[1][6].key]
-        .getTranscript(index1[1][6].index)
+        .getTranscript(index1[1][6].file)
         .then(transcript => {
           transcripts.push(transcript);
           const telement1 = (transcript.segments[0] as Paragraph)
@@ -423,7 +423,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
         index1[0][0].source,
       );
       textinSources[index1[1][7].key]
-        .getTranscript(index1[1][7].index)
+        .getTranscript(index1[1][7].file)
         .then(transcript => {
           transcripts.push(transcript);
           const image = (transcript.segments[0] as Paragraph)
@@ -467,7 +467,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
         index1[0][0].source,
       );
       textinSources[index1[1][10].key]
-        .getTranscript(index1[1][10].index)
+        .getTranscript(index1[1][10].file)
         .then(transcript => {
           transcripts.push(transcript);
           const listObject1: TextSegment = transcript.segments[0];
@@ -517,7 +517,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
         index1[0][0].source,
       );
       textinSources[index1[1][8].key]
-        .getTranscript(index1[1][8].index)
+        .getTranscript(index1[1][8].file)
         .then(transcript => {
           transcripts.push(transcript);
           const linkObject1 = transcript.segments[0] as Paragraph;
@@ -560,7 +560,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
         index1[0][0].source,
       );
       textinSources[index1[1][9].key]
-        .getTranscript(index1[1][9].index)
+        .getTranscript(index1[1][9].file)
         .then(transcript => {
           transcripts.push(transcript);
           const crossObject1 = (transcript.segments[0] as Paragraph)
@@ -601,7 +601,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
         index1[0][1].source,
       );
       textinSources[index1[1][1].key]
-        .getTranscript(index1[1][1].index)
+        .getTranscript(index1[1][1].file)
         .then(transcript => {
           transcripts = [];
           transcripts.push(transcript);
@@ -638,12 +638,12 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
         },
       ];
 
-      const nodes: IndexNode[] = [
-        { key: 'input-data1', index: 'manual.adoc' },
-        { key: 'input-data2', index: 'brownfox2.adoc', sections: [''] },
+      const files: IndexNode[] = [
+        { key: 'input-data1', file: 'manual.adoc' },
+        { key: 'input-data2', file: 'brownfox2.adoc', sections: [''] },
       ];
 
-      const index: Index = [sources, nodes];
+      const index: Index = [sources, files];
 
       const textinsources: TextInSources = {};
 

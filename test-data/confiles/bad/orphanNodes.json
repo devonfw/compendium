@@ -11,14 +11,14 @@
       "source": "./mocks/input-data2"
     }
   ],
-  "nodes": [
+  "files": [
     {
       "key": "input-data1",
-      "index": "manual.adoc"
+      "file": "manual.adoc"
     },
     {
       "key": "input-data3",
-      "index": "brownfox2.adoc"
+      "file": "brownfox2.adoc"
     }
   ]
 }

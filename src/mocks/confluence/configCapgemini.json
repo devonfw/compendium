@@ -1,18 +1,18 @@
 {
-    "sources": [       
-        {
-            "key": "internal",
-            "kind": "confluence",
-            "source": "https://adcenter.pl.s2-eu.capgemini.com/confluence/",
-            "space": "JQ",
-            "context": "capgemini"
-        }
-    ],
-    "nodes": [
-        {
-            "key": "internal",
-            "kind": "confluence",
-            "index": "Jump+the+queue+Home"
-        }
-    ]
+  "sources": [
+    {
+      "key": "internal",
+      "kind": "confluence",
+      "source": "https://adcenter.pl.s2-eu.capgemini.com/confluence/",
+      "space": "JQ",
+      "context": "capgemini"
+    }
+  ],
+  "files": [
+    {
+      "key": "internal",
+      "kind": "confluence",
+      "file": "Jump+the+queue+Home"
+    }
+  ]
 }

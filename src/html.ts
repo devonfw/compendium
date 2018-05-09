@@ -46,14 +46,18 @@ export class HtmlFileTextOut implements TextOut {
         }
         outputDir2 = outputDir.join('/');
       }
-      let copyPromisify = util.promisify(extrafs.copy);
-      copyPromisify('./imageTemp', outputDir2)
-        .then(() => {
-          shelljs.rm('-rf', 'imageTemp');
-        })
-        .catch(err => {
-          if (err.code !== 'ENOENT') console.log(err.message);
-        });
+      try {
+        let copyPromisify = util.promisify(extrafs.copy);
+        await copyPromisify('./imageTemp', outputDir2);
+        shelljs.rm('-rf', 'imageTemp');
+      } catch (err) {
+        if (
+          err.code !== 'ENOENT' &&
+          err.code !== 'ENOTEMPTY' &&
+          err.code !== 'EBUSY'
+        )
+          console.log(err.message);
+      }
     }
 
     const outputString: Array<any> = [];

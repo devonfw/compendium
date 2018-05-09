@@ -11,54 +11,54 @@
       "source": "./test-data/input/input-data2"
     }
   ],
-  "nodes": [
+  "files": [
     {
       "key": "input-data1",
-      "index": "manual.adoc"
+      "file": "manual.adoc"
     },
     {
       "key": "input-data2",
-      "index": "brownfox2.adoc"
+      "file": "brownfox2.adoc"
     },
     {
       "key": "input-data2",
-      "index": "paragraph1.adoc"
+      "file": "paragraph1.adoc"
     },
     {
       "key": "input-data2",
-      "index": "paragraph2.adoc"
+      "file": "paragraph2.adoc"
     },
     {
       "key": "input-data2",
-      "index": "image.adoc"
+      "file": "image.adoc"
     },
     {
       "key": "input-data2",
-      "index": "tableList.adoc"
+      "file": "tableList.adoc"
     },
     {
       "key": "input-data1",
-      "index": "code.adoc"
+      "file": "code.adoc"
     },
     {
       "key": "input-data1",
-      "index": "image.adoc"
+      "file": "image.adoc"
     },
     {
       "key": "input-data1",
-      "index": "link.adoc"
+      "file": "link.adoc"
     },
     {
       "key": "input-data1",
-      "index": "cross.adoc"
+      "file": "cross.adoc"
     },
     {
       "key": "input-data1",
-      "index": "ol.adoc"
+      "file": "ol.adoc"
     },
     {
       "key": "input-data1",
-      "index": "admonitions.adoc"
+      "file": "admonitions.adoc"
     }
   ]
 }

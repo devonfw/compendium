@@ -57,11 +57,11 @@ export class ConfigFile implements DocConfig {
     }
 
     const indexNodes: IndexNode[] = [];
-    for (const node of data.nodes) {
+    for (const node of data.files) {
       if (Utilities.checkNodeValuesJSON(node)) {
         const indexNode: IndexNode = {
           key: node.key,
-          index: node.index,
+          file: node.file,
         };
         if (
           node.sections !== null &&
@@ -73,14 +73,14 @@ export class ConfigFile implements DocConfig {
           } else {
             console.log(
               'The array of sections in ' +
-                node.index +
+                node.file +
                 ' is malformed. All document will be loaded.\n',
             );
           }
         }
         indexNodes.push(indexNode);
       } else {
-        throw new Error("JSON: Some nodes don't have a valid property/value");
+        throw new Error("JSON: Some files don't have a valid property/value");
       }
     }
     const index: Index = [indexSources, indexNodes];

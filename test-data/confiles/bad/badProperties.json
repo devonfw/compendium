@@ -6,10 +6,10 @@
       "source": "./mocks/input-data1"
     }
   ],
-  "nodes": [
+  "files": [
     {
       "key": "input-data1",
-      "index": "manual.adoc"
+      "file": "manual.adoc"
     }
   ]
 }

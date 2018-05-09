@@ -115,7 +115,7 @@ export interface IndexSource {
 
 export interface IndexNode {
   key: string;
-  index: string;
+  file: string;
   sections?: string[];
 }
 

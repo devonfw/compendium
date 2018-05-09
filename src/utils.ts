@@ -58,8 +58,8 @@ export class Utilities {
     if (
       nodeJSON.key &&
       nodeJSON.key !== '' &&
-      nodeJSON.index &&
-      nodeJSON.index !== ''
+      nodeJSON.file &&
+      nodeJSON.file !== ''
     ) {
       return true;
     } else {

@@ -1,18 +1,18 @@
 {
-    "sources": [
-        {
-            "key": "external",
-            "kind": "confluence",
-            "source": "http://localhost:8090/",
-            "space": "COM",
-            "context": "other"
-        }
-    ],
-    "nodes": [
-        {
-            "key": "external",
-            "kind": "confluence",
-            "index": "hello+world"
-        }
-    ]
+  "sources": [
+    {
+      "key": "external",
+      "kind": "confluence",
+      "source": "http://localhost:8090/",
+      "space": "COM",
+      "context": "other"
+    }
+  ],
+  "files": [
+    {
+      "key": "external",
+      "kind": "confluence",
+      "file": "hello+world"
+    }
+  ]
 }
