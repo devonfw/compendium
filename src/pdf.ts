@@ -37,7 +37,7 @@ export class PdfFileTextOut implements TextOut {
    */
   public async generate(data: Array<Transcript>): Promise<void> {
     try {
-      this.moveTheImages();
+      await this.moveTheImages();
     } catch (err) {
       throw err;
     }
@@ -181,19 +181,14 @@ export class PdfFileTextOut implements TextOut {
    * @returns {Promise<void>}
    * @memberof PdfFileTextOut
    */
-  public async moveTheImages() {
-    if (EmitElement.dirExists('./imageTemp/')) {
+  public async moveTheImages(): Promise<void> {
+    if (await EmitElement.dirExists('imageTemp')) {
       try {
         let copyPromisify = util.promisify(extrafs.copy);
         await copyPromisify('./imageTemp', './');
         shelljs.rm('-rf', 'imageTemp');
       } catch (err) {
-        if (
-          err.code !== 'ENOENT' &&
-          err.code !== 'ENOTEMPTY' &&
-          err.code !== 'EBUSY'
-        )
-          console.log(err.message);
+        console.log(err.message);
       }
     }
   }

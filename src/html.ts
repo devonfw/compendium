@@ -34,30 +34,10 @@ export class HtmlFileTextOut implements TextOut {
    * @memberof HtmlFileTextOut
    */
   public async generate(data: Array<Transcript>): Promise<void> {
-    if (EmitElement.dirExists('./imageTemp/')) {
-      const arrayDir = this.outputFile.split('/');
-      const outputDir: Array<string> = [];
-      outputDir.push('./');
-      let outputDir2 = '';
-      if (arrayDir.length > 1) {
-        arrayDir.splice(-1, 1);
-        for (const piece of arrayDir) {
-          outputDir.push(piece);
-        }
-        outputDir2 = outputDir.join('/');
-      }
-      try {
-        let copyPromisify = util.promisify(extrafs.copy);
-        await copyPromisify('./imageTemp', outputDir2);
-        shelljs.rm('-rf', 'imageTemp');
-      } catch (err) {
-        if (
-          err.code !== 'ENOENT' &&
-          err.code !== 'ENOTEMPTY' &&
-          err.code !== 'EBUSY'
-        )
-          console.log(err.message);
-      }
+    try {
+      await this.moveImages();
+    } catch (error) {
+      throw error;
     }
 
     const outputString: Array<any> = [];
@@ -92,7 +72,6 @@ export class HtmlFileTextOut implements TextOut {
         }
         outputString.push('\n\n');
       }
-
       const myOutput = this.asciidoctor.convert(outputString.join(''), {
         attributes: { showtitle: true, doctype: 'book' },
       });
@@ -137,5 +116,27 @@ export class HtmlFileTextOut implements TextOut {
     }
 
     this.done = true;
+  }
+  private async moveImages(): Promise<void> {
+    if (await EmitElement.dirExists('imageTemp')) {
+      const arrayDir = this.outputFile.split('/');
+      const outputDir: Array<string> = [];
+      outputDir.push('./');
+      let outputDir2 = '';
+      if (arrayDir.length > 1) {
+        arrayDir.splice(-1, 1);
+        for (const piece of arrayDir) {
+          outputDir.push(piece);
+        }
+        outputDir2 = outputDir.join('/');
+      }
+      try {
+        let copyPromisify = util.promisify(extrafs.copy);
+        await copyPromisify('./imageTemp', outputDir2);
+        shelljs.rm('-rf', 'imageTemp');
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
   }
 }

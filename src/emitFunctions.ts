@@ -311,10 +311,10 @@ export class EmitElement {
    * @returns
    * @memberof AsciiDocFileTextOut
    */
-  public static async dirExists(filename: string) {
+  public static async dirExists(filename: string): Promise<boolean> {
     try {
-      let accessPromisify = util.promisify(fs.access);
-      await accessPromisify(filename);
+      let accessPromisify = util.promisify(fs.stat);
+      let stats = await accessPromisify(filename);
       return true;
     } catch (e) {
       return false;

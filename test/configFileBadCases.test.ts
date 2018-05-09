@@ -58,13 +58,7 @@ const badConfigFolder = './test-data/confiles/bad/';
  * Mocks are located in the @param {string} outputFolder
  */
 describe('Testing the asciidoc input and the pdf, html, asciidoc Output with BAD case scenarios', () => {
-  before(() => {
-    //build the mocks with config file
-    try {
-    } catch (err) {
-      throw err;
-    }
-  });
+  before(() => {});
   describe('Bad Config Files testing docconfig.getIndex method', () => {
     it('Bad properties', done => {
       const errorMessageResult = 'JSON: Some sources have the wrong property';

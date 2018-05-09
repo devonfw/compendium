@@ -26,6 +26,7 @@ import {
 import * as fs from 'fs';
 import * as shelljs from 'shelljs';
 import * as util from 'util';
+import * as extrafs from 'fs-extra';
 import { EmitElement } from './emitFunctions';
 
 export class ParseLocal {
@@ -562,13 +563,17 @@ export class ParseLocal {
       } catch (error) {
         console.log(error);
       }
-
       if (!exist) {
         try {
           let copyPromisify = util.promisify(fs.copyFile);
           await copyPromisify(this.base + '/' + dir, 'imageTemp/' + dir);
         } catch (err) {
-          console.log(err.message);
+          if (
+            err.code !== 'ENOENT' &&
+            err.code !== 'ENOTEMPTY' &&
+            err.code !== 'EBUSY'
+          )
+            console.log(err.message);
         }
       }
     }
@@ -581,10 +586,10 @@ export class ParseLocal {
    * @returns
    * @memberof AsciiDocFileTextOut
    */
-  private static async dirExists(filename: string) {
+  private static async dirExists(filename: string): Promise<boolean> {
     try {
-      let accessPromisify = util.promisify(fs.access);
-      await accessPromisify(filename, fs.constants.F_OK);
+      let accessPromisify = util.promisify(fs.stat);
+      let stats = await accessPromisify(filename);
       return true;
     } catch (e) {
       return false;
