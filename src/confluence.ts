@@ -29,7 +29,7 @@ import {
 import * as fs from 'fs';
 import { ConfluenceServiceImpl } from './confluenceService';
 import { ConfluenceServiceImplMock } from './mocks/impl';
-import { ParseConfluence } from './parseConfluence';
+import { ParseLocal } from './parseLocal';
 
 /*
     The basepath has to have this format: https://adcenter.pl.s2-eu.capgemini.com/confluence/
@@ -146,7 +146,7 @@ export class ConfluenceTextIn implements TextIn {
       if (htmlView) {
         const tree = this.htmlparse.parse(htmlView);
         for (const branch of tree) {
-          const temp = await ParseConfluence.recursive(branch);
+          const temp = await ParseLocal.recursive(branch);
           for (const final of temp) {
             end.push(final);
           }

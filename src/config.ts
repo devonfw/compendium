@@ -34,11 +34,11 @@ export class ConfigFile implements DocConfig {
       for (const source of data.sources) {
         if (Utilities.checkSourceValuesJSON(source)) {
           const indexSource: IndexSource = {
-            key: source.key,
-            kind: source.kind,
+            reference: source.reference,
+            source_type: source.source_type,
             source: source.source,
           };
-          if (source.kind === 'confluence') {
+          if (source.source_type === 'confluence') {
             indexSource.space = source.space;
             indexSource.context = source.context;
           }
@@ -50,18 +50,18 @@ export class ConfigFile implements DocConfig {
         }
       }
     } else throw new Error('JSON: Some sources have the wrong property');
-    if (Utilities.checkDuplicateKeys(indexSources)) {
+    if (Utilities.checkDuplicateReferences(indexSources)) {
       throw new Error(
-        'JSON: Data inconsistency, some sources have the same key.',
+        'JSON: Data inconsistency, some sources have the same reference.',
       );
     }
 
     const indexNodes: IndexNode[] = [];
-    for (const node of data.files) {
+    for (const node of data.documents) {
       if (Utilities.checkNodeValuesJSON(node)) {
         const indexNode: IndexNode = {
-          key: node.key,
-          file: node.file,
+          reference: node.reference,
+          document: node.document,
         };
         if (
           node.sections !== null &&
@@ -73,20 +73,22 @@ export class ConfigFile implements DocConfig {
           } else {
             console.log(
               'The array of sections in ' +
-                node.file +
+                node.document +
                 ' is malformed. All document will be loaded.\n',
             );
           }
         }
         indexNodes.push(indexNode);
       } else {
-        throw new Error("JSON: Some files don't have a valid property/value");
+        throw new Error(
+          "JSON: Some documents don't have a valid property/value",
+        );
       }
     }
     const index: Index = [indexSources, indexNodes];
-    if (!Utilities.checkFileKeysConsistency(index)) {
+    if (!Utilities.checkDocumentsRefConsistency(index)) {
       throw new Error(
-        'JSON: Data inconsistency, some files keys are not matching with the sources.',
+        'JSON: Data inconsistency, some documents references are not matching with the sources.',
       );
     }
     return index;

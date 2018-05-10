@@ -1,64 +1,64 @@
 {
   "sources": [
     {
-      "key": "input-data1",
-      "kind": "asciidoc",
+      "reference": "project1",
+      "source_type": "asciidoc",
       "source": "./test-data/input/input-data1"
     },
     {
-      "key": "input-data2",
-      "kind": "asciidoc",
+      "reference": "project2",
+      "source_type": "asciidoc",
       "source": "./test-data/input/input-data2"
     }
   ],
-  "files": [
+  "documents": [
     {
-      "key": "input-data1",
-      "file": "manual.adoc"
+      "reference": "project1",
+      "document": "manual"
     },
     {
-      "key": "input-data2",
-      "file": "brownfox2.adoc"
+      "reference": "project2",
+      "document": "brownfox2"
     },
     {
-      "key": "input-data2",
-      "file": "paragraph1.adoc"
+      "reference": "project2",
+      "document": "paragraph1"
     },
     {
-      "key": "input-data2",
-      "file": "paragraph2.adoc"
+      "reference": "project2",
+      "document": "paragraph2"
     },
     {
-      "key": "input-data2",
-      "file": "image.adoc"
+      "reference": "project2",
+      "document": "image"
     },
     {
-      "key": "input-data2",
-      "file": "tableList.adoc"
+      "reference": "project2",
+      "document": "tableList"
     },
     {
-      "key": "input-data1",
-      "file": "code.adoc"
+      "reference": "project1",
+      "document": "code"
     },
     {
-      "key": "input-data1",
-      "file": "image.adoc"
+      "reference": "project1",
+      "document": "image"
     },
     {
-      "key": "input-data1",
-      "file": "link.adoc"
+      "reference": "project1",
+      "document": "link"
     },
     {
-      "key": "input-data1",
-      "file": "cross.adoc"
+      "reference": "project1",
+      "document": "cross"
     },
     {
-      "key": "input-data1",
-      "file": "ol.adoc"
+      "reference": "project1",
+      "document": "ol"
     },
     {
-      "key": "input-data1",
-      "file": "admonitions.adoc"
+      "reference": "project1",
+      "document": "admonitions"
     }
   ]
 }

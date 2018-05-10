@@ -106,16 +106,16 @@ export interface Merger {
 }
 
 export interface IndexSource {
-  key: string;
-  kind: TextInSource;
+  reference: string;
+  source_type: TextInSource;
   source: string;
   space?: string | undefined;
   context?: string | undefined;
 }
 
 export interface IndexNode {
-  key: string;
-  file: string;
+  reference: string;
+  document: string;
   sections?: string[];
 }
 

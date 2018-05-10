@@ -47,9 +47,6 @@ let outputResult: string;
 let outputArray: string[];
 
 //paths only test
-const outputFolder = './test-data/output/bad/';
-const pathConfigFile = './test-data/input/bad/config.json';
-const pathAdoc = './test-data/input/bad/badExample.adoc';
 const badConfigFolder = './test-data/confiles/bad/';
 
 /**
@@ -75,7 +72,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with BAD
     });
     it('Duplicate Source', done => {
       const errorMessageResult =
-        'JSON: Data inconsistency, some sources have the same key.';
+        'JSON: Data inconsistency, some sources have the same reference.';
       docconfig = new ConfigFile(badConfigFolder + 'duplicateSources.json');
       docconfig
         .getIndex()
@@ -89,7 +86,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with BAD
     });
     it('Orphan nodes', done => {
       const errorMessageResult =
-        'JSON: Data inconsistency, some files keys are not matching with the sources.';
+        'JSON: Data inconsistency, some documents references are not matching with the sources.';
       docconfig = new ConfigFile(badConfigFolder + 'orphanNodes.json');
       docconfig
         .getIndex()
@@ -103,18 +100,5 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with BAD
     });
   });
 
-  describe('Config File correct but Bad outputPathFile', () => {
-    it('Should show', done => {
-      docconfig = new ConfigFile(pathConfigFile);
-      docconfig
-        .getIndex()
-        .then(index => {
-          done();
-        })
-        .catch(error => {
-          done(error);
-        });
-    });
-  });
   after(() => {});
 });

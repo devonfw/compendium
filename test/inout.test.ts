@@ -28,6 +28,7 @@ import {
   TextOut,
 } from '../src/types';
 import { ConfigFile } from '../src/config';
+import { EmitElement } from '../src/emitFunctions';
 import { AsciiDocFileTextIn } from '../src/asciidocInput';
 import { AsciiDocFileTextOut } from '../src/asciidocOutput';
 import { HtmlFileTextOut } from '../src/html';
@@ -83,24 +84,24 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
     it('Should show', done => {
       assert.isArray(index1, 'Index must be an array');
       assert.isArray(index1[0], 'Souces must be an array');
-      assert.isArray(index1[1], 'Files must be an array');
+      assert.isArray(index1[1], 'Documents must be an array');
 
       expect(index1[0]).have.lengthOf(2, 'There are two sources');
-      expect(index1[1]).have.lengthOf(12, 'There are 12 files');
+      expect(index1[1]).have.lengthOf(12, 'There are 12 documents');
 
-      expect(index1[0][0].key).equals('input-data1');
-      expect(index1[0][0].kind).equals('asciidoc');
+      expect(index1[0][0].reference).equals('project1');
+      expect(index1[0][0].source_type).equals('asciidoc');
       expect(index1[0][0].source).equals('./test-data/input/input-data1');
 
-      expect(index1[0][1].key).equals('input-data2');
-      expect(index1[0][1].kind).equals('asciidoc');
+      expect(index1[0][1].reference).equals('project2');
+      expect(index1[0][1].source_type).equals('asciidoc');
       expect(index1[0][1].source).equals('./test-data/input/input-data2');
 
-      expect(index1[1][0].key).equals('input-data1');
-      expect(index1[1][0].file).equals('manual.adoc');
+      expect(index1[1][0].reference).equals('project1');
+      expect(index1[1][0].document).equals('manual');
 
-      expect(index1[1][1].key).equals('input-data2');
-      expect(index1[1][1].file).equals('brownfox2.adoc');
+      expect(index1[1][1].reference).equals('project2');
+      expect(index1[1][1].document).equals('brownfox2');
 
       done();
     });
@@ -108,11 +109,11 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
   //-------PARAGRAPH 1---------------------------------------------------------------------------------------------
   describe('Testing h2 and h3 with bold and cursive, paragraph1.adoc in input-data2', () => {
     before(done => {
-      textinSources[index1[0][1].key] = new AsciiDocFileTextIn(
+      textinSources[index1[0][1].reference] = new AsciiDocFileTextIn(
         index1[0][1].source,
       );
-      textinSources[index1[1][2].key]
-        .getTranscript(index1[1][2].file)
+      textinSources[index1[1][2].reference]
+        .getTranscript(index1[1][2].document)
         .then(transcriptObject => {
           transcripts = [];
           transcripts.push(transcriptObject);
@@ -165,11 +166,11 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
     before(done => {
       //get the Transcript IO ready
       transcripts = [];
-      textinSources[index1[0][1].key] = new AsciiDocFileTextIn(
+      textinSources[index1[0][1].reference] = new AsciiDocFileTextIn(
         index1[0][1].source,
       );
-      textinSources[index1[1][4].key]
-        .getTranscript(index1[1][4].file)
+      textinSources[index1[1][4].reference]
+        .getTranscript(index1[1][4].document)
         .then(transcriptObject => {
           transcripts.push(transcriptObject);
           transcript = transcripts[0];
@@ -200,9 +201,17 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
           outputResult = fs.readFileSync(outputFolder + 'image.adoc', 'utf8');
           outputArray = [];
           outputArray = outputResult.split('\n');
+          //the image output
           expect(outputArray[3].trim()).equals(
             'image:images/fox.png[Red Fox, link="http://www.google.com"]',
           );
+          //image file inside the right folder
+          /* EmitElement.dirExists(outputFolder + '/images/fox.png').then(
+            isFile => {
+              expect(isFile).to.be.true;
+              done();
+            },
+          ); */
           done();
         } catch (error) {
           done(error);
@@ -235,11 +244,11 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
     before(done => {
       //get the Transcript IO ready
       transcripts = [];
-      textinSources[index1[0][1].key] = new AsciiDocFileTextIn(
+      textinSources[index1[0][1].reference] = new AsciiDocFileTextIn(
         index1[0][1].source,
       );
-      textinSources[index1[1][3].key]
-        .getTranscript(index1[1][3].file)
+      textinSources[index1[1][3].reference]
+        .getTranscript(index1[1][3].document)
         .then(transcriptObject => {
           transcripts.push(transcriptObject);
           transcript = transcripts[0];
@@ -311,11 +320,11 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
     before(done => {
       //get the Transcript IO ready
       transcripts = [];
-      textinSources[index1[0][1].key] = new AsciiDocFileTextIn(
+      textinSources[index1[0][1].reference] = new AsciiDocFileTextIn(
         index1[0][1].source,
       );
-      textinSources[index1[1][5].key]
-        .getTranscript(index1[1][5].file)
+      textinSources[index1[1][5].reference]
+        .getTranscript(index1[1][5].document)
         .then(transcriptObject => {
           transcripts.push(transcriptObject);
           transcript = transcripts[0];

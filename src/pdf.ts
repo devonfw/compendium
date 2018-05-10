@@ -125,7 +125,7 @@ export class PdfFileTextOut implements TextOut {
             if (success) {
               //we move the path to the user output path
               try {
-                this.createPdfInRightFolder(fileName);
+                await this.createPdfInRightFolder(fileName);
               } catch (error) {
                 console.log(error);
               }
@@ -160,7 +160,7 @@ export class PdfFileTextOut implements TextOut {
    * @returns {boolean}
    * @memberof PdfFileTextOut
    */
-  public async createPdfInRightFolder(filename: string) {
+  public async createPdfInRightFolder(filename: string): Promise<void> {
     try {
       let copyPromisify = util.promisify(fs.copyFile);
       await copyPromisify(filename + '.pdf', this.outputFile + '.pdf');
@@ -188,7 +188,12 @@ export class PdfFileTextOut implements TextOut {
         await copyPromisify('./imageTemp', './');
         shelljs.rm('-rf', 'imageTemp');
       } catch (err) {
-        console.log(err.message);
+        if (
+          err.code !== 'ENOENT' &&
+          err.code !== 'ENOTEMPTY' &&
+          err.code !== 'EBUSY'
+        )
+          console.log(err.message);
       }
     }
   }

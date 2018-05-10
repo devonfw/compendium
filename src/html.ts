@@ -135,7 +135,12 @@ export class HtmlFileTextOut implements TextOut {
         await copyPromisify('./imageTemp', outputDir2);
         shelljs.rm('-rf', 'imageTemp');
       } catch (err) {
-        console.log(err.message);
+        if (
+          err.code !== 'ENOENT' &&
+          err.code !== 'ENOTEMPTY' &&
+          err.code !== 'EBUSY'
+        )
+          console.log(err.message);
       }
     }
   }

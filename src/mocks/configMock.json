@@ -1,24 +1,24 @@
 {
   "sources": [
     {
-      "key": "input-data1",
-      "kind": "asciidoc",
+      "reference": "input-data1",
+      "source_type": "asciidoc",
       "source": "./src/mocks/input-data1"
     },
     {
-      "key": "input-data2",
-      "kind": "asciidoc",
+      "reference": "input-data2",
+      "source_type": "asciidoc",
       "source": "./src/mocks/input-data2"
     }
   ],
-  "files": [
+  "documents": [
     {
-      "key": "input-data1",
-      "file": "brownfox.adoc"
+      "reference": "input-data1",
+      "document": "brownfox"
     },
     {
-      "key": "input-data2",
-      "file": "brownfox2.adoc",
+      "reference": "input-data2",
+      "document": "brownfox2",
       "section": ""
     }
   ]

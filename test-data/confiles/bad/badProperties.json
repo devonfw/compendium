@@ -1,15 +1,15 @@
 {
   "sources1": [
     {
-      "key": "input-data1",
-      "kind": "asciidoc",
+      "reference": "input-data1",
+      "source_type": "asciidoc",
       "source": "./mocks/input-data1"
     }
   ],
-  "files": [
+  "documents": [
     {
-      "key": "input-data1",
-      "file": "manual.adoc"
+      "reference": "input-data1",
+      "document": "manual"
     }
   ]
 }

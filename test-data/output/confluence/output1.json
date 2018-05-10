@@ -7143,7 +7143,7 @@
       "element": "h1",
       "text": [
         {
-          "text": "Space contributors",
+          "text": "JSON: Data inconsistency, some sources have the same reference. contributors",
           "attrs": {
             "strong": false,
             "cursive": false,

@@ -87,19 +87,19 @@ Depending of the input type, you can use Compendium in different ways, since wit
 ==== JSON Config file
 
 To obtain a file with different sources the best way is using a JSON Config file. To write it, we need to know the following. +
-The file has two differentiated parts, the first part which contains the sources, and the second part, which contains the files. +
+The file has two differentiated parts, the first part which contains the sources, and the second part, which contains the documents. +
 First, we need to define the different sources, we can define as many sources as necessary. In this part, for each source we have three different arguments:
 
-* key: It's a reference, it refers the content in the file.
-* kind: It's the type or document format (i.e asciidoc).
+* reference: It's a reference, it refers the content in the file.
+* source_type: It's the type or document format (i.e asciidoc).
 * source: It's the URL or PATH where the information is located.
 
-On the other hand, we need to define the files, as to the sources, we can have all the files that are necessary. For each node we have three arguments also:
+On the other hand, we need to define the documents, as to the sources, we can have all the documents that are necessary. For each node we have three arguments also:
 
-* key: It's a reference, it refers sources key.
-* file: It's the file name or name/id project (i.e examples.adoc).
+* reference: It's a reference, it refers sources reference.
+* document: It's the file name or name/id project (i.e examples.adoc).
 * section: It's the section that you want to extract. If you want to extract all the content in the document you should leave this argument blank, but if you want to extract different sections, you should write in an array. (i.e [h1, h3])
 
-IMPORTANT: You can't write the same key, each key should be unique. And if you want to extract Confluence or Jira information you need to introduce your credentials to get the information.
+IMPORTANT: You can't write the same reference, each reference should be unique. And if you want to extract Confluence or Jira information you need to introduce your credentials to get the information.
 
 Reference can be made to asciidoc files, jira issues and confluence pages. You can see an example link:http://gitlab-val.es.capgemini.com/gitlab/ADCenter/compendium/blob/master/src/mocks/config.json[here].

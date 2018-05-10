@@ -29,12 +29,13 @@ export class Utilities {
   public static checkSourceValuesJSON(sourceJSON: any): boolean {
     let valid = true;
     if (
-      sourceJSON.key &&
-      sourceJSON.key !== '' &&
-      sourceJSON.kind &&
-      (sourceJSON.kind === 'asciidoc' || sourceJSON.kind === 'confluence')
+      sourceJSON.reference &&
+      sourceJSON.reference !== '' &&
+      sourceJSON.source_type &&
+      (sourceJSON.source_type === 'asciidoc' ||
+        sourceJSON.source_type === 'confluence')
     ) {
-      if (sourceJSON.kind === 'confluence') {
+      if (sourceJSON.source_type === 'confluence') {
         if (sourceJSON.space && sourceJSON.space !== '' && sourceJSON.context) {
           valid = true;
         } else {
@@ -56,10 +57,10 @@ export class Utilities {
    */
   public static checkNodeValuesJSON(nodeJSON: any): boolean {
     if (
-      nodeJSON.key &&
-      nodeJSON.key !== '' &&
-      nodeJSON.file &&
-      nodeJSON.file !== ''
+      nodeJSON.reference &&
+      nodeJSON.reference !== '' &&
+      nodeJSON.document &&
+      nodeJSON.document !== ''
     ) {
       return true;
     } else {
@@ -67,70 +68,73 @@ export class Utilities {
     }
   }
   /**
-   * checkDuplicateKeys
-   * Check if configfile has keys duplicated, in this case show an error
+   * checkDuplicateReferences
+   * Check if configfile has references duplicated, in this case show an error
    * @public
    * @param {IndexSource[]} indexSources
    * @returns {boolean}
    * @memberof ConfigFile
    */
-  public static checkDuplicateKeys(indexSources: IndexSource[]): boolean {
+  public static checkDuplicateReferences(indexSources: IndexSource[]): boolean {
     let duplicate = false;
     const source: any = {};
     indexSources.map(item => {
-      const key = item.key;
-      if (key in source) {
+      const ref = item.reference;
+      if (ref in source) {
         duplicate = true;
       } else {
-        source[key] = item;
+        source[ref] = item;
       }
     });
     return duplicate;
   }
   /**
-   * checkDuplicateKeys
-   * Check if configfile has keys in the files that don´t exist in the source, in this case show an error
-   * True for wrong key found
+   * checkDocumentsRefConsistency
+   * Check if configfile has references in the files that don´t exist in the source, in this case show an error
+   * True for wrong reference found
    * @public
    * @param {IndexSource[]} indexSources
    * @returns {boolean}
    * @memberof ConfigFile
    */
-  public static checkFileKeysConsistency(index: Index): boolean {
+  public static checkDocumentsRefConsistency(index: Index): boolean {
     const indexSources: IndexSource[] = index[0] as IndexSource[];
     const indexNodes: IndexNode[] = index[1] as IndexNode[];
-    //create array with all the keys from sources
-    let sourceKeys: string[] = [];
+    //create array with all the reference from sources
+    let sourceRefs: string[] = [];
     indexSources.map(item => {
-      const key = item.key;
-      sourceKeys.push(key);
+      const ref = item.reference;
+      sourceRefs.push(ref);
     });
     let match = true;
     indexNodes.map(item => {
-      const key = item.key;
-      let number = sourceKeys.indexOf(key);
-      if (number < 0) match = false; //this key don`t has its match in the sources array
+      const ref = item.reference;
+      let number = sourceRefs.indexOf(ref);
+      if (number < 0) match = false; //this reference don`t has its match in the sources array
     });
 
     return match;
   }
 
   /**
-   * getKindByKey
-   * create a relation with kind and key
+   * getSourceTypeByRef
+   * create a relation with source_type and reference
    * @public
    * @param {IndexSource[]} indexSources
-   * @param {string} key
+   * @param {string} reference
    * @returns {string}
    * @memberof ConfigFile
    */
-  public static getKindByKey(indexSources: IndexSource[], key: string): string {
-    let kind = '';
+  public static getSourceTypeByRef(
+    indexSources: IndexSource[],
+    reference: string,
+  ): string {
+    let source_type = '';
     for (const source of indexSources) {
-      if (source.key === key) {
-        kind = source.kind;
+      if (source.reference === reference) {
+        source_type = source.source_type;
       }
     }
-    return kind;
+    return source_type;
   }
 }

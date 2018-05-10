@@ -1,18 +1,18 @@
 {
   "sources": [
     {
-      "key": "external",
-      "kind": "confluence",
+      "reference": "external",
+      "source_type": "confluence",
       "source": "http://localhost:8090/",
       "space": "COM",
       "context": "other"
     }
   ],
-  "files": [
+  "documents": [
     {
-      "key": "external",
+      "reference": "external",
       "kind": "confluence",
-      "file": "hello+world"
+      "document": "hello+world"
     }
   ]
 }

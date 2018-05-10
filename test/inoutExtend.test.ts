@@ -28,6 +28,7 @@ import {
   TextOut,
 } from '../src/types';
 import { ConfigFile } from '../src/config';
+import { EmitElement } from '../src/emitFunctions';
 import { AsciiDocFileTextIn } from '../src/asciidocInput';
 import { AsciiDocFileTextOut } from '../src/asciidocOutput';
 import { HtmlFileTextOut } from '../src/html';
@@ -83,11 +84,11 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
     before(done => {
       //get the Transcript IO ready
       transcripts = [];
-      textinSources[index1[0][0].key] = new AsciiDocFileTextIn(
+      textinSources[index1[0][0].reference] = new AsciiDocFileTextIn(
         index1[0][0].source,
       );
-      textinSources[index1[1][6].key]
-        .getTranscript(index1[1][6].file)
+      textinSources[index1[1][6].reference]
+        .getTranscript(index1[1][6].document)
         .then(transcriptObject => {
           transcripts.push(transcriptObject);
           transcript = transcripts[0];
@@ -127,11 +128,11 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
     before(done => {
       //get the Transcript IO ready
       transcripts = [];
-      textinSources[index1[0][0].key] = new AsciiDocFileTextIn(
+      textinSources[index1[0][0].reference] = new AsciiDocFileTextIn(
         index1[0][0].source,
       );
-      textinSources[index1[1][7].key]
-        .getTranscript(index1[1][7].file)
+      textinSources[index1[1][7].reference]
+        .getTranscript(index1[1][7].document)
         .then(transcriptObject => {
           transcripts.push(transcriptObject);
           transcript = transcripts[0];
@@ -163,6 +164,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
           );
           outputArray = [];
           outputArray = outputResult.split('\n');
+          //image output
           expect(outputArray[3]).includes('image:images/sunset.jpg[sunset]');
           done();
         } catch (error) {
@@ -176,11 +178,11 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
     before(done => {
       //get the Transcript IO ready
       transcripts = [];
-      textinSources[index1[0][0].key] = new AsciiDocFileTextIn(
+      textinSources[index1[0][0].reference] = new AsciiDocFileTextIn(
         index1[0][0].source,
       );
-      textinSources[index1[1][10].key]
-        .getTranscript(index1[1][10].file)
+      textinSources[index1[1][10].reference]
+        .getTranscript(index1[1][10].document)
         .then(transcriptObject => {
           transcripts.push(transcriptObject);
           transcript = transcripts[0];
@@ -231,11 +233,11 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
     before(done => {
       //get the Transcript IO ready
       transcripts = [];
-      textinSources[index1[0][0].key] = new AsciiDocFileTextIn(
+      textinSources[index1[0][0].reference] = new AsciiDocFileTextIn(
         index1[0][0].source,
       );
-      textinSources[index1[1][8].key]
-        .getTranscript(index1[1][8].file)
+      textinSources[index1[1][8].reference]
+        .getTranscript(index1[1][8].document)
         .then(transcriptObject => {
           transcripts.push(transcriptObject);
           transcript = transcripts[0];
@@ -278,11 +280,11 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
     before(done => {
       //get the Transcript IO ready
       transcripts = [];
-      textinSources[index1[0][0].key] = new AsciiDocFileTextIn(
+      textinSources[index1[0][0].reference] = new AsciiDocFileTextIn(
         index1[0][0].source,
       );
-      textinSources[index1[1][9].key]
-        .getTranscript(index1[1][9].file)
+      textinSources[index1[1][9].reference]
+        .getTranscript(index1[1][9].document)
         .then(transcriptObject => {
           transcripts.push(transcriptObject);
           transcript = transcripts[0];
@@ -323,11 +325,11 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
   //---------PDF-------------------------------------------------------------------
   describe('Output to PDF brownfox2', () => {
     it('Testing generate pdf function', done => {
-      textinSources[index1[0][1].key] = new AsciiDocFileTextIn(
+      textinSources[index1[0][1].reference] = new AsciiDocFileTextIn(
         index1[0][1].source,
       );
-      textinSources[index1[1][1].key]
-        .getTranscript(index1[1][1].file)
+      textinSources[index1[1][1].reference]
+        .getTranscript(index1[1][1].document)
         .then(transcript => {
           transcripts = [];
           transcripts.push(transcript);
@@ -337,6 +339,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
           out
             .generate(transcripts)
             .then(() => {
+              //listFilesOutput.push(outputFolder + 'outBrownfox2.pdf');
               done();
             })
             .catch(error => {
@@ -353,20 +356,24 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
     it('The file is created with the result of the merge', done => {
       const sources: IndexSource[] = [
         {
-          key: 'input-data1',
-          kind: 'asciidoc',
+          reference: 'input-data1',
+          source_type: 'asciidoc',
           source: 'test-data/input/input-data1',
         },
         {
-          key: 'input-data2',
-          kind: 'asciidoc',
+          reference: 'input-data2',
+          source_type: 'asciidoc',
           source: 'test-data/input/input-data2',
         },
       ];
 
       const files: IndexNode[] = [
-        { key: 'input-data1', file: 'manual.adoc' },
-        { key: 'input-data2', file: 'brownfox2.adoc', sections: [''] },
+        { reference: 'input-data1', document: 'manual' },
+        {
+          reference: 'input-data2',
+          document: 'brownfox2',
+          sections: [''],
+        },
       ];
 
       const index: Index = [sources, files];

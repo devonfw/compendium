@@ -1,18 +1,18 @@
 {
   "sources": [
     {
-      "key": "internal",
-      "kind": "confluence",
+      "reference": "internal",
+      "source_type": "confluence",
       "source": "https://adcenter.pl.s2-eu.capgemini.com/confluence/",
       "space": "JQ",
       "context": "capgemini"
     }
   ],
-  "files": [
+  "documents": [
     {
-      "key": "internal",
+      "reference": "internal",
       "kind": "confluence",
-      "file": "Jump+the+queue+Home"
+      "document": "Jump+the+queue+Home"
     }
   ]
 }

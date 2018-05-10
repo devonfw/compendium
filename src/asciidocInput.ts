@@ -48,7 +48,7 @@ export class AsciiDocFileTextIn implements TextIn {
     id: string,
     sections?: string[],
   ): Promise<Transcript> {
-    const dir = this.base + '/' + id;
+    const dir = this.base + '/' + id + '.adoc';
     let doc;
     const readFile = util.promisify(fs.readFile);
     try {

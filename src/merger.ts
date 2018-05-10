@@ -25,17 +25,19 @@ export class MergerImpl implements Merger {
   ): Promise<void> {
     const transcripts: Array<Transcript> = [];
     for (const node of index[1]) {
-      if (textinSources[node.key]) {
+      if (textinSources[node.reference]) {
         try {
           transcripts.push(
-            await textinSources[node.key].getTranscript(node.file),
+            await textinSources[node.reference].getTranscript(node.document),
           );
         } catch (err) {
           throw new Error(err.message);
         }
       } else {
         const error_msg =
-          "Node with id '" + node.file + "' doesn't have an existing source";
+          "Node with id '" +
+          node.document +
+          "' doesn't have an existing source";
         throw new Error(error_msg);
       }
     }

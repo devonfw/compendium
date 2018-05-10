@@ -67,12 +67,12 @@ export async function doCompendium(
 
   const textinSources: TextInSources = {};
   for (const source of index[0]) {
-    if (source.kind === 'asciidoc') {
-      textinSources[source.key] = new AsciiDocFileTextIn(source.source);
-    } else if (source.kind === 'confluence') {
+    if (source.source_type === 'asciidoc') {
+      textinSources[source.reference] = new AsciiDocFileTextIn(source.source);
+    } else if (source.source_type === 'confluence') {
       if (source.context === 'capgemini') {
         if (isConfluenceTest) {
-          textinSources[source.key] = new ConfluenceTextIn(
+          textinSources[source.reference] = new ConfluenceTextIn(
             source.source,
             source.space,
             COOKIES_TEST,
@@ -88,12 +88,12 @@ export async function doCompendium(
           console.log(
             chalk.bold(
               `Please enter credentials for source with key '${chalk.green.italic(
-                source.key,
+                source.reference,
               )}' (${chalk.blue(source.source)})\n`,
             ),
           );
           credentials = await askInPrompt();
-          textinSources[source.key] = new ConfluenceTextIn(
+          textinSources[source.reference] = new ConfluenceTextIn(
             source.source,
             source.space,
             credentials,
