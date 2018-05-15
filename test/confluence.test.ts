@@ -5,9 +5,12 @@ import {
   RichText,
   RichString,
   Cookies,
+  Transcript,
+  TextSegment,
 } from '../src/types';
 import { ConfluenceTextIn } from '../src/confluence';
 import { AsciiDocFileTextOut } from '../src/asciidocOutput';
+import { HtmlFileTextOut } from '../src/html';
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as fs from 'fs';
@@ -22,17 +25,16 @@ let basepath: string;
 let space: string;
 let credentials: Credentials;
 let cookies: Cookies;
-let isMock: boolean | undefined;
 let id: string;
 let id_badFormat: string;
 let id_multiplePages: string;
 
 // Default values for ConfluenceTextIn constructor
-basepath = 'http://localhost:8090/';
-space = 'JQ';
+basepath = 'https://murtasanjuanases.atlassian.net/wiki/';
+space = 'PD';
 credentials = {
-  username: 'Admin',
-  password: 'Admin123',
+  username: 'murta.sanjuan-ases-external@capgemini.com',
+  password: 'Admin1234',
 };
 cookies = [
   {
@@ -40,10 +42,14 @@ cookies = [
     value: 'abcd',
   },
 ];
-isMock = true;
+let transcripts: Transcript[] = [];
+let transcript: Transcript = { segments: [] };
+const segments1: Array<TextSegment> = [];
+transcript.segments = segments1;
+const outputFolder = 'test-data/output/confluence/';
 
 // Default id values
-id = 'Jump+the+queue+Home+(Edited+for+Demo)';
+id = 'Operating+Mode';
 id_badFormat = 'bad+format';
 id_multiplePages = 'multiple+pages';
 
@@ -51,56 +57,62 @@ id_multiplePages = 'multiple+pages';
 const outputPath01 = 'test-data/output/confluence/output1.json';
 
 // TEST01
-// Should get content from a mock Service
-xdescribe('Confluence01 Testing the Input of Text and doc generation', () => {
-  before(() => {
-    //setup fixture
+// Should get content from Murta's space
+
+describe('Confluence01 Testing the Output and Input of Text and doc generation', () => {
+  before(done => {
     if (fs.existsSync(outputPath01)) {
       fs.unlinkSync(outputPath01);
     }
+    //setup fixture
+    const textinConfluence01 = new ConfluenceTextIn(
+      basepath,
+      space,
+      credentials,
+    );
+    textinConfluence01
+      .getTranscript(id)
+      .then(transcriptObject => {
+        //save the transcript for other test
+        transcripts = [];
+        transcripts.push(transcriptObject);
+        transcript = transcripts[0];
+
+        // Compare transcript
+        done();
+      })
+      .catch(error => {
+        done(error);
+      });
   });
-
-  describe('ConfluenceTextIn', () => {
-    it('should return the Transcript from the external source', done => {
-      const textinConfluence01 = new ConfluenceTextIn(
-        basepath,
-        space,
-        credentials,
-        isMock,
+  describe('Input', () => {
+    it('input', done => {
+      // To see transcript in a file (Optional). Existing path is required.
+      fs.writeFileSync(
+        outputPath01,
+        JSON.stringify(transcript, null, 2),
+        'utf8',
       );
-      textinConfluence01
-        .getTranscript(id)
-        .then(transcript => {
-          // To see transcript in a file (Optional). Existing path is required.
-          fs.writeFileSync(
-            outputPath01,
-            JSON.stringify(transcript, null, 2),
-            'utf8',
-          );
 
-          // Compare transcript
-          const h1 = transcript.segments[2];
-          if (h1.kind === 'textelement') {
-            const richText = h1.text[0];
-            if (richText as RichString) {
-              const richString = richText as RichString;
-              expect(richString.text).equals(
-                '1. Project Introduction. Statement of Purpose',
-              );
-              done();
-            } else {
-              done(new Error('Expected RichString, received InlineImage'));
-            }
-          } else {
-            done(new Error('Not a valid h1 element'));
-          }
+      done();
+    });
+  });
+  describe('Input', () => {
+    it('To asciidoc', done => {
+      let out: AsciiDocFileTextOut = new AsciiDocFileTextOut(
+        outputFolder + 'confluence01',
+      );
+
+      out
+        .generate(transcripts)
+        .then(() => {
+          done();
         })
         .catch(error => {
           done(error);
         });
     });
   });
-
   after(() => {
     // clean fixture
   });

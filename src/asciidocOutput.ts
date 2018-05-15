@@ -96,7 +96,6 @@ export class AsciiDocFileTextOut implements TextOut {
     if (await EmitElement.dirExists('imageTemp')) {
       const arrayDir = this.outputFile.split('/');
       const outputDir: Array<string> = [];
-      outputDir.push('./');
       let outputDir2 = '';
       if (arrayDir.length > 1) {
         arrayDir.splice(-1, 1);
@@ -107,8 +106,7 @@ export class AsciiDocFileTextOut implements TextOut {
       }
 
       try {
-        let copyPromisify = util.promisify(extrafs.copy);
-        await copyPromisify('./imageTemp', outputDir2);
+        await extrafs.copy('./imageTemp', outputDir2);
         shelljs.rm('-rf', 'imageTemp');
       } catch (err) {
         if (

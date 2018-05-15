@@ -184,8 +184,7 @@ export class PdfFileTextOut implements TextOut {
   public async moveTheImages(): Promise<void> {
     if (await EmitElement.dirExists('imageTemp')) {
       try {
-        let copyPromisify = util.promisify(extrafs.copy);
-        await copyPromisify('./imageTemp', './');
+        await extrafs.copy('./imageTemp', './');
         shelljs.rm('-rf', 'imageTemp');
       } catch (err) {
         if (

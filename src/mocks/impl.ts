@@ -48,7 +48,7 @@ export class TextInMock implements TextIn {
   public constructor(basepath: string) {}
 
   public async getTranscript(id: string): Promise<Transcript> {
-    if (id === 'test-data/brownfox.adoc') {
+    if (id === 'test-data/brownfox') {
       const paragraph: Paragraph = {
         kind: 'paragraph',
         text: [],

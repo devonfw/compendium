@@ -3,7 +3,7 @@ export type ScriptType = 'super' | 'sub' | 'normal';
 
 export type ElementType = 'title' | 'h1' | 'h2' | 'h3' | 'h4';
 
-export type TextInSource = 'asciidoc' | 'jira' | 'confluence';
+export type TextInSource = 'asciidoc' | 'jira' | 'confluence' | 'url-html';
 
 export interface TextInSources {
   [key: string]: TextIn;
@@ -127,6 +127,7 @@ export interface DocConfig {
 
 export interface TextIn {
   getTranscript(id: string, sections?: string[]): Promise<Transcript>;
+  // supportsExport(): boolean;
 }
 
 export interface TextOut {
@@ -143,6 +144,12 @@ export type Cookies = Array<Cookie>;
 export interface ConfluenceService {
   getContentbyCookies(URL: string, cookie: Cookies): Promise<JSON>;
   getContentbyCredentials(URL: string, credentials: Credentials): Promise<JSON>;
+  getContent(URL: string, cookie: Cookies | Credentials): Promise<JSON>;
+  getImage(URL: string, cookie: Cookies | Credentials): Promise<Buffer>;
+}
+
+export interface InputUrlService {
+  getContent(URL: string): Promise<string>;
 }
 
 export interface Credentials {

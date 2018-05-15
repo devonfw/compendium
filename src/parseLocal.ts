@@ -31,6 +31,7 @@ import { EmitElement } from './emitFunctions';
 
 export class ParseLocal {
   public base: string;
+  public static arrayImagesSrc: string[] = [];
   public constructor(basepath: string) {
     this.base = basepath;
   }
@@ -120,12 +121,12 @@ export class ParseLocal {
           };
           result.push(out);
         } else if (node.name === 'img') {
+          this.arrayImagesSrc.push(node.attribs.src);
           const img: InlineImage = {
             kind: 'inlineimage',
-            img: node.attribs.src,
+            img: this.changeSRC(node.attribs.src),
             title: node.attribs.alt,
           };
-          this.copyImage(node.attribs.src);
           result.push(img);
         } else if (node.name === 'table') {
           out = { kind: 'table', content: this.table(node.children) };
@@ -187,12 +188,12 @@ export class ParseLocal {
   public static linkContent(node: Array<any>): Paragraph | InlineImage {
     let result: Paragraph | InlineImage;
     if (node.length === 1 && node[0].name === 'img') {
+      this.arrayImagesSrc.push(node[0].attribs.src);
       const img: InlineImage = {
         kind: 'inlineimage',
-        img: node[0].attribs.src,
+        img: this.changeSRC(node[0].attribs.src),
         title: node[0].attribs.alt,
       };
-      this.copyImage(node[0].attribs.src);
       result = img;
     } else {
       const out: Paragraph = { kind: 'paragraph', text: this.paragraphs(node) };
@@ -358,12 +359,12 @@ export class ParseLocal {
         out = { kind: 'paragraph', text: this.paragraphs(child.children) };
         result.push(out);
       } else if (child.name === 'img') {
+        this.arrayImagesSrc.push(child.attribs.src);
         const img: InlineImage = {
           kind: 'inlineimage',
-          img: child.attribs.src,
+          img: this.changeSRC(child.attribs.src),
           title: child.attribs.alt,
         };
-        this.copyImage(child.attribs.src);
         result.push(img);
       } else if (child.name === 'table') {
         out = { kind: 'table', content: this.table(child.children) };
@@ -439,12 +440,12 @@ export class ParseLocal {
     const result: RichText = [];
     for (const child of node) {
       if (child.name === 'img') {
+        this.arrayImagesSrc.push(child.attribs.src);
         const img: InlineImage = {
           kind: 'inlineimage',
-          img: child.attribs.src,
+          img: this.changeSRC(child.attribs.src),
           title: child.attribs.alt,
         };
-        this.copyImage(child.attribs.src);
         result.push(img);
       } else if (child.name === 'a') {
         const out: Link = {
@@ -550,14 +551,25 @@ export class ParseLocal {
       for (const piece of arrayDir) {
         outputDir = outputDir + '/' + piece;
       }
+      //create folder path if not exist
+      let exist = false;
       try {
-        await shelljs.mkdir('-p', './imageTemp/' + outputDir);
-      } catch (err) {
-        if (err.code !== 'EEXIST') {
-          throw err;
+        exist = await this.dirExists('imageTemp/' + outputDir);
+      } catch (error) {
+        console.log(error);
+      }
+
+      if (!exist) {
+        try {
+          await shelljs.mkdir('-p', './imageTemp/' + outputDir);
+        } catch (err) {
+          if (err.code !== 'EEXIST') {
+            throw err;
+          }
         }
       }
-      let exist;
+      //create image if not exist
+      exist = false;
       try {
         exist = await this.dirExists('imageTemp/' + dir);
       } catch (error) {
@@ -581,18 +593,32 @@ export class ParseLocal {
   /**
    * dirExists
    * Check if the directory exist
-   * @private
+   * @protected
    * @param {string} filename
    * @returns
-   * @memberof AsciiDocFileTextOut
+   * @memberof ParseLocal
    */
-  private static async dirExists(filename: string): Promise<boolean> {
+  protected static async dirExists(filename: string): Promise<boolean> {
     try {
       let accessPromisify = util.promisify(fs.stat);
       let stats = await accessPromisify(filename);
       return true;
     } catch (e) {
       return false;
+    }
+  }
+  /**
+   * change the image src when downloading
+   *
+   * @param {string} dir
+   * @memberof ParseLocal
+   */
+  public static changeSRC(name: string): string {
+    if (name.includes('http')) {
+      //not implemented yet
+      return name;
+    } else {
+      return name;
     }
   }
 }

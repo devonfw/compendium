@@ -83,6 +83,12 @@ export class AsciiDocFileTextIn implements TextIn {
       }
     }
     transcript.segments = end;
+    //copy images
+    if (ParseLocal.arrayImagesSrc.length > 0) {
+      for (const src of ParseLocal.arrayImagesSrc) {
+        await ParseLocal.copyImage(src);
+      }
+    }
     return transcript;
   }
 }

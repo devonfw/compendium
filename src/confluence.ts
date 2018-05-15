@@ -28,8 +28,7 @@ import {
 } from './types';
 import * as fs from 'fs';
 import { ConfluenceServiceImpl } from './confluenceService';
-import { ConfluenceServiceImplMock } from './mocks/impl';
-import { ParseLocal } from './parseLocal';
+import { ParseConfluence } from './parseConfluence';
 
 /*
     The basepath has to have this format: https://adcenter.pl.s2-eu.capgemini.com/confluence/
@@ -53,7 +52,7 @@ export class ConfluenceTextIn implements TextIn {
   private spaceKey: string | undefined;
   private cookies: Cookies | undefined;
   private credentials: Credentials | undefined;
-  private mock: boolean | undefined;
+  private auth: Credentials | Cookies;
 
   private htmlparse = require('html-parse');
 
@@ -61,16 +60,12 @@ export class ConfluenceTextIn implements TextIn {
     baseURL: string,
     spaceKey: string | undefined,
     auth: Cookies | Credentials,
-    isMock?: boolean,
   ) {
     this.baseURL = baseURL;
     this.spaceKey = spaceKey;
-    if ((auth as Cookies)[0]) {
-      this.cookies = auth as Cookies;
-    } else if ((auth as Credentials).username) {
-      this.credentials = auth as Credentials;
-    }
-    this.mock = isMock;
+    this.auth = auth;
+    //parseConfluence needs authoritation to download images
+    ParseConfluence.init(auth);
   }
   /**
    * getTrancript
@@ -95,58 +90,29 @@ export class ConfluenceTextIn implements TextIn {
     } else if (this.spaceKey === '') {
       throw new Error('ConfluenceTextIn: SpaceKey cannot be blank.');
     }
-    if (this.mock) {
-      confluenceService = new ConfluenceServiceImplMock();
-    } else {
-      confluenceService = new ConfluenceServiceImpl();
-    }
+    confluenceService = new ConfluenceServiceImpl();
 
     const uri = this.createURIbyTitle(title);
     const url = this.createURLbyTitle(title);
-
+    //get content json
     let content;
     let error = false;
-    if (this.cookies) {
-      try {
-        content = await confluenceService.getContentbyCookies(
-          uri,
-          this.cookies,
-        );
-      } catch (err) {
-        if (err.message) {
-          throw new Error(err.message);
-        } else {
-          throw new Error(
-            "It isn't possible to get the content from confluence",
-          );
-        }
+    try {
+      content = await confluenceService.getContent(uri, this.auth);
+    } catch (err) {
+      if (err.message) {
+        throw new Error(err.message);
+      } else {
+        throw new Error("It isn't possible to get the content from confluence");
       }
-    } else if (this.credentials) {
-      try {
-        content = await confluenceService.getContentbyCredentials(
-          uri,
-          this.credentials,
-        );
-      } catch (err) {
-        if (err.message) {
-          throw new Error(err.message);
-        } else {
-          throw new Error(
-            "It isn't possible to get the content from confluence",
-          );
-        }
-      }
-    } else {
-      throw new Error(
-        'Credentials are mandatory to access confluence resources',
-      );
     }
+    //from json to transcript
     if (content) {
       const htmlView = this.processDataFromConfluence(content);
       if (htmlView) {
         const tree = this.htmlparse.parse(htmlView);
         for (const branch of tree) {
-          const temp = await ParseLocal.recursive(branch);
+          const temp = await ParseConfluence.recursive(branch);
           for (const final of temp) {
             end.push(final);
           }
@@ -161,6 +127,12 @@ export class ConfluenceTextIn implements TextIn {
     if (error) {
       throw new Error("It isn't possible to get transcript from " + url);
     }
+    //copy images and wait until finishes
+    if (ParseConfluence.arrayImagesSrc.length > 0) {
+      for (const src of ParseConfluence.arrayImagesSrc) {
+        await ParseConfluence.copyImage(src);
+      }
+    }
     return transcript;
   }
   /**
@@ -174,7 +146,6 @@ export class ConfluenceTextIn implements TextIn {
   private processDataFromConfluence(content: JSON): string {
     let htmlContent;
     let error = false;
-
     const parsed_content = JSON.parse(JSON.stringify(content));
     if (parsed_content.id) {
       if (parsed_content.body.view.value) {
@@ -189,6 +160,8 @@ export class ConfluenceTextIn implements TextIn {
         } else {
           error = true;
         }
+      } else if (parsed_content.size === 0) {
+        throw new Error('Confluence page content is empty');
       } else {
         throw new Error(
           'Only one Confluence page is allowed at once in this version. Check your request please.',

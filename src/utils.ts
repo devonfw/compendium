@@ -33,6 +33,7 @@ export class Utilities {
       sourceJSON.reference !== '' &&
       sourceJSON.source_type &&
       (sourceJSON.source_type === 'asciidoc' ||
+        sourceJSON.source_type === 'url-html' ||
         sourceJSON.source_type === 'confluence')
     ) {
       if (sourceJSON.source_type === 'confluence') {

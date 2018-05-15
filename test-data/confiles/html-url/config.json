@@ -1,0 +1,15 @@
+{
+  "sources": [
+    {
+      "reference": "handbook",
+      "source_type": "url-html",
+      "source": "http://adcenter.capgemini.com/handbook/"
+    }
+  ],
+  "documents": [
+    {
+      "reference": "handbook",
+      "document": "Service-Portfolio_4326220.html"
+    }
+  ]
+}

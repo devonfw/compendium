@@ -131,8 +131,7 @@ export class HtmlFileTextOut implements TextOut {
         outputDir2 = outputDir.join('/');
       }
       try {
-        let copyPromisify = util.promisify(extrafs.copy);
-        await copyPromisify('./imageTemp', outputDir2);
+        await extrafs.copy('./imageTemp', outputDir2);
         shelljs.rm('-rf', 'imageTemp');
       } catch (err) {
         if (

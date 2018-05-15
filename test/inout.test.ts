@@ -56,7 +56,7 @@ const pathImageSunset: string = './test-data/input/images/sunset.jpg';
 const pathConfigFile = './test-data/input/config.json';
 const pathAdoc1 = './test-data/input/brownfox2.adoc';
 const pathAdoc2 = './test-data/input/manual.adoc';
-const outputFolder = './test-data/output/';
+const outputFolder = 'test-data/output/';
 let listFilesOutput: string[] = []; //to erase in after()
 
 /**
@@ -409,6 +409,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
     try {
       //delete all output files
       shelljs.rm(listFilesOutput);
+      shelljs.rm('-rf', outputFolder.concat('images'));
     } catch (error) {
       throw error;
     }
