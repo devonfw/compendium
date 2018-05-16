@@ -29,7 +29,6 @@ export class ParseConfluence extends ParseLocal {
       } catch (error) {
         console.log(error);
       }
-
       //get content json
       let content;
       let error = false;

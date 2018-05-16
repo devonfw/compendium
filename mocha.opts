@@ -1,5 +1,4 @@
 mocha -r ts-node/register
---reporter dot
 --timeout 50000
 --watch-extensions ts
 test/**/*.ts

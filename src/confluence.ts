@@ -91,9 +91,15 @@ export class ConfluenceTextIn implements TextIn {
       throw new Error('ConfluenceTextIn: SpaceKey cannot be blank.');
     }
     confluenceService = new ConfluenceServiceImpl();
+    let uri: string = '';
+    let url: string = '';
+    try {
+      uri = this.createURIbyTitle(title);
+      url = this.createURLbyTitle(title);
+    } catch (err) {
+      throw new Error(err.message);
+    }
 
-    const uri = this.createURIbyTitle(title);
-    const url = this.createURLbyTitle(title);
     //get content json
     let content;
     let error = false;
@@ -106,24 +112,30 @@ export class ConfluenceTextIn implements TextIn {
         throw new Error("It isn't possible to get the content from confluence");
       }
     }
+
     //from json to transcript
-    if (content) {
-      const htmlView = this.processDataFromConfluence(content);
-      if (htmlView) {
-        const tree = this.htmlparse.parse(htmlView);
-        for (const branch of tree) {
-          const temp = await ParseConfluence.recursive(branch);
-          for (const final of temp) {
-            end.push(final);
+    try {
+      if (content) {
+        const htmlView = this.processDataFromConfluence(content);
+        if (htmlView) {
+          const tree = this.htmlparse.parse(htmlView);
+          for (const branch of tree) {
+            const temp = await ParseConfluence.recursive(branch);
+            for (const final of temp) {
+              end.push(final);
+            }
           }
+          transcript.segments = end;
+        } else {
+          error = true;
         }
-        transcript.segments = end;
       } else {
         error = true;
       }
-    } else {
-      error = true;
+    } catch (error) {
+      throw error;
     }
+
     if (error) {
       throw new Error("It isn't possible to get transcript from " + url);
     }
@@ -155,13 +167,14 @@ export class ConfluenceTextIn implements TextIn {
       }
     } else if (parsed_content.results) {
       if (parsed_content.size === 1 && parsed_content.results[0].id) {
+        //get body view value
         if (parsed_content.results[0].body.view.value) {
           htmlContent = parsed_content.results[0].body.view.value;
         } else {
           error = true;
         }
       } else if (parsed_content.size === 0) {
-        throw new Error('Confluence page content is empty');
+        throw new Error('Confluence page request is empty');
       } else {
         throw new Error(
           'Only one Confluence page is allowed at once in this version. Check your request please.',
