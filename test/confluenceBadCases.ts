@@ -58,29 +58,13 @@ id_multiplePages = 'multiple+pages';
 const outputPath01 = 'test-data/output/confluence/output1.json';
 
 // TEST02: Testing common fails
-describe('Confluence02 Testing common fails', () => {
+describe('ConfluenceBad01 Testing common fails', () => {
   before(() => {
     //setup fixture
   });
 
   // Input parameters
-  describe('ConfluenceTextIn', () => {
-    it('getTranscript should work with the proper input parameters', done => {
-      const textinConfluence02 = new ConfluenceTextIn(
-        basepath,
-        space,
-        credentials,
-      );
-      textinConfluence02
-        .getTranscript(id)
-        .then(transcript => {
-          done();
-        })
-        .catch(error => {
-          done(error);
-        });
-    });
-
+  describe('ConfluenceTextIn bad cases', () => {
     // Bad case I: Title blank
     it('getTranscript should complain when some input parameter are no correct I: Title cannot be blank', done => {
       const textinConfluence02 = new ConfluenceTextIn(

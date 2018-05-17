@@ -96,7 +96,7 @@ export class HtmlFileTextOut implements TextOut {
                 background-color: #dddddd;
             }
             img {
-                width:90%;
+                width:20%;
             }
 
             </style>

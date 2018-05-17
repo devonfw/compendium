@@ -65,7 +65,7 @@ export class ConfluenceTextIn implements TextIn {
     this.spaceKey = spaceKey;
     this.auth = auth;
     //parseConfluence needs authoritation to download images
-    ParseConfluence.init(auth);
+    ParseConfluence.init(auth, baseURL);
   }
   /**
    * getTrancript

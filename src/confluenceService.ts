@@ -28,13 +28,14 @@ export class ConfluenceServiceImpl implements ConfluenceService {
           ) {
             resolve(res.body);
           } else {
-            const erinfo = new Error(
-              "It's not possible to get info from '" +
-                URL +
-                "'" +
-                '. Make sure you have authorization.',
+            reject(
+              new Error(
+                "It's not possible to get info from '" +
+                  URL +
+                  "'" +
+                  '. Make sure you have authorization.',
+              ),
             );
-            reject(erinfo);
           }
         });
     });
@@ -99,8 +100,8 @@ export class ConfluenceServiceImpl implements ConfluenceService {
   /**
    * get Content json from any kind of auth
    * @public
-   * @param {Cookies} cookies
-   * @returns {string}
+   * @param {Cookies|Credentials} auth
+   * @returns {JSON}
    * @memberof ConfluenceServiceImpl
    */
   public async getContent(
@@ -184,8 +185,8 @@ export class ConfluenceServiceImpl implements ConfluenceService {
   /**
    * calls the other methods of get image buffer with the specific authoritazion
    * @public
-   * @param {Cookies} cookies
-   * @returns {string}
+   * @param {Cookies|Credentials} auth
+   * @returns {JSON}
    * @memberof ConfluenceServiceImpl
    */
   public async getImage(

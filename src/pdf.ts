@@ -185,7 +185,7 @@ export class PdfFileTextOut implements TextOut {
     if (await EmitElement.dirExists('imageTemp')) {
       try {
         await extrafs.copy('./imageTemp', './');
-        shelljs.rm('-rf', 'imageTemp');
+        await extrafs.remove('imageTemp');
       } catch (err) {
         if (
           err.code !== 'ENOENT' &&

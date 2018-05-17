@@ -1,4 +1,4 @@
-import { COOKIES_TEST, isConfluenceTest } from './mocks/confluence/auth';
+import { COOKIES_TEST, isConfluenceTest } from '../test-data/input/cookieTest';
 import * as fs from 'fs';
 import {
   IndexSource,
