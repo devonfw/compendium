@@ -64,8 +64,6 @@ export class ConfluenceTextIn implements TextIn {
     this.baseURL = baseURL;
     this.spaceKey = spaceKey;
     this.auth = auth;
-    //parseConfluence needs authoritation to download images
-    ParseConfluence.init(auth, baseURL);
   }
   /**
    * getTrancript
@@ -114,11 +112,14 @@ export class ConfluenceTextIn implements TextIn {
     }
 
     //from json to transcript
+    //parseConfluence needs authoritation to download images
+    ParseConfluence.init(this.auth, this.baseURL, this.spaceKey);
     try {
       if (content) {
         const htmlView = this.processDataFromConfluence(content);
         if (htmlView) {
           const tree = this.htmlparse.parse(htmlView);
+
           for (const branch of tree) {
             const temp = await ParseConfluence.recursive(branch);
             for (const final of temp) {

@@ -6,7 +6,7 @@ export const isConfluenceTest = true;
 // -------
 
 const brandNewDayProd =
-  'AQIC5wM2LY4SfcwFZc9dcx9OLQwZYnXD8-krxs93LwqZUQs.*AAJTSQACMDMAAlNLABM2NDAzOTYwODAzNTM0OTcxMTE1AAJTMQACMDE.*';
+  'AQIC5wM2LY4Sfcwip_JJiv-jgbFce6cfPMIFUMNFMv4wPUE.*AAJTSQACMDMAAlNLABQtMjc0NzExMzU0Njk3MDgzMTQ2MgACUzEAAjAx*';
 const brandNewDayProdCookie: Cookie = {
   name: 'brandNewDayProd',
   value: brandNewDayProd,

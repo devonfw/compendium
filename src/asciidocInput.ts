@@ -75,7 +75,9 @@ export class AsciiDocFileTextIn implements TextIn {
     const tree = this.htmlparse.parse(dochtml);
     const transcript: Transcript = { segments: [] };
     const end: Array<TextSegment> = [];
+    //new instance static variables
     ParseLocal.base = this.base;
+    ParseLocal.arrayImagesSrc = [];
     for (const branch of tree) {
       const temp = await ParseLocal.recursive(branch, sections);
       for (const final of temp) {

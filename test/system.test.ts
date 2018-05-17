@@ -35,7 +35,7 @@ let outputFormat: string;
 let inputFormat: string;
 
 //SYSTEM DO COMPENDIUM TEST
-xdescribe('System01 test doCompendium from confluence/asciidoc to asciidoc', () => {
+describe('System01 test doCompendium from confluence/asciidoc to asciidoc', () => {
   before(done => {
     //variables
     configFilePath = './test-data/input/config.json';
@@ -50,7 +50,7 @@ xdescribe('System01 test doCompendium from confluence/asciidoc to asciidoc', () 
         done(error);
       });
   });
-  describe('System test', () => {
+  xdescribe('System test', () => {
     it('To asciidoc', done => {
       doCompendium(configFilePath, 'asciidoc', outputFile)
         .then(() => {
@@ -61,7 +61,7 @@ xdescribe('System01 test doCompendium from confluence/asciidoc to asciidoc', () 
         });
     });
   });
-  xdescribe('System test', () => {
+  describe('System test', () => {
     it('To html', done => {
       doCompendium(configFilePath, 'html', outputFile)
         .then(() => {
@@ -72,7 +72,7 @@ xdescribe('System01 test doCompendium from confluence/asciidoc to asciidoc', () 
         });
     });
   });
-  describe('System test', () => {
+  xdescribe('System test', () => {
     it('To pdf', done => {
       doCompendium(configFilePath, 'pdf', './test-data/output/systemOut')
         .then(() => {
@@ -86,6 +86,6 @@ xdescribe('System01 test doCompendium from confluence/asciidoc to asciidoc', () 
 
   after(() => {
     // clean fixture
-    shelljs.rm('-rf', outputFolder);
+    //shelljs.rm('-rf', outputFolder);
   });
 });

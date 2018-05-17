@@ -11,10 +11,18 @@ export class ParseConfluence extends ParseLocal {
   public static auth: Cookies | Credentials;
   public static confluenceService: ConfluenceService;
   public static baseURL: string;
+  public static spaceKey: string | undefined;
 
-  public static init(auth: Cookies | Credentials, baseURL: string) {
+  public static init(
+    auth: Cookies | Credentials,
+    baseURL: string,
+    spaceKey: string | undefined,
+  ) {
     this.auth = auth;
     this.baseURL = baseURL;
+    this.spaceKey = '';
+    this.spaceKey = spaceKey;
+    this.arrayImagesSrc = [];
     //Confluence Service
     this.confluenceService = new ConfluenceServiceImpl();
   }
@@ -26,9 +34,14 @@ export class ParseConfluence extends ParseLocal {
    */
   public static async copyImage(dir: string) {
     if (dir.includes('http')) {
-      //create folder imageTemp if not exists
+      //create folder imageTemp if not exists and project subfolder
       try {
         await extrafs.ensureDir('imageTemp/images/');
+        let folder = '';
+        if (this.spaceKey !== undefined) {
+          folder = `${this.spaceKey}/`;
+          await extrafs.ensureDir('imageTemp/images/' + folder);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -54,8 +67,10 @@ export class ParseConfluence extends ParseLocal {
       //write image in the folder imageTemp
       if (content) {
         let folder = 'imageTemp/images/';
+
         let filename = this.getPath(dir);
         let src = folder.concat(filename);
+
         try {
           await extrafs.writeFile(src, content);
         } catch (err) {
@@ -78,18 +93,23 @@ export class ParseConfluence extends ParseLocal {
     let extension: string = '';
     if (dir.includes('.jpg')) extension = 'jpg';
     if (dir.includes('.png')) extension = 'png';
-    if (dir.includes('jpeg')) extension = 'jpeg';
+    if (dir.includes('.jpeg')) extension = 'jpeg';
     if (extension === '')
       throw new Error(
         'The image url does not contain an implemented extension',
       );
-    //image number
+    //image number with subfolder from project spacekey
     let arrayAux = dir.split('/');
     let filename = arrayAux[arrayAux.length - 2];
+    let folder = '';
+    if (this.spaceKey !== undefined) {
+      folder = `${this.spaceKey}/`;
+    }
     //path
     let path = filename.concat('.', extension);
+    folder += path;
 
-    return path;
+    return folder;
   }
   /**
    * change the image src when downloading
