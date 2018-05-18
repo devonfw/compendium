@@ -22,7 +22,7 @@
     "chai-fs": "^2.0.0",
     "html-parse": "0.0.4",
     "html-to-pdf": "^0.1.11",
-    "npm": "^6.0.0",
+    "npm": "^6.0.1",
     "prompt": "^1.0.0",
     "result.ts": "^0.3.1",
     "shelljs": "^0.8.1",

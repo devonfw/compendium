@@ -5,8 +5,7 @@ import { Credentials } from './types';
 import { doCompendium, askInPrompt } from './clinterpreter';
 import * as yargs from 'yargs';
 
-//ts-node src/compendium.ts -f src/mocks/configMock.json --html out/out
-//ts-node src/compendium.ts -f src/mocks/configMock.json --pdf out
+//ts-node src/compendium.ts -f test-data/input/config.json --html out/out
 
 let configFile, outputFile, multiple, outputFormat, inputFormat;
 

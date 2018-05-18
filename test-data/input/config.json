@@ -16,13 +16,6 @@
       "source": "https://murtasanjuanases.atlassian.net/wiki/",
       "space": "PD",
       "context": "external"
-    },
-    {
-      "reference": "confluence2",
-      "source_type": "confluence",
-      "source": "https://adcenter.pl.s2-eu.capgemini.com/confluence/",
-      "space": "JQ",
-      "context": "capgemini"
     }
   ],
   "documents": [
@@ -85,10 +78,6 @@
     {
       "reference": "confluence1",
       "document": "Public+Development+of+Compendium"
-    },
-    {
-      "reference": "confluence2",
-      "document": "Jump+the+queue+Home"
     }
   ]
 }

@@ -102,4 +102,4 @@ On the other hand, we need to define the documents, as to the sources, we can ha
 
 IMPORTANT: You can't write the same reference, each reference should be unique. And if you want to extract Confluence or Jira information you need to introduce your credentials to get the information.
 
-Reference can be made to asciidoc files, jira issues and confluence pages. You can see an example link:http://gitlab-val.es.capgemini.com/gitlab/ADCenter/compendium/blob/master/src/mocks/config.json[here].
+Reference can be made to asciidoc files, jira issues and confluence pages. You can see an example link:http://gitlab-val.es.capgemini.com/gitlab/ADCenter/compendium/blob/master/test-data/input/config.json[here].

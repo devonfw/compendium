@@ -6,12 +6,9 @@ import {
   IndexSource,
   DocConfig,
 } from './types';
-import { TextInMock, TextOutMock } from './mocks/impl';
 import { Utilities } from './utils';
 import * as fs from 'fs';
 import * as util from 'util';
-
-export let mock = false;
 
 export class ConfigFile implements DocConfig {
   public configPath: string;

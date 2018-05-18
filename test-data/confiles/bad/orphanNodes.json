@@ -3,12 +3,12 @@
     {
       "reference": "input-data1",
       "source_type": "asciidoc",
-      "source": "./mocks/input-data1"
+      "source": "./brown/input-data1"
     },
     {
       "reference": "input-data2",
       "source_type": "asciidoc",
-      "source": "./mocks/input-data2"
+      "source": "./brown/input-data2"
     }
   ],
   "documents": [

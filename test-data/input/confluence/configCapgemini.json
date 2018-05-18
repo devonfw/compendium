@@ -1,7 +1,7 @@
 {
   "sources": [
     {
-      "reference": "internal",
+      "reference": "confluence2",
       "source_type": "confluence",
       "source": "https://adcenter.pl.s2-eu.capgemini.com/confluence/",
       "space": "JQ",
@@ -10,8 +10,7 @@
   ],
   "documents": [
     {
-      "reference": "internal",
-      "kind": "confluence",
+      "reference": "confluence2",
       "document": "Jump+the+queue+Home"
     }
   ]

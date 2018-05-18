@@ -63,7 +63,7 @@ const outputPath01 = 'test-data/output/confluence/output1.json';
 
 // TEST01
 // Should get content from Murta's space
-xdescribe('Confluence Test', () => {
+describe('Confluence Test', () => {
   before(done => {
     extrafs
       .ensureDir(outputFolder)

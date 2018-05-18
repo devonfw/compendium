@@ -52,7 +52,7 @@ const badConfigFolder = './test-data/confiles/bad/';
 /**
  * Bad Case Scnarios for Config File
  *
- * Mocks are located in the @param {string} outputFolder
+ * Mocks are located in the @param {string} badConfigFolder
  */
 describe('Testing the asciidoc input and the pdf, html, asciidoc Output with BAD case scenarios', () => {
   before(() => {});

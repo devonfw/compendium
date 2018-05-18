@@ -3,7 +3,7 @@
     {
       "reference": "input-data1",
       "source_type": "asciidoc",
-      "source": "./mocks/input-data1"
+      "source": "./brownfox/input-data1"
     }
   ],
   "documents": [

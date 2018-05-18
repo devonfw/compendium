@@ -6,7 +6,6 @@ import {
   IndexSource,
   DocConfig,
 } from './types';
-import { TextInMock, TextOutMock } from './mocks/impl';
 import { EmitElement } from './emitFunctions';
 import * as fs from 'fs';
 import * as shelljs from 'shelljs';
