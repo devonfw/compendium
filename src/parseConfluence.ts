@@ -12,6 +12,7 @@ export class ParseConfluence extends ParseLocal {
   public static confluenceService: ConfluenceService;
   public static baseURL: string;
   public static spaceKey: string | undefined;
+  public static credentials: Credentials;
 
   public static init(
     auth: Cookies | Credentials,
@@ -70,7 +71,6 @@ export class ParseConfluence extends ParseLocal {
 
         let filename = this.getPath(dir);
         let src = folder.concat(filename);
-
         try {
           await extrafs.writeFile(src, content);
         } catch (err) {

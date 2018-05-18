@@ -1,6 +1,6 @@
 import { Cookie, Cookies, Credentials } from '../../src/types';
 
-export const isConfluenceTest = true;
+export const isConfluenceTest = false;
 
 // Cookies
 // -------

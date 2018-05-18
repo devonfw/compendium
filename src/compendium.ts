@@ -6,6 +6,7 @@ import { doCompendium, askInPrompt } from './clinterpreter';
 import * as yargs from 'yargs';
 
 //ts-node src/compendium.ts -f test-data/input/config.json --html out/out
+//murta.sanjuan-ases-external@capgemini.com   Admin1234
 
 let configFile, outputFile, multiple, outputFormat, inputFormat;
 

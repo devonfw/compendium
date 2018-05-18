@@ -1,4 +1,5 @@
 import { COOKIES_TEST, isConfluenceTest } from '../test-data/input/cookieTest';
+import { ConfluenceServiceImpl } from './confluenceService';
 import * as fs from 'fs';
 import {
   IndexSource,
@@ -12,6 +13,7 @@ import {
   Cookie,
   Cookies,
   Credentials,
+  ConfluenceService,
 } from './types';
 import { AsciiDocFileTextIn } from './asciidocInput';
 import { AsciiDocFileTextOut } from './asciidocOutput';
@@ -71,17 +73,48 @@ export async function doCompendium(
       textinSources[source.reference] = new AsciiDocFileTextIn(source.source);
     } else if (source.source_type === 'confluence') {
       if (source.context === 'capgemini') {
-        if (isConfluenceTest) {
+        //capgemini is from the internal network
+        /* if (isConfluenceTest) {
           textinSources[source.reference] = new ConfluenceTextIn(
             source.source,
             source.space,
             COOKIES_TEST,
           );
-        } else {
-          throw new Error(
-            "Resource under 'Single Sign On' context. This authentication is not yet implemented.",
+        } else { */
+        //need credentials first
+        let credentials: Credentials;
+        try {
+          console.log(
+            chalk.bold(
+              `Please enter credentials for source with key '${chalk.green.italic(
+                source.reference,
+              )}' (${chalk.blue(source.source)})\n`,
+            ),
           );
+          credentials = await askInPrompt();
+        } catch (err) {
+          throw new Error(err.message);
         }
+        //need session cookie
+        let cookies: Cookies = [];
+        let confluenceService: ConfluenceService;
+        confluenceService = new ConfluenceServiceImpl();
+        let uri = source.source;
+        try {
+          cookies = await confluenceService.getSessionCookiesByCredentials(
+            uri,
+            credentials,
+          );
+        } catch (error) {
+          throw new Error(error.message);
+        }
+        //proccess with the confluence Text in proccess
+        textinSources[source.reference] = new ConfluenceTextIn(
+          source.source,
+          source.space,
+          cookies,
+        );
+        //}
       } else {
         let credentials: Credentials;
         try {

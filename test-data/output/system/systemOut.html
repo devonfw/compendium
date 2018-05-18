@@ -29,129 +29,627 @@
 <div id="toc" class="toc">
 <div id="toctitle" class="title">Table of Contents</div>
 <ul class="sectlevel0">
-<li><a href="#_example_manual">Example Manual</a>
+<li><a href="#_strong_1_project_introduction_statement_of_purpose_strong"><strong>1. Project Introduction. Statement of Purpose</strong></a></li>
+<li><a href="#_strong_2_objectives_strong"><strong>2. Objectives</strong></a></li>
+<li><a href="#_strong_3_first_steps_analysis_strong"><strong>3. First Steps Analysis</strong></a></li>
+<li><a href="#_strong_4_user_stories_strong"><strong>4. User Stories</strong></a>
 <ul class="sectlevel1">
-<li><a href="#_source_code">Source Code</a></li>
-<li><a href="#_images">Images</a></li>
-<li><a href="#_ordered_list">Ordered List</a></li>
-<li><a href="#_admonition_types">Admonition types</a></li>
-<li><a href="#_image">Image</a></li>
-<li><a href="#_other_table">Other Table</a></li>
-<li><a href="#_labeled_list">Labeled list</a></li>
-<li><a href="#_hybrid_list">Hybrid list</a></li>
-<li><a href="#_paragraph_attached">Paragraph attached</a></li>
-<li><a href="#_link">Link</a></li>
-<li><a href="#_cross_reference">Cross reference</a></li>
-<li><a href="#_the_fox">The fox</a>
+<li><a href="#_strong_epic_1_get_a_number_strong"><strong>Epic 1. Get a number</strong></a>
 <ul class="sectlevel2">
-<li><a href="#_the_strong_real_strong_strong_em_fox_em_strong">The <strong>real</strong> <strong><em>fox</em></strong></a></li>
+<li><a href="#_user_story_1_accept_terms_conditions">User story 1. Accept terms &amp; conditions</a></li>
+<li><a href="#_user_story_2_verify_information">User story 2. Verify information</a></li>
+<li><a href="#_user_story_3_consent_information">User story 3. Consent information</a></li>
+<li><a href="#_user_story_4_register">User story 4. Register</a></li>
+<li><a href="#_user_story_5_priority_access">User story 5. Priority access</a></li>
 </ul>
 </li>
-<li><a href="#_the_fox_2">The fox</a>
+<li><a href="#_strong_epic_2_consult_the_queue_strong"><strong>Epic 2. Consult the queue</strong></a>
 <ul class="sectlevel2">
-<li><a href="#_the_strong_real_strong_strong_em_fox_em_strong_2">The <strong>real</strong> <strong><em>fox</em></strong></a></li>
+<li><a href="#_user_story_6_consult_queue">User story 6. Consult Queue</a></li>
+<li><a href="#_user_story_7_waiting_time">User story 7. Waiting time</a></li>
 </ul>
 </li>
-<li><a href="#_what_is_unique_about_its_implementation">What is unique about its implementation?</a></li>
-<li><a href="#_operating_mode">Operating Mode</a>
-<ul class="sectlevel3">
-<li><a href="#_asciidoc_input">Asciidoc input</a></li>
+<li><a href="#_strong_epic_3_manage_queue_strong"><strong>Epic 3. Manage queue</strong></a>
+<ul class="sectlevel2">
+<li><a href="#_user_story_8_configure_queue">User story 8. Configure queue</a></li>
+<li><a href="#_user_story_9_attend_queue">User story 9. Attend queue</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a href="#_strong_5_site_map_strong"><strong>5. Site Map</strong></a></li>
+<li><a href="#_strong_6_entity_relationship_diagram_strong"><strong>6. Entity relationship diagram</strong></a></li>
+<li><a href="#_strong_7_bounded_context_strong"><strong>7. Bounded context</strong></a></li>
+<li><a href="#_strong_8_glossary_of_terms_strong"><strong>8. Glossary of terms</strong></a>
+<ul class="sectlevel1">
+<li><a href="#_recent_space_activity">Recent space activity</a></li>
+<li><a href="#_space_contributors">Space contributors</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 </div>
-<h1 id="_example_manual" class="sect0">Example Manual</h1>
+<h1 id="_strong_1_project_introduction_statement_of_purpose_strong" class="sect0"><strong>1. Project Introduction. Statement of Purpose</strong></h1>
 <div class="openblock partintro">
 <div class="content">
-This project does something. &#169; I haven´t done it yet.
+<div class="paragraph">
+<p>Existing systems to manage queues and turns consists only in the assignation of a number without any associated logic that improves user experience and give value to user and to queue owner.</p>
+</div>
+<div class="paragraph">
+<p>Classic systems do not allow to know at what time will be each turn. In addition, clients only can consult queue status if he stays at the queue location. This provoke a bad user experience because he must to stay in the queue all waiting time. Besides, in an amount of cases, this causes that some users leave the queue because the long waiting time, provoking the loss of the sales.</p>
+</div>
+<div class="paragraph">
+<p>Ideally the users of the queue have to be able to know at what hour could be its turn. It is very important because he can improve its time and he will need to wait in the queue and only go when its time reaches.</p>
+</div>
+<div class="paragraph">
+<p>Besides, to facilitate that the user has not to be in the queue waiting its turn, he can consult the queue status at any device that he can have. (for example a mobile phone, tablet,  ..)</p>
+</div>
+<div class="paragraph">
+<p>As value added, queue owners will be able to prioritize users at the queue to have the possibility of creating marketing campaigns.</p>
+</div>
+<div class="paragraph">
+<p>A successful solution would be to improve user experience facilitating that the user has not to be in the queue waiting its turn.</p>
 </div>
 </div>
-<div class="sect1">
-<h2 id="_source_code">Source Code</h2>
-<div class="sectionbody">
-<div class="listingblock">
+</div>
+<h1 id="_strong_2_objectives_strong" class="sect0"><strong>2. Objectives</strong></h1>
+<div class="openblock partintro">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Scanner s = new Scanner( new File("scores.dat") );</code></pre>
+<div class="paragraph">
+<p>The objectives of the project are:</p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p>Eliminate the needed of stay waiting in a queue.</p>
+</li>
+<li>
+<p>Improve user experience, easing the access to the queue.</p>
+</li>
+<li>
+<p>The system has to be simple and easily scalable and extensible</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<h1 id="_strong_3_first_steps_analysis_strong" class="sect0"><strong>3. First Steps Analysis</strong></h1>
+<div class="openblock partintro">
+<div class="content">
+This is the <a href="/confluence/display/JQ/Jump+the+queue+Home">First Steps Analysis </a> presentation used to present and validate our understanding of the User Stories and behaviour of the future solution with customer.
+</div>
+</div>
+<h1 id="_strong_4_user_stories_strong" class="sect0"><strong>4. User Stories</strong></h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p>As the first objective of Jump the Queue component is to improve the time management of the user, providing the needed functionalities to do so.</p>
+</div>
+<div class="paragraph">
+<p>The solution focus on this premise and has to facilitate the process of accessing and consulting to the queue.</p>
+</div>
+<div class="paragraph">
+<p>Roughly, the entire process that a user will follow to obtain and consult the access code of a queue will be:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/JQ/4328086.png" alt="4328086"></span></p>
+</div>
+<div class="paragraph">
+<p>The main actors that will interact with jump the queue component will be the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>User</strong> : It is an internal user of the external system that creates the queue and it will have privilege access to the queue.</p>
+</li>
+<li>
+<p><strong>Visitor</strong> : User of the queue component that does not exist in the external system that created the queue.</p>
+</li>
+<li>
+<p><strong>Owner</strong> : User that manages the queue.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In the next points, we can see the details of the user stories that define the minimum functionality of Jump the Queue component.</p>
+</div>
+<div class="paragraph">
+<p>We can see the proposed user story map at the following figure.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/JQ/4328086.png" alt="4328086"></span></p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_images">Images</h2>
+<h2 id="_strong_epic_1_get_a_number_strong"><strong>Epic 1. Get a number</strong></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><span class="image"><img src="images/sunset.jpg" alt="sunset"></span></p>
+<p>This epic contains all needed functions that allow users to get a number for entering in the queue.</p>
+</div>
+<div class="paragraph">
+<p>As part of the process, the epic must implement:</p>
+</div>
+<div class="paragraph">
+<p>1º Accept terms &amp; conditions.</p>
+</div>
+<div class="paragraph">
+<p>2º Register in the queue. As part of this process the component must validate the information.</p>
+</div>
+<div class="paragraph">
+<p>3º Obtain the code to access the queue.</p>
+</div>
+<div class="paragraph">
+<p>The user stories that define this epic are:</p>
+</div>
+<div class="sect2">
+<h3 id="_user_story_1_accept_terms_conditions">User story 1. Accept terms &amp; conditions</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Story Narrative</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accept terms &amp; conditions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Priority</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">As</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">visitor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Size</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I need to</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">accept terms and conditions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dependency</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">So that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I can access jump the queue system</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Acceptance Criteria</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- Terms and conditions will be configurable and the system must show this text.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The system will ask to accept terms and conditions before getting an access code.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_user_story_2_verify_information">User story 2. Verify information</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Story Narrative</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Verify information</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Priority</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">As</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">visitor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Size</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I need</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">my telephone number or email to be verified</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dependency</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">So that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">their validity will be confirmed</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Acceptance Criteria</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- User has to receive an email or a SMS with a validation code.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The system will only allow the access to users that input this validation code.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_user_story_3_consent_information">User story 3. Consent information</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Story Narrative</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Consent information</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Priority</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">As</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">visitor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Size</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I want to</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">give my permission for the use of my personal information</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dependency</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">So that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I can received commercial notices</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Acceptance Criteria</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- This functionality can be activated or de-activated.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- If the user gives its permission, the system must save this information.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_user_story_4_register">User story 4. Register</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Story Narrative</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Register</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Priority</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">As</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">visitor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Size</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I want to</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">register to obtain an access code for the queue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dependency</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">So that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I get an access code</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Acceptance Criteria</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- User can inform a phone, email and a Name.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The name is mandatory.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The phone or the email have to be informed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The phone or the email have to be confirmed.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The access code will be formatting as &quot;Q&quot; plus a number between 0 to 999.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The access code will be the next free number. If the number reaches 999, the number continues with 0.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The email, phone cannot be repeated in more than one non-attended turns.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_user_story_5_priority_access">User story 5. Priority access</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Story Narrative</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Priority access</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Priority</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">As</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">internal user</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Size</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I want to</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">get priority access code to the queue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dependency</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">So that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I will be attended earlier</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Acceptance Criteria</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-  The access code will be formatting as &quot;A&quot; plus a number between 0 to 999.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The access code will be the next free number. If the number reaches 999, the number continues with 0.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_ordered_list">Ordered List</h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Install the gem locally (at the moment it has not been publish to rubygem)</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Clone the github repository locally `git clone `</p>
-</li>
-<li>
-<p>Built it <code>gem build asciidoctor-confluence.gemspec</code></p>
-</li>
-<li>
-<p>Install it <code>gem install ./asciidoctor-confluence.{version}.gem</code></p>
-</li>
-<li>
-<p>To check it has been done correctly <code>asciidoctor-confluence -v</code> should display <code>asciidoctor-confluence: {version}</code></p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p>Have a Confluence instance</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>If you don&#8217;t have a Confluence server, you can use a Docker container (e.i.: <a href="https://registry.hub.docker.com/u/cptactionhank/atlassian-confluence/">https://registry.hub.docker.com/u/cptactionhank/atlassian-confluence/</a> ), the option requires therefore an Atlassian account so it can generate a trial licence key.</p>
-</li>
-</ol>
-</div>
-</li>
-</ol>
-</div>
-<table class="tableblock frame-all grid-all spread">
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_admonition_types">Admonition types</h2>
-<div class="sectionbody">
-<table class="tableblock frame-all grid-all spread">
-</table>
-<table class="tableblock frame-all grid-all spread">
-</table>
-<table class="tableblock frame-all grid-all spread">
-</table>
-<table class="tableblock frame-all grid-all spread">
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_image">Image</h2>
+<h2 id="_strong_epic_2_consult_the_queue_strong"><strong>Epic 2. Consult the queue</strong></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><span class="image"><a class="image" href="http://www.flickr.com/photos/javh/5448336655"><img src="images/sunset.jpg" alt="sunset"></a></span></p>
+<p>It contains all functions that permit to order and to consult the status of the queue.</p>
+</div>
+<div class="paragraph">
+<p>The user stories that define this are:</p>
+</div>
+<div class="sect2">
+<h3 id="_user_story_6_consult_queue">User story 6. Consult Queue</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Story Narrative</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Consult queue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Priority</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">As</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">visitor or internal user or jump the queue owner</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Size</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I want to</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">consult the status of the queue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dependency</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">So that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I would know when it is my turn</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Acceptance Criteria</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The system only returns the non-attended turns of the queue.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The list will be ordered by the time when the ticket was taken, except in the case that the access code will be of the form &quot;A&quot; + number that will be first (priority access).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The list must return the following information: Access code, estimated time and Name.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_user_story_7_waiting_time">User story 7. Waiting time</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Story Narrative</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Waiting time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Priority</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">As</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">visitor or internal user</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Size</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I want to</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">see my estimated waiting time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dependency</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">So that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I would know when I will be attended</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Acceptance Criteria</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The system has to calculate the estimated time with the following formula: current hour + (Sum(The last ten attention time)/nº of attended turn counted)*(number of non-attended turns in the queue before this).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The number cannot be less than a configurable value.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The attention time is the difference between the start time and the end time.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_other_table">Other Table</h2>
+<h2 id="_strong_epic_3_manage_queue_strong"><strong>Epic 3. Manage queue</strong></h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>It contains all functions that allow to manage the queue in order to configure and attend active turn.</p>
+</div>
+<div class="paragraph">
+<p>The user stories that define this are:</p>
+</div>
+<div class="sect2">
+<h3 id="_user_story_8_configure_queue">User story 8. Configure queue</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Story Narrative</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Configure queue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Priority</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">As</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">jump the queue owner of the queue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Size</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I want to</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">personalize the logo and description showed to users</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dependency</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">So that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I can personalize my business</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Acceptance Criteria</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The system allows to configure a logo and description.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- Jump the queue front shows the logo and description</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_user_story_9_attend_queue">User story 9. Attend queue</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Story Narrative</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Attend queue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Priority</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">As</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">jump the queue owner of the queue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Size</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I need to</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">know the current turn of the queue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dependency</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">So that</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">I can attend it</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Acceptance Criteria</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The turn has to be the first in the queue that is non-attended.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- The system must save:</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- At the previous turn: Save the current time as end time</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- At the new turn: Save the current time as start time</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<h1 id="_strong_5_site_map_strong" class="sect0"><strong>5. Site Map</strong></h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p>We proposed the following sitemap and screen structures to support the requirements that solution shall fulfill.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/JQ/4328086.png" alt="4328086"></span></p>
+</div>
+<div class="paragraph">
+<p>1º Select Queue. This step will not be a screen and represents the operation to be followed by a user to enter Jump the Queue.</p>
+</div>
+<div class="paragraph">
+<p>2º Request/ Insert code. This functionality represents the process to be followed by a user to obtain a ticket number. The proposed screen will only apply to visitor users because existing users will have a direct access to step 3.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/JQ/4328086.png" alt="4328086"></span></p>
+</div>
+<div class="paragraph">
+<p>3º Assigned Order / Show Queue. Here, the user can consult its number and the list of people in the queue.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/JQ/4328086.png" alt="4328086"></span></p>
+</div>
+<div class="paragraph">
+<p>Finally, the owner of the queue can consult and pass the turn with the consult screen and with a button at the screen or pressing a physical button.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/JQ/4328086.png" alt="4328086"></span></p>
+</div>
+</div>
+</div>
+<h1 id="_strong_6_entity_relationship_diagram_strong" class="sect0"><strong>6. Entity relationship diagram</strong></h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p>Starting from the list of user stories, we found the below entities to support them.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/JQ/4328086.png" alt="4328086"></span></p>
+</div>
+<div class="paragraph">
+<p>Each entity will content the following information:</p>
+</div>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 50%;">
@@ -159,397 +657,257 @@ This project does something. &#169; I haven´t done it yet.
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Firefox</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Web Browser</p></td>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">Visitor Information</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ruby</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Programming Language</p></td>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">It contains the personal information of the visitors who gave the permission to use it</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">TorqueBox</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Application Server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Telephone</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TelephoneType</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Email</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EmailType</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_labeled_list">Labeled list</h2>
-<div class="sectionbody">
-<table class="tableblock frame-all grid-all spread">
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_hybrid_list">Hybrid list</h2>
-<div class="sectionbody">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Fedora
-.* Desktop</p>
-</li>
-<li>
-<p>Ubuntu
-.* Desktop
-.* Server</p>
-</li>
-<li>
-<p>FreeBSD</p>
-</li>
-<li>
-<p>NetBSD</p>
-</li>
-<li>
-<p>OpenShift</p>
-</li>
-<li>
-<p>CloudBees</p>
-</li>
-<li>
-<p>Amazon EC2</p>
-</li>
-<li>
-<p>Rackspace</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_paragraph_attached">Paragraph attached</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>grandparent list item</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_link">Link</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p><a href="protocol.json">Open the JSON file</a></p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_cross_reference">Cross reference</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The text at the end of this sentence is cross referenced to <a href="#_other_table">Table</a></p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_the_fox">The fox</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_the_strong_real_strong_strong_em_fox_em_strong">The <strong>real</strong> <strong><em>fox</em></strong></h3>
-<div class="paragraph">
-<p><span class="image"><a class="image" href="http://www.google.com"><img src="images/fox.png" alt="Red Fox"></a></span></p>
-</div>
-<div class="paragraph">
-<p>The <sub>quick</sub> <strong>brown fox</strong> <strong><em>jumps</em></strong> <strong>over</strong> the lazy <span class="underline">dog.</span></p>
-</div>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 50%;">
+<col style="width: 50%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Column 1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Columns 2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">and 3</p></td>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">Terms and conditions</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">It describes the Terms and conditions that the user must accept to use the queue</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Item 2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Item 2</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Item 3</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Item 3</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Item 4</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.google.es">Google</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">footer 1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">footer 2</p></td>
-<td class="tableblock halign-left valign-top"><div><div class="ulist">
-<ul>
-<li>
-<p>hola1</p>
-</li>
-<li>
-<p>hola2</p>
-<div class="ulist">
-<ul>
-<li>
-<p>anidada1</p>
-</li>
-<li>
-<p>anidada2</p>
-<div class="ulist">
-<ul>
-<li>
-<p>anidadaotravez1</p>
-</li>
-<li>
-<p>anidadaotravez2</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>anidada3</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>hola3</p>
-</li>
-</ul>
-</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_the_fox_2">The fox</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_the_strong_real_strong_strong_em_fox_em_strong_2">The <strong>real</strong> <strong><em>fox</em></strong></h3>
-<div class="paragraph">
-<p>The <sub>quick</sub> <strong>brown fox</strong> <strong><em>jumps</em></strong> <strong>over</strong> the lazy <span class="underline">dog.</span></p>
-</div>
-<div class="paragraph">
-<p><span class="image"><a class="image" href="http://www.google.com"><img src="images/fox.png" alt="Red Fox"></a></span></p>
-</div>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 50%;">
+<col style="width: 50%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Column 1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Columns 2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">and 3</p></td>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">Queue owner</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">It contains information for the users that can manage queues</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Item 2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Item 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">userIdType</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Item 3</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Item 3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Item 4</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.google.es">Google</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Email</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EmailType</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">footer 1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">footer 2</p></td>
-<td class="tableblock halign-left valign-top"><div><div class="ulist">
-<ul>
-<li>
-<p>hola1</p>
-</li>
-<li>
-<p>hola2</p>
-<div class="ulist">
-<ul>
-<li>
-<p>anidada1</p>
-</li>
-<li>
-<p>anidada2</p>
-<div class="ulist">
-<ul>
-<li>
-<p>anidadaotravez1</p>
-</li>
-<li>
-<p>anidadaotravez2</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>anidada3</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>hola3</p>
-</li>
-</ul>
-</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PasswordType</p></td>
 </tr>
 </tbody>
 </table>
-<div class="listingblock">
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">Queue</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">It contains the information that describes a queue</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Logo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Image</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">Access code</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock">It contains the list people that are in the queue and their information.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Id_code</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String. Assigned code. PK</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Email</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EmailType</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Telephone</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TelephoneType</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CreationTime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time (HH:MM). The hour when the user got the turn</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">StartTime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time (HH:MM). The hour when the attendance of the user starts</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EndTime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time (HH:MM). The hour when the attendance of the user ends</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EstimatedTime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time (HH:MM). The hour which the system estimated when the user will be attended</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<h1 id="_strong_7_bounded_context_strong" class="sect0"><strong>7. Bounded context</strong></h1>
+<div class="openblock partintro">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Scanner s = new Scanner( new File("scores.dat") );</code></pre>
-</div>
+<div class="paragraph">
+<p>In this point, we will define the bounded context of the final solution.</p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/sunset.jpg" alt="sunset"></span></p>
+<p>In the figure below we have three domains, one for each related Epic.</p>
 </div>
 <div class="paragraph">
-<p><a href="protocol.json">Open the JSON file</a></p>
-</div>
-<div class="paragraph">
-<p>The text at the end of this sentence is cross referenced to <a href="#_other_table">Table</a></p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Install the gem locally (at the moment it has not been publish to rubygem)</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Clone the github repository locally `git clone `</p>
-</li>
-<li>
-<p>Built it <code>gem build asciidoctor-confluence.gemspec</code></p>
-</li>
-<li>
-<p>Install it <code>gem install ./asciidoctor-confluence.{version}.gem</code></p>
-</li>
-<li>
-<p>To check it has been done correctly <code>asciidoctor-confluence -v</code> should display <code>asciidoctor-confluence: {version}</code></p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p>Have a Confluence instance</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>If you don&#8217;t have a Confluence server, you can use a Docker container (e.i.: <a href="https://registry.hub.docker.com/u/cptactionhank/atlassian-confluence/">https://registry.hub.docker.com/u/cptactionhank/atlassian-confluence/</a> ), the option requires therefore an Atlassian account so it can generate a trial licence key.</p>
-</li>
-</ol>
-</div>
-</li>
-</ol>
-</div>
-<table class="tableblock frame-all grid-all spread">
-</table>
-<table class="tableblock frame-all grid-all spread">
-</table>
-<table class="tableblock frame-all grid-all spread">
-</table>
-<table class="tableblock frame-all grid-all spread">
-</table>
-<div class="paragraph">
-<p>Asciidoctor is a  <em>fast</em>  text processor and publishing toolchain for converting AsciiDoc content to HTML5, DocBook 5 or 4.5, EPUB3, PDF and other formats. Asciidoctor is the leading implementation of the AsciiDoc syntax, first introduced and implemented in the Python-based AsciiDoc project.</p>
-</div>
-<div class="paragraph">
-<p>Asciidoctor is written in Ruby and can be used on any Ruby runtime, including JRuby. It can also be run on the JVM via AsciidoctorJ, a formal Java API which leverages JRuby underneath, or run in JavaScript using Asciidoctor.js, a transcompiled version of the Ruby codebase.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_what_is_unique_about_its_implementation">What is unique about its implementation?</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Asciidoctor converts AsciiDoc source files and strings to HTML 5, DocBook 4.5 and other formats, including HTML 5 presentations (reveal.js, Bespoke.js, etc).</p>
-</div>
-<div class="paragraph">
-<p>What follows are highlights of its most notable features.</p>
-</div>
-<div class="paragraph">
-<p>Asciidoctor uses a set of built-in ERB templates to generate HTML 5 and DocBook 4.5 output that is structurally equivalent to what AsciiDoc produces. Any of these templates can be replaced by a custom template written in any template language available in the Ruby ecosystem. Custom template rendering is handled by the <a href="https://github.com/rtomayko/tilt">Tilt</a>  template abstraction library (among the most popular gems in the Ruby ecosystem).</p>
-</div>
-<div class="paragraph">
-<p>Leveraging the Ruby stack isn’t the only benefit of Asciidoctor. Unlike the AsciiDoc Python implementation, Asciidoctor parses and converts the source document in discrete steps. This makes converting the document optional and gives Ruby programs the opportunity to extract, add or replace information in the document by interacting with the document object model Asciidoctor assembles. Developers can use the full power of the Ruby programming language to play with the content in the document.</p>
-</div>
-<div class="paragraph">
-<p>No coverage of Asciidoctor would be complete without mention of its 'speed'. Despite not being an original goal of the project, Asciidoctor has proven startlingly fast. It loads, parses and converts documents  <strong>100x as fast</strong>  as the Python implementation. That’s good news for developer productivity and good news for GitHub or any server-side application that needs to convert AsciiDoc markup. Asciidoctor also offers several levels of security, further justifying its suitability for server-side deployments.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/PD/4292609.png" alt="4292609"></span></p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/PD/688139.jpg" alt="688139"></span></p>
-</div>
-<div class="paragraph">
-<p>For the definition of the programming interfaces have been developed for both the inputs and the outputs.  Thus, when adding new features is much easier, since we only have to implement the necessary classes and the interface.  On the other hand, tests have been carried out, which verify that the operation of the code is correct and in case of failure we quickly know where our problem lies. At final, we can see a scheme to know what is the operation depending on the input or output parameters.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_operating_mode">Operating Mode</h2>
-<div class="sectionbody">
-<div class="sect3">
-<h4 id="_asciidoc_input">Asciidoc input</h4>
-<div class="paragraph">
-<p>Confluence input</p>
-</div>
-<div class="paragraph">
-<p>Html output</p>
-</div>
-<div class="paragraph">
-<p>pdf output</p>
-</div>
-<div class="paragraph">
-<p>asciidoc output</p>
-</div>
-<div class="paragraph">
-<p>This project uses different technologies. Here is a list of all of them:</p>
+<p>-      Obtain Access code domain: As we saw at epic chapter, this domain contains the required logic to get a turn in the queue. The related entities are:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://code.visualstudio.com/">Visual Studio Code</a>  It’s a great programme, because it can use in every SO and it’s free. We developed using 1.19.2 version</p>
+<p>Access code: It is shared with Consult queue status domain.</p>
 </li>
 <li>
-<p><a href="https://nodejs.org/en/">NodeJS</a>  Server-side development using the basics of the Express framework. It is a JavaScript runtime built on Chrome’s V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient.</p>
+<p>Queue: It is shared by the three domains.</p>
 </li>
 <li>
-<p><a href="https://github.com/asciidoctor/asciidoctor.js">Asciidoctor.js</a>  Server-side development using the 1.5.6 version. Asciidoctor.js uses Opal to transpile Asciidoctor from Ruby to Javascript, we can run on any Javascript platform.</p>
+<p>Personal (visitor) information</p>
 </li>
 <li>
-<p><a href="https://www.npmjs.com/">NPM</a>  A Command line client using 5.6.0 version. NPM is the package manager for Javascript, packages are open-source. It consists of three distinct components, one of them is the Commando Line Interface (CLI). Because of, CLI runs from a terminal, we interact with it.</p>
-</li>
-<li>
-<p><a href="http://yargs.js.org/">Yargs</a>  Command line tool using 5.0 version. Yargs is a node.js library, and help us build an interactive command line tool by parsing arguments and implementing new enhanced interface.</p>
+<p>Terms and conditions: This is shared with Manage queue domain.</p>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>-      Consult queue status domain: It has the needed logic to check turn status. This is supported by the entities:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Access Code: It is shared with Obtain access code domain.</p>
+</li>
+<li>
+<p>Queue: It is shared by the three domains.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>-      Manage queue domain: This domain contains all functionalities to configure the queues and their owners.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Queue: It is shared by the three domains.</p>
+</li>
+<li>
+<p>Terms and conditions: This is shared with Obtain Access Code.</p>
+</li>
+<li>
+<p>Queue owner.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/JQ/4328086.png" alt="4328086"></span></p>
+</div>
+</div>
+</div>
+<h1 id="_strong_8_glossary_of_terms_strong" class="sect0"><strong>8. Glossary of terms</strong></h1>
+<div class="openblock partintro">
+<div class="content">
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Term</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Access code</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This is the turn number assigned to a person</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Validation code</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">It is a code used to confirm the validity of the email or telephone number informed by the user</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Estimated time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stands for the time that the system calculates when the person in the queue will be attended</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Attention time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This is the time that it takes for a user to be attended. It is calculated as the difference between the start and the end of the attention</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Priority access</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">It is the access granted to privileged users so they can be attended earlier</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_recent_space_activity">Recent space activity</h2>
+<div class="sectionbody">
+<div class="literalblock">
+<div class="content">
+<pre>image:/confluence/s/en_GB/7202/e97769bbf919c0bd667762fc102f557beacb7f94/_/images/icons/profilepics/default.png[, link=""]   link:/confluence/display/~lperezde[Luisa Perez]       link:/confluence/display/JQ/Jump+the+queue+Home[Jump the queue Home]  updated Feb 02, 2018 link:/confluence/pages/diffpagesbyversion.action?pageId=2163154&amp;amp;selectedPageVersions=8&amp;amp;selectedPageVersions=7[view change]       image:/confluence/s/en_GB/7202/e97769bbf919c0bd667762fc102f557beacb7f94/_/images/icons/profilepics/anonymous.png[]   Anonymous       link:/confluence/display/JQ/Jump+the+queue+Home[Jump the queue Home]  updated Feb 01, 2018 link:/confluence/pages/diffpagesbyversion.action?pageId=2163154&amp;amp;selectedPageVersions=7&amp;amp;selectedPageVersions=6[view change]</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_space_contributors">Space contributors</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>{&quot;mode&quot;:&quot;list&quot;,&quot;scope&quot;:&quot;descendants&quot;,&quot;limit&quot;:&quot;5&quot;,&quot;showLastTime&quot;:&quot;true&quot;,&quot;order&quot;:&quot;update&quot;,&quot;contextEntityId&quot;:2163154}</p>
 </div>
 </div>
 </div>

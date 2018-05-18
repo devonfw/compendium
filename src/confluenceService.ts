@@ -1,4 +1,4 @@
-import { ConfluenceService, Cookies, Credentials } from './types';
+import { ConfluenceService, Cookies, Credentials, Cookie } from './types';
 import * as request from 'superagent';
 
 export class ConfluenceServiceImpl implements ConfluenceService {
@@ -12,6 +12,7 @@ export class ConfluenceServiceImpl implements ConfluenceService {
   public getContentbyCookies(URL: string, cookies: Cookies): Promise<JSON> {
     return new Promise<JSON>((resolve, reject) => {
       const serializedCookies = this.serializeCookies(cookies);
+      console.log(serializedCookies);
 
       request
         .get(URL)
@@ -128,7 +129,6 @@ export class ConfluenceServiceImpl implements ConfluenceService {
   public getImagebyCookies(URL: string, cookies: Cookies): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
       const serializedCookies = this.serializeCookies(cookies);
-
       request
         .get(URL)
         .set('Cookie', serializedCookies)
@@ -202,5 +202,71 @@ export class ConfluenceServiceImpl implements ConfluenceService {
     } else {
       throw new Error('Cookies or Credentials must be included');
     }
+  }
+  /**
+   * get the session cookie in confluence by credentials
+   * @param {string} URL
+   * @param {Credentials} credentials
+   * @returns {Promise<Cookies>}
+   * @memberof ConfluenceServiceImpl
+   */
+  public getSessionCookiesByCredentials(
+    URLlogin: string,
+    credentials: Credentials,
+  ): Promise<Cookies> {
+    return new Promise<Cookies>((resolve, reject) => {
+      let cookies: Cookies = [];
+      let cookie: Cookie;
+      request
+        .post(URLlogin)
+        .type('application/json')
+        .auth(credentials.username, credentials.password)
+        .end((err: any, res: any) => {
+          if (err) {
+            reject(err.message);
+          } else if (res) {
+            //get cookie
+            let aux = res.get('set-cookie');
+            cookies = this.buildingCookie(aux);
+            //filter error if is empty
+            if (cookies.length < 1)
+              reject(
+                new Error(
+                  'There is no cookie available for the source ' + URLlogin,
+                ),
+              );
+            resolve(cookies);
+          } else {
+            //response is empty
+            reject(
+              new Error(
+                "It's not possible to get the cookie from '" +
+                  URLlogin +
+                  "'" +
+                  '. Make sure you have authorization.',
+              ),
+            );
+          }
+        });
+    });
+  }
+  /*
+  *Transform JSON response set-cookies into Cookie Object
+  * 
+  * */
+  public buildingCookie(response: JSON): Cookies {
+    let cookies: Cookies = [];
+    const parsed_content = JSON.parse(JSON.stringify(response));
+    console.log(parsed_content);
+
+    let arrayItem = parsed_content[0].split(';');
+    //only the first is the cookie
+    let arraySubItem = arrayItem[0].split('=');
+    let cookie: Cookie = { name: arraySubItem[0], value: '' };
+    if (arraySubItem.length > 0) cookie.value = arraySubItem[1];
+    cookies.push(cookie);
+    console.log(cookie);
+
+    return cookies;
   }
 }
