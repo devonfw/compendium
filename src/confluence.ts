@@ -60,7 +60,6 @@ export class ConfluenceTextIn implements TextIn {
     baseURL: string,
     spaceKey: string | undefined,
     auth: Cookies | Credentials,
-    credentials?: Credentials,
   ) {
     this.baseURL = baseURL;
     this.spaceKey = spaceKey;

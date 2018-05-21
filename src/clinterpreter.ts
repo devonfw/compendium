@@ -113,7 +113,6 @@ export async function doCompendium(
             source.source,
             source.space,
             cookies,
-            credentials,
           );
         }
       } else {
