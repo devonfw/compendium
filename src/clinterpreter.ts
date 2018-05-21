@@ -72,60 +72,52 @@ export async function doCompendium(
     if (source.source_type === 'asciidoc') {
       textinSources[source.reference] = new AsciiDocFileTextIn(source.source);
     } else if (source.source_type === 'confluence') {
+      //need credentials first
+      let credentials: Credentials;
+      try {
+        console.log(
+          chalk.bold(
+            `Please enter credentials for source with key '${chalk.green.italic(
+              source.reference,
+            )}' (${chalk.blue(source.source)})\n`,
+          ),
+        );
+        credentials = await askInPrompt();
+      } catch (err) {
+        throw new Error(err.message);
+      }
       if (source.context === 'capgemini') {
         //capgemini is from the internal network
-        /* if (isConfluenceTest) {
+        if (isConfluenceTest) {
           textinSources[source.reference] = new ConfluenceTextIn(
             source.source,
             source.space,
             COOKIES_TEST,
           );
-        } else { */
-        //need credentials first
-        let credentials: Credentials;
-        try {
-          console.log(
-            chalk.bold(
-              `Please enter credentials for source with key '${chalk.green.italic(
-                source.reference,
-              )}' (${chalk.blue(source.source)})\n`,
-            ),
-          );
-          credentials = await askInPrompt();
-        } catch (err) {
-          throw new Error(err.message);
-        }
-        //need session cookie
-        let cookies: Cookies = [];
-        let confluenceService: ConfluenceService;
-        confluenceService = new ConfluenceServiceImpl();
-        let uri = source.source;
-        try {
-          cookies = await confluenceService.getSessionCookiesByCredentials(
-            uri,
+        } else {
+          //need session cookie
+          let cookies: Cookies = [];
+          let confluenceService: ConfluenceService;
+          confluenceService = new ConfluenceServiceImpl();
+          let uri = source.source;
+          try {
+            cookies = await confluenceService.getSessionCookiesByCredentials(
+              uri,
+              credentials,
+            );
+          } catch (error) {
+            throw new Error(error.message);
+          }
+          //proccess with the confluence Text in proccess
+          textinSources[source.reference] = new ConfluenceTextIn(
+            source.source,
+            source.space,
+            cookies,
             credentials,
           );
-        } catch (error) {
-          throw new Error(error.message);
         }
-        //proccess with the confluence Text in proccess
-        textinSources[source.reference] = new ConfluenceTextIn(
-          source.source,
-          source.space,
-          cookies,
-        );
-        //}
       } else {
-        let credentials: Credentials;
         try {
-          console.log(
-            chalk.bold(
-              `Please enter credentials for source with key '${chalk.green.italic(
-                source.reference,
-              )}' (${chalk.blue(source.source)})\n`,
-            ),
-          );
-          credentials = await askInPrompt();
           textinSources[source.reference] = new ConfluenceTextIn(
             source.source,
             source.space,
