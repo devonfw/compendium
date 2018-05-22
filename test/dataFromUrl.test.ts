@@ -43,11 +43,11 @@ transcript.segments = segments1;
 let docconfig: ConfigFile;
 let index1: Index;
 const textinSources: TextInSources = {};
-const outputFolder = 'test-data/output/';
+const outputFolder = 'test-data/output/html/';
 const pathConfigFile = './test-data/confiles/html-url/config.json';
 let listFilesOutput: string[] = []; //to erase in after()
 
-xdescribe('Url-html', () => {
+xdescribe('Url-html Input Output one html page', () => {
   before(done => {
     //get the index ready
     docconfig = new ConfigFile(pathConfigFile);
@@ -62,8 +62,8 @@ xdescribe('Url-html', () => {
       });
   });
 
-  describe('Url input', () => {
-    it('Testing the input', done => {
+  xdescribe('Url input', () => {
+    it('Testing the input get Transcript', done => {
       //get the Transcript
       textinSources[index1[0][0].reference] = new InputUrlTextIn(
         index1[0][0].source,
@@ -71,6 +71,8 @@ xdescribe('Url-html', () => {
       textinSources[index1[1][0].reference]
         .getTranscript(index1[1][0].document)
         .then(transcriptObject => {
+          console.log(transcriptObject);
+
           done();
         })
         .catch(error => {
@@ -114,16 +116,79 @@ xdescribe('Url-html', () => {
         let transcripts: Transcript[] = [];
         transcripts.push(transcript);
         let out: HtmlFileTextOut = new HtmlFileTextOut(
-          outputFolder + 'outJumpTheQueue',
+          outputFolder + 'outHandbook',
         );
         out.generate(transcripts).then(() => {
-          listFilesOutput.push(outputFolder + 'outJumpTheQueue.html');
+          listFilesOutput.push(outputFolder + 'outHandbook.html');
           done();
         });
       });
     });
   });
 
+  after(() => {
+    try {
+      //delete all output files
+      //shelljs.rm(listFilesOutput);
+    } catch (error) {
+      throw error;
+    }
+  });
+});
+//___________________________All links from Index_____________________________________________
+xdescribe('Url-html all Index Handbook', () => {
+  before(done => {
+    //get the index ready
+    let configFilePath = './test-data/confiles/html-url/configAllIndex.json';
+    docconfig = new ConfigFile(configFilePath);
+    docconfig
+      .getIndex()
+      .then(index => {
+        index1 = index;
+        done();
+      })
+      .catch(error => {
+        done(error);
+      });
+  });
+  describe('Get Transcript from an index', () => {
+    it('index handbook page', done => {
+      //constructor
+      textinSources[index1[0][0].reference] = new InputUrlTextIn(
+        index1[0][0].source,
+      );
+      //get index list
+      textinSources[index1[1][0].reference]
+        .getIndexList(index1[1][0].document)
+        .then(documentsList => {
+          if (documentsList.length > 0) {
+            //save the list inside the index
+            documentsList.forEach(title => {
+              index1[1].push({
+                reference: index1[0][0].reference,
+                document: title,
+              });
+            });
+
+            textinSources[index1[1][15].reference]
+              .getTranscript(index1[1][15].document)
+              .then(transcript => {
+                console.log(index1[1][10].document);
+
+                console.log(transcript);
+
+                done();
+              })
+              .catch(error => {
+                done(error);
+              });
+          }
+        })
+        .catch(error => {
+          done(error);
+        });
+    });
+  });
   after(() => {
     try {
       //delete all output files

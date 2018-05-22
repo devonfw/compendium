@@ -29,7 +29,7 @@ export class ParseConfluence extends ParseLocal {
   }
 
   /**
-   * copyImagenot implemented yet
+   * copyImage
    * @param {string} dir
    * @memberof ParseConfluence
    */

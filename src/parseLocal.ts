@@ -517,16 +517,18 @@ export class ParseLocal {
   ): Array<RichString> {
     const paragraph: Array<RichString> = [];
     for (const par of para) {
-      if (myParam === 'strong') {
-        par.attrs.strong = true;
-      } else if (myParam === 'em') {
-        par.attrs.cursive = true;
-      } else if (myParam === 'underline') {
-        par.attrs.underline = true;
-      } else if (myParam === 'sub') {
-        par.attrs.script = 'sub';
-      } else if (myParam === 'sup') {
-        par.attrs.script = 'super';
+      if (par.attrs) {
+        if (myParam === 'strong') {
+          par.attrs.strong = true;
+        } else if (myParam === 'em') {
+          par.attrs.cursive = true;
+        } else if (myParam === 'underline') {
+          par.attrs.underline = true;
+        } else if (myParam === 'sub') {
+          par.attrs.script = 'sub';
+        } else if (myParam === 'sup') {
+          par.attrs.script = 'super';
+        }
       }
       paragraph.push(par);
     }

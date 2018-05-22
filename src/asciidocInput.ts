@@ -93,4 +93,9 @@ export class AsciiDocFileTextIn implements TextIn {
     }
     return transcript;
   }
+  //not implemented yet
+  public async getIndexList(title: string): Promise<string[]> {
+    let arrayResult: string[] = [];
+    return arrayResult;
+  }
 }

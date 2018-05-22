@@ -128,6 +128,7 @@ export interface DocConfig {
 export interface TextIn {
   getTranscript(id: string, sections?: string[]): Promise<Transcript>;
   // supportsExport(): boolean;
+  getIndexList(id: string): Promise<string[]>;
 }
 
 export interface TextOut {

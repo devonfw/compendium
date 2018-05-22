@@ -241,4 +241,9 @@ export class ConfluenceTextIn implements TextIn {
     }
     return outputURL;
   }
+  //not implemented yet
+  public async getIndexList(title: string): Promise<string[]> {
+    let arrayResult: string[] = [];
+    return arrayResult;
+  }
 }

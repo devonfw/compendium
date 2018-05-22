@@ -1,0 +1,231 @@
+:toc: macro
+toc::[]
+
+.  
+. link:index.html[AD Center Management]
+.  
+.  
+. link:AD-Center-Handbook_4326182.html[AD Center Handbook]
+.  
+
+
+=  AD Center Management : Service Portfolio  
+
+The AD Center is a one team approach delivering Scale Digital solutions, combining:
+
+*Solution Delivery Office*
+
+* Providing state-of-the-art design competency (BA,SA,UI &amp; UX)
+* Driving solutioning for digital custom-build application
+* Commuting on-site for client-facing tasks
+
+
+*Production Yard*
+
+* Developing the software by agile scale, Dev-Ops methodologies
+* Leveraging highly-qualified engineers (UI, SA, Developers, Testers …)
+
+
+and leveraging our *key assets* :
+
+* Asset based innovation
+* Agile processes and methods for development and integration
+* Capabilities and specialized teams
+
+
+= Service Catalog
+
+
+
+image:images/7766516.png[]
+
+
+
+== Solution Delivery Office
+
+=== Business Analysis
+
+Defining the needs and recommending solutions that deliver value to the client thereby enabling change in an organizational context. Practically: definition of Business Requirements
+
+The business analyst in the SDO fulfills a consultancy role that has the responsibility for investigating business situations, identifying and evaluating options for improving business systems, defining requirements and ensuring the effective use of information systems in meeting the needs of the business.
+
+They do not work strictly on the definition of the software system.  They will investigate the business systems, taking a holistic view of the situation. This may include examining elements of the organization structures and staff development issues as well as current processes and IT systems. They will include process improvement, organizational change or strategic planning and policy development. In this way the Business Analysts define the needs of the system and recommending solutions that deliver value to the client thereby enabling change in an organizational context.
+
+==== Key services / activities
+
+* Requirements elicitation
+* : The practice of collecting requirements from stakeholders in a project. Techniques for requirements elicitation include: brainstorming, document analysis, workshops etc.
+* Solution assessment and validation
+* : Validate the correctness of a proposed solution, support its implementation and assess possible shortcomings.
+* Enterprise analysis or company analysis
+* : Focuses on understanding the needs of the business as a whole, its strategic direction, and identifying initiatives that will allow a business to meet those strategic goals
+* Requirements planning and management
+* : Involves planning the requirements development process, determining which requirements are the highest priority for implementation, and managing change.
+
+
+=== Bid Support
+
+Supporting the Market Unit with the all phases of the bidding process
+
+=== Estimation
+
+Supporting the Market Unit with the estimation of effort, to be included in the bid
+
+=== Architecture
+
+Software architecture serves as the blueprint for both the system and the project developing it, defining the work assignments that must be carried out by design and implementation teams. The architecture is the primary carrier of system qualities such as performance, modifiability, and security, none of which can be achieved without a unifying architectural vision.
+
+==== Key services / activities
+
+* Definition of the architecture of the software solutions
+* Review/validation of the application architecture with the client
+* Definition of the methodology and best practices
+* Selection of tools to improve development process
+* Create reference designs for different solution types (web, batch, etc…)
+* Specialized support for engagements
+* Training on supported Devon technologies
+* Collaboration with Devon Core-Team to provide feedback and support
+* Incorporate new versions of the Devon framework to projects
+** Support for version upgrades
+
+
+
+
+=== Prototyping
+
+Software prototyping is the activity of creating prototypes of software applications, i.e., incomplete versions of the software program being developed. It is an activity that can occur in software development and is comparable to prototyping as known from other fields, such as mechanical engineering or manufacturing.
+
+==== Key services / activities
+
+* Create application prototypes for demo, bid support or proof of concept
+* Create initial version of the solution prior to developing in the Yard
+** Bootstrap the project with suitable technology stack
+** Commit initial code to the repositories
+** Implement tooling, best practices and continuous integration pipeline
+** Project is “Ready to Manufacture”
+* Poof of Concept for new technologies and new versions of Devon
+
+
+
+
+=== UX Design
+
+Specializes in usability analysis and commitment to improve the strategy of design in omni-channel services
+
+==== Experience and skills
+
+* UX goal is to design intuitive, user-centric interaction packages that deliver business value at the enterprise level
+* The UX team should be experts in designing and prototyping of the software package of Adobe CC, Axure 8 PRO and other tools
+
+
+==== Key services / activities
+
+* User Experience research and digital strategy
+* Heuristic evaluation and Usability testing for web and mobile apps
+* Service UI design services
+* Rapid UX/UI Design and Prototyping
+* Comprehensive user experience design services include
+** Strategy
+** Design
+** Continuous improvement
+
+
+==== How do we do
+
+* Define the problem and frame the solution
+* Ideate, create, validate and iterate the concept
+* Deliver all that is needed to build
+* Monitor and improve
+
+
+image:images/8850358.png[]
+
+
+
+== Yard
+
+=== Analysis design
+
+The Functional Analysts and Designers in the Yard are responsible for the high-level, functional design of a software system. This defines its functionality based on the defined Business requirements. They assure that each modular part of a device has only one responsibility and performs that responsibility with the minimum of side effects on other parts.
+
+Important tasks of the functional designers is to guard against over specifying the design as well as scope creep. The former can be prevented by using Agile methodologies like user stories and capturing requirements in a series of automated acceptance tests (BDD). Scope creep can be avoided by utilizing Requirements management techniques.
+
+Using methodologies like Domain Driven Design (DDD) or Model Driven Architecture (MDA) the designers model the system with the principal aim to  separate design from architecture. The functional design addresses the functional requirements while architecture provides the infrastructure through which non-functional requirements like scalability, reliability and performance are realized.
+
+==== Key services / activities
+
+* Domain-driven design: A methodology and process prescription for the development of complex systems whose focus is mapping activities, tasks, events, and data within a problem domain into the technology artefacts of a solution domain.
+* Model-driven architecture: MDA is a software design approach for the development of software systems. It provides a set of guidelines for the structuring of specifications, which are expressed as models. Model-driven architecture supports model-driven engineering of software systems.
+* Creation of User Stories: A central development artefact for Agile project teams. A user story is a very high-level definition of a requirement, containing just enough information so that the developers can produce a reasonable estimate of the effort to implement it.
+* Use Case definition: A Use cases  a set of interactions between a system and one or more actors, with actors being people, other systems, or both. It describes not only a behaviour, but also how that behaviour can be achieved.
+
+
+=== Technical design
+
+The Yard contains the role of the Solution Architect. His/her role is to focus on the Software architecture of the solution. This refers to the high level structures of a software system, the discipline of creating such structures, and the documentation of these structures. These structures are needed to reason about the software system. Each structure comprises software elements, relations among them, and properties of both elements and relations.
+
+The role of the Software architect is critical. A solid architecture can reduce the cost of development in the long run, ensuring quality and scalability of the system.
+
+==== Key services / activities
+
+* Architectural Synthesis: The process of creating an architecture. Given the architecturally significant requirements determined by the analysis, the current state of the design and the results of any evaluation activities, the design is created and improved
+* Architecture Evaluation: The process of determining how well the current design or a portion of it satisfies the requirements derived during analysis. Validate the correctness of a proposed solution, support its implementation and assess possible shortcomings.
+* Architecture Evolution: The process of maintaining and adapting an existing software architecture to meet requirement and environmental changes. It is concerned with adding new functionality as well as maintaining existing functionality and system behaviour.
+* Architecture documentation: This facilitates communication between stakeholders, captures early decisions about the high-level design, and allows reuse of design components between projects.
+
+
+=== DevOps
+
+DevOps is the practice of operations and development engineers participating together in the entire service lifecycle, from design through the development process to production support. And, in the end, everyone is able to deliver the best results and overall experience possible to the customer.
+
+DevOps relies on automation of all possible development phases to get an efficient workflow from product idea conception to deployment in production. The Yard DevOps team will provide continuous integration pipelines for projects and seek continuous improvement of the solution through intelligent monitoring.
+
+==== Key services / activities
+
+* Specialized on automation tools and methodology
+* Create automatisms for more efficient software development
+* Adopt and adapt newer versions of Production Line
+* Support the correct usage of tools on the engagements
+* Define monitoring KPI for engagements (quality, performance…)
+
+
+=== Testing
+
+A software tester’s main job is to locate and report bugs. Software testers need a specific set of skills in order to perform their daily tasks of locating and reporting bugs. What makes their day-to-day tasks challenging is the fact that many bugs are not getting fixed right away. Software tester have to go back and forth with the development team, coordinating about the same bug a number of times.
+
+==== Key services / activities
+
+* Definition of test plans and test cases
+* Quality assurance and evolution check for projects
+* Prepare testing on the continuous integration environments
+* Prepare virtualized data and services for the tests
+* Promote testing discipline on the software development
+* Training for teams
+* Support for the technologies involved (Junit, Selenium, etc…)
+* Perform testing for external applications (not developed in Yard)
+* Different types of testing:
+** Unit test, integration test, stability, conformance, performance
+** Desktop, mobile, web, batch, APIs
+
+
+=== Development
+
+Independent agile teams working with different combination of technologies following the same methodology/processes and using the same tools
+
+==== Key development services according to the devonfw technology stack
+
+* Frontend: Sencha ExtJS, Angular
+* Backend: Java
+* Mobile: Xamarin, Cordova
+
+
+==== Key principles
+
+* The development is executed by developers with the support from the solution architects
+* Extensive use of devonfw accelerators and reusable components
+* Component-oriented development focused on reuse, testability and quality
+* Active participation in the Devon Yammer group within the Devon community and strong communication with the iCSD team in the Sounding Board Meeting to provide feedback
+
+
+
+
