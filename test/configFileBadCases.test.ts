@@ -98,6 +98,20 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with BAD
           done();
         });
     });
+    it('Duplicated document when is index source true', done => {
+      const errorMessageResult =
+        'Error duplicated document: When document_is_index=true the document must be unique';
+      docconfig = new ConfigFile(badConfigFolder + 'configAllIndexBad.json');
+      docconfig
+        .getIndex()
+        .then(index => {
+          done('Test fail to throw the error ');
+        })
+        .catch(error => {
+          expect(error.message).includes(errorMessageResult);
+          done();
+        });
+    });
   });
 
   after(() => {});

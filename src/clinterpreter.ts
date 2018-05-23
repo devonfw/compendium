@@ -21,8 +21,9 @@ import { HtmlFileTextOut } from './html';
 import { PdfFileTextOut } from './pdf';
 import { MergerImpl } from './merger';
 import { ConfigFile } from './config';
-import { ConfluenceTextIn } from './confluence';
+import { ConfluenceTextIn } from './confluenceInput';
 import { InputUrlTextIn } from './inputUrl';
+import { Utilities } from './utils';
 import chalk from 'chalk';
 import * as shelljs from 'shelljs';
 import * as util from 'util';
@@ -131,6 +132,38 @@ export async function doCompendium(
       textinSources[source.reference] = new InputUrlTextIn(source.source);
     } else {
       throw new Error('Unknown TextInSource');
+    }
+    //Check if the source has a document_is_index true
+    //if not exists position -1, if exists position of its array
+    let documentIsIndexPosition: number = Utilities.findDocumentIsIndex(
+      index[1],
+      source.reference,
+    );
+    if (documentIsIndexPosition >= 0) {
+      //Index exists but check if source type supports it
+      if (textinSources[source.reference].supportsExport()) {
+        let arrayTitles = await textinSources[source.reference].getIndexList(
+          index[1][documentIsIndexPosition].document,
+        );
+        if (arrayTitles.length > 0) {
+          index[1];
+          //save the list inside the index
+          for (let title of arrayTitles) {
+            index[1].push({
+              reference: source.reference,
+              document: title,
+            });
+          }
+        } else {
+          console.log('No links meeting requirements inside the index page');
+        }
+      } else {
+        throw new Error(
+          'Source type: ' +
+            source.source_type +
+            ' not supports export all documents from index. ',
+        );
+      }
     }
   }
 

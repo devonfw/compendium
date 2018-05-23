@@ -133,4 +133,43 @@ export class Utilities {
     }
     return source_type;
   }
+  //Document Nodes
+  //when document is an index source must be a unique reference
+  //return true if is unique and false if is not
+  public static checkNodeDocumentIsUnique(
+    reference: string,
+    indexNodes: IndexNode[],
+  ): boolean {
+    //array only references
+    let arrayReferences = indexNodes.map(node => node.reference);
+    let duplicate = true;
+    const source: string[] = [];
+    arrayReferences.map(ref => {
+      if (source.indexOf(ref) >= 0) {
+        duplicate = false;
+      } else {
+        source.push(ref);
+      }
+    });
+
+    return duplicate;
+  }
+  //if document_is_index exists return the position of the document inside the index
+  public static findDocumentIsIndex(
+    index: IndexNode[],
+    sourceRef: string,
+  ): number {
+    let result: number = -1;
+    //find
+    index.map((node, index) => {
+      if (
+        node.reference === sourceRef &&
+        node.document_is_index &&
+        node.document_is_index === 'true'
+      ) {
+        result = index;
+      }
+    });
+    return result;
+  }
 }

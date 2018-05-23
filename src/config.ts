@@ -76,6 +76,18 @@ export class ConfigFile implements DocConfig {
             );
           }
         }
+        //document_is_index true and unique
+        if (node.document_is_index && node.document_is_index === 'true') {
+          if (
+            Utilities.checkNodeDocumentIsUnique(node.reference, data.documents)
+          ) {
+            indexNode.document_is_index = node.document_is_index;
+          } else {
+            throw new Error(
+              'Error duplicated document: When document_is_index=true the document must be unique',
+            );
+          }
+        }
         indexNodes.push(indexNode);
       } else {
         throw new Error(

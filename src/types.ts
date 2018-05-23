@@ -117,7 +117,7 @@ export interface IndexNode {
   reference: string;
   document: string;
   sections?: string[];
-  index_source?: boolean;
+  document_is_index?: string;
 }
 
 export type Index = [Array<IndexSource>, Array<IndexNode>];

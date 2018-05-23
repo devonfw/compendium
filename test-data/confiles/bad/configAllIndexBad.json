@@ -11,6 +11,10 @@
       "reference": "handbook",
       "document": "index",
       "document_is_index": "true"
+    },
+    {
+      "reference": "handbook",
+      "document": "index"
     }
   ]
 }

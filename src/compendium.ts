@@ -10,6 +10,8 @@ import * as yargs from 'yargs';
 //murta.sanjuan-ases-external@capgemini.com   Admin1234
 //sample with url-html:
 //ts-node src/compendium.ts -f test-data/confiles/html-url/config.json --html out/out
+//sample with url-html all index html links
+//ts-node src/compendium.ts -f test-data/confiles/html-url/configAllIndex.json --html out/out
 
 let configFile, outputFile, multiple, outputFormat, inputFormat;
 

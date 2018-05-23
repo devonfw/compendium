@@ -129,15 +129,15 @@ describe('Url-html Input Output one html page', () => {
 
   after(() => {
     try {
-      //delete all output files
-      shelljs.rm(listFilesOutput);
+      // clean fixture
+      shelljs.rm('-rf', outputFolder);
     } catch (error) {
       throw error;
     }
   });
 });
 //___________________________All links from Index_____________________________________________
-xdescribe('Url-html all Index Handbook', () => {
+describe('Url-html all Index Handbook Input', () => {
   before(done => {
     //get the index ready
     let configFilePath = './test-data/confiles/html-url/configAllIndex.json';
@@ -152,7 +152,7 @@ xdescribe('Url-html all Index Handbook', () => {
         done(error);
       });
   });
-  describe('Get Transcript from an index', () => {
+  describe('Get titles list from an index', () => {
     it('index handbook page', done => {
       //constructor
       textinSources[index1[0][0].reference] = new InputUrlTextIn(
@@ -174,9 +174,11 @@ xdescribe('Url-html all Index Handbook', () => {
             textinSources[index1[1][15].reference]
               .getTranscript(index1[1][15].document)
               .then(transcript => {
-                console.log(index1[1][10].document);
-
-                console.log(transcript);
+                let paragraph = transcript.segments[3] as Paragraph;
+                let link1 = paragraph.text[0] as Link;
+                let link2 = link1.text as Paragraph;
+                let link3 = link2.text[0] as RichString;
+                expect(link3.text).includes('Accelerated Solution Design');
 
                 done();
               })
@@ -190,12 +192,5 @@ xdescribe('Url-html all Index Handbook', () => {
         });
     });
   });
-  after(() => {
-    try {
-      //delete all output files
-      //shelljs.rm(listFilesOutput);
-    } catch (error) {
-      throw error;
-    }
-  });
+  after(() => {});
 });

@@ -8,7 +8,7 @@ import {
   Transcript,
   TextSegment,
 } from '../src/types';
-import { ConfluenceTextIn } from '../src/confluence';
+import { ConfluenceTextIn } from '../src/confluenceInput';
 import { AsciiDocFileTextOut } from '../src/asciidocOutput';
 import { HtmlFileTextOut } from '../src/html';
 import { PdfFileTextOut } from '../src/pdf';
