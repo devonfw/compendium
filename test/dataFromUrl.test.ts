@@ -47,7 +47,7 @@ const outputFolder = 'test-data/output/html/';
 const pathConfigFile = './test-data/confiles/html-url/config.json';
 let listFilesOutput: string[] = []; //to erase in after()
 
-xdescribe('Url-html Input Output one html page', () => {
+describe('Url-html Input Output one html page', () => {
   before(done => {
     //get the index ready
     docconfig = new ConfigFile(pathConfigFile);
@@ -62,7 +62,7 @@ xdescribe('Url-html Input Output one html page', () => {
       });
   });
 
-  xdescribe('Url input', () => {
+  describe('Url input', () => {
     it('Testing the input get Transcript', done => {
       //get the Transcript
       textinSources[index1[0][0].reference] = new InputUrlTextIn(
@@ -71,8 +71,10 @@ xdescribe('Url-html Input Output one html page', () => {
       textinSources[index1[1][0].reference]
         .getTranscript(index1[1][0].document)
         .then(transcriptObject => {
-          console.log(transcriptObject);
-
+          let paragraph = transcriptObject.segments[5] as Paragraph;
+          let richS = paragraph.text[0] as RichString;
+          console.log(richS.text);
+          expect(richS.text).includes('Production Yard');
           done();
         })
         .catch(error => {
@@ -98,30 +100,29 @@ xdescribe('Url-html Input Output one html page', () => {
           done(error);
         });
     });
-    describe('output in asciidoc', () => {
-      it('output asciidoc', done => {
-        let transcripts: Transcript[] = [];
-        transcripts.push(transcript);
-        let out: AsciiDocFileTextOut = new AsciiDocFileTextOut(
-          outputFolder + 'outHandbook',
-        );
-        out.generate(transcripts).then(() => {
-          listFilesOutput.push(outputFolder + 'outHandbook.adoc');
-          done();
-        });
-      });
-    });
-    xdescribe('output in html', () => {
+    describe('output in html', () => {
       it('output html', done => {
         let transcripts: Transcript[] = [];
         transcripts.push(transcript);
         let out: HtmlFileTextOut = new HtmlFileTextOut(
           outputFolder + 'outHandbook',
         );
-        out.generate(transcripts).then(() => {
-          listFilesOutput.push(outputFolder + 'outHandbook.html');
-          done();
-        });
+        out
+          .generate(transcripts)
+          .then(() => {
+            listFilesOutput.push(outputFolder + 'outHandbook.html');
+            //read the output file
+            let outputResult = fs.readFileSync(
+              outputFolder + 'outHandbook.html',
+              'utf8',
+            );
+            let outputArray = outputResult.split('\n');
+            expect(outputArray[90]).includes('Production Yard');
+            done();
+          })
+          .catch(error => {
+            done(error);
+          });
       });
     });
   });
@@ -129,7 +130,7 @@ xdescribe('Url-html Input Output one html page', () => {
   after(() => {
     try {
       //delete all output files
-      //shelljs.rm(listFilesOutput);
+      shelljs.rm(listFilesOutput);
     } catch (error) {
       throw error;
     }

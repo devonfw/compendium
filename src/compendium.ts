@@ -5,8 +5,11 @@ import { Credentials } from './types';
 import { doCompendium, askInPrompt } from './clinterpreter';
 import * as yargs from 'yargs';
 
+//sample with asciidoc local and confluence external many documents
 //ts-node src/compendium.ts -f test-data/input/config.json --html out/out
 //murta.sanjuan-ases-external@capgemini.com   Admin1234
+//sample with url-html:
+//ts-node src/compendium.ts -f test-data/confiles/html-url/config.json --html out/out
 
 let configFile, outputFile, multiple, outputFormat, inputFormat;
 

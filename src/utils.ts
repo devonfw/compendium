@@ -101,11 +101,7 @@ export class Utilities {
     const indexSources: IndexSource[] = index[0] as IndexSource[];
     const indexNodes: IndexNode[] = index[1] as IndexNode[];
     //create array with all the reference from sources
-    let sourceRefs: string[] = [];
-    indexSources.map(item => {
-      const ref = item.reference;
-      sourceRefs.push(ref);
-    });
+    let sourceRefs: string[] = indexSources.map(item => item.reference);
     let match = true;
     indexNodes.map(item => {
       const ref = item.reference;

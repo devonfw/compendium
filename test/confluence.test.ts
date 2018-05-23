@@ -62,7 +62,7 @@ const pathConfigFile = './test-data/input/config.json';
 const outputPath01 = 'test-data/output/confluence/output1.json';
 
 // TEST01
-// Should get content from Murta's space
+// Should get content from external Murta's confluence account
 describe('Confluence Test', () => {
   before(done => {
     extrafs

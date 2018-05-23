@@ -117,6 +117,7 @@ export interface IndexNode {
   reference: string;
   document: string;
   sections?: string[];
+  index_source?: boolean;
 }
 
 export type Index = [Array<IndexSource>, Array<IndexNode>];
@@ -127,7 +128,7 @@ export interface DocConfig {
 
 export interface TextIn {
   getTranscript(id: string, sections?: string[]): Promise<Transcript>;
-  // supportsExport(): boolean;
+  supportsExport(): boolean;
   getIndexList(id: string): Promise<string[]>;
 }
 

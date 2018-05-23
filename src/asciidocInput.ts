@@ -93,6 +93,10 @@ export class AsciiDocFileTextIn implements TextIn {
     }
     return transcript;
   }
+  //in case get all from an index is implemented
+  public supportsExport(): boolean {
+    return false;
+  }
   //not implemented yet
   public async getIndexList(title: string): Promise<string[]> {
     let arrayResult: string[] = [];

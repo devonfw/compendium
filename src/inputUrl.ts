@@ -113,6 +113,9 @@ export class InputUrlTextIn implements TextIn {
     }
     return transcript;
   }
+  public supportsExport(): boolean {
+    return true;
+  }
   /**
    * get Links array, list of documents to read from one index page
    */

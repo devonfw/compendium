@@ -60,6 +60,7 @@ export class ConfigFile implements DocConfig {
           reference: node.reference,
           document: node.document,
         };
+        //sections
         if (
           node.sections !== null &&
           node.sections !== '' &&

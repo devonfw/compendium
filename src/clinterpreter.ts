@@ -22,6 +22,7 @@ import { PdfFileTextOut } from './pdf';
 import { MergerImpl } from './merger';
 import { ConfigFile } from './config';
 import { ConfluenceTextIn } from './confluence';
+import { InputUrlTextIn } from './inputUrl';
 import chalk from 'chalk';
 import * as shelljs from 'shelljs';
 import * as util from 'util';
@@ -126,6 +127,8 @@ export async function doCompendium(
           throw new Error(err.message);
         }
       }
+    } else if (source.source_type === 'url-html') {
+      textinSources[source.reference] = new InputUrlTextIn(source.source);
     } else {
       throw new Error('Unknown TextInSource');
     }
