@@ -55,16 +55,21 @@ export class ParseUrlHtml extends ParseLocal {
    * @memberof ParseLocal overwriting
    */
   public static changeSRC(name: string): string {
-    let folder = 'images/' + name;
+    //./ if exists clear it
+    let aux = name.replace('./', '');
+    let folder = 'images/' + aux;
     return folder;
   }
   public static getFolderPath(dir: string): string {
-    let aux = dir.lastIndexOf('/') + 1;
+    //find las index of / to find out folder only
+    let aux1 = dir.lastIndexOf('/') + 1;
     let folder: string = '';
-    if (aux > 0) {
-      folder = dir.substring(0, aux);
+    if (aux1 > 0) {
+      folder = dir.substring(0, aux1);
     }
-    return folder;
+    //./ if exists clear it
+    let folder1 = folder.replace('./', '');
+    return folder1;
   }
   public static getFilenamePath(dir: string): string {
     let arrayAux = dir.split('/');

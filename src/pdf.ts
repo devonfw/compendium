@@ -41,7 +41,6 @@ export class PdfFileTextOut implements TextOut {
     } catch (err) {
       throw err;
     }
-
     const outputString: Array<string> = [];
     outputString.push(':toc: macro\ntoc::[]\n\n');
     if (data.length < 1) {

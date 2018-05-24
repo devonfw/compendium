@@ -91,7 +91,7 @@ describe('System01 test doCompendium from confluence murta and asciidoc in local
   });
 });
 //CONFLUENCE INTERNAL (with cookie or with credentials depending the cookietest.ts true or false)
-describe('System02 test doCompendium from confluence capgemini to asciidoc/html/pdf', () => {
+xdescribe('System02 test doCompendium from confluence capgemini to asciidoc/html/pdf', () => {
   before(done => {
     //variables
     outputFile = './test-data/output/system/systemOutInternal';
