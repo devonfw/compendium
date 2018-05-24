@@ -162,4 +162,7 @@ export class ParseConfluence extends ParseLocal {
 
     return filesize;
   }
+  public static checkImagesList() {
+    //we are already validating in get path
+  }
 }

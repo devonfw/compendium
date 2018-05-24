@@ -1,6 +1,7 @@
 import { InputUrlService } from './types';
 import * as request from 'request';
 import * as util from 'util';
+import * as fs from 'fs';
 
 export class InputUrlServiceImpl implements InputUrlService {
   /**
@@ -19,6 +20,15 @@ export class InputUrlServiceImpl implements InputUrlService {
         } else {
           reject('error when requesting ' + URL);
         }
+      });
+    });
+  }
+  public downloadImage(URL: string, src: string): Promise<any> {
+    let file = fs.createWriteStream(src);
+    return new Promise<any>((resolve, reject) => {
+      request.get(URL).pipe(file);
+      file.on('finish', () => {
+        resolve();
       });
     });
   }

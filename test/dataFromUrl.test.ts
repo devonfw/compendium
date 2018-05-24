@@ -73,7 +73,6 @@ describe('Url-html Input Output one html page', () => {
         .then(transcriptObject => {
           let paragraph = transcriptObject.segments[5] as Paragraph;
           let richS = paragraph.text[0] as RichString;
-          console.log(richS.text);
           expect(richS.text).includes('Production Yard');
           done();
         })
@@ -130,14 +129,14 @@ describe('Url-html Input Output one html page', () => {
   after(() => {
     try {
       // clean fixture
-      shelljs.rm('-rf', outputFolder);
+      //shelljs.rm('-rf', outputFolder);
     } catch (error) {
       throw error;
     }
   });
 });
 //___________________________All links from Index_____________________________________________
-describe('Url-html all Index Handbook Input', () => {
+xdescribe('Url-html all Index Handbook Input', () => {
   before(done => {
     //get the index ready
     let configFilePath = './test-data/confiles/html-url/configAllIndex.json';

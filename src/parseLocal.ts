@@ -623,4 +623,19 @@ export class ParseLocal {
       return name;
     }
   }
+  //validate array images
+  public static checkImagesList() {
+    let result: string[] = this.arrayImagesSrc.filter(item => {
+      if (
+        item.endsWith('.jpeg') ||
+        item.endsWith('.jpg') ||
+        item.endsWith('.png') ||
+        item.endsWith('.gif')
+      ) {
+        return item;
+      }
+    });
+
+    this.arrayImagesSrc = result;
+  }
 }

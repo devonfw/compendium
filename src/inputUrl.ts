@@ -99,6 +99,8 @@ export class InputUrlTextIn implements TextIn {
         }
       }
       transcript.segments = end;
+      //prepare the images to copy
+      ParseUrlHtml.checkImagesList();
       //copy images
       if (ParseUrlHtml.arrayImagesSrc.length > 0) {
         for (const src of ParseUrlHtml.arrayImagesSrc) {

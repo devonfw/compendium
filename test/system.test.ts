@@ -37,7 +37,7 @@ let inputFormat: string;
 
 //SYSTEM DO COMPENDIUM TEST
 //CONFLUENCE EXTERNAL
-xdescribe('System01 test doCompendium from confluence murta and asciidoc in local to asciidoc/html/pdf', () => {
+describe('System01 test doCompendium from confluence murta and asciidoc in local to asciidoc/html/pdf', () => {
   before(done => {
     //variables
     outputFile = './test-data/output/system/systemOut';
@@ -91,10 +91,10 @@ xdescribe('System01 test doCompendium from confluence murta and asciidoc in loca
   });
 });
 //CONFLUENCE INTERNAL (with cookie or with credentials depending the cookietest.ts true or false)
-xdescribe('System02 test doCompendium from confluence capgemini to asciidoc/html/pdf', () => {
+describe('System02 test doCompendium from confluence capgemini to asciidoc/html/pdf', () => {
   before(done => {
     //variables
-    outputFile = './test-data/output/system/systemOut';
+    outputFile = './test-data/output/system/systemOutInternal';
     outputFormat = 'asciidoc';
     extrafs
       .ensureDir(outputFolder)

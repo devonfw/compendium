@@ -156,6 +156,7 @@ export interface ConfluenceService {
 
 export interface InputUrlService {
   getContent(URL: string): Promise<string>;
+  downloadImage(URL: string, src: string): Promise<any>;
 }
 
 export interface Credentials {

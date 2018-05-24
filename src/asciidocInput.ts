@@ -85,6 +85,8 @@ export class AsciiDocFileTextIn implements TextIn {
       }
     }
     transcript.segments = end;
+    //validate images before copying
+    ParseLocal.checkImagesList();
     //copy images
     if (ParseLocal.arrayImagesSrc.length > 0) {
       for (const src of ParseLocal.arrayImagesSrc) {

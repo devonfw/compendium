@@ -29,39 +29,21 @@ export class ParseUrlHtml extends ParseLocal {
    * @memberof ParseConfluence
    */
   public static async copyImage(dir: string) {
-    //create folder imageTemp if not exists
-    try {
-      await extrafs.ensureDir('imageTemp/images/');
-    } catch (error) {
-      console.log(error);
-    }
-
-    //get content json
-    let content;
-    let error = false;
-    try {
-      content = await this.inputUrlService.getContent(this.baseURL + dir);
-    } catch (err) {
-      if (err.message) {
-        throw new Error(err.message);
-      } else {
-        throw new Error("It isn't possible to get the content from url " + dir);
-      }
-    }
-    //write image in the folder imageTemp
-    if (content) {
-      let folder = 'imageTemp/images/';
-      let filename = this.getPath(dir);
+    if (dir.includes(':')) {
+      //not implemented yet
+    } else {
+      //find out the folder
+      let folderAux = this.getFolderPath(dir);
+      let folder = 'imageTemp/images/' + folderAux;
+      let filename = this.getFilenamePath(dir);
       let src = folder.concat(filename);
+      //download image
+      let content: any;
       try {
-        await extrafs.writeFile(src, content);
+        await extrafs.ensureDir(folder);
+        await this.inputUrlService.downloadImage(this.baseURL + dir, src);
       } catch (err) {
-        if (
-          err.code !== 'ENOENT' &&
-          err.code !== 'ENOTEMPTY' &&
-          err.code !== 'EBUSY'
-        )
-          console.log(err.message);
+        throw new Error(err.message);
       }
     }
   }
@@ -73,11 +55,18 @@ export class ParseUrlHtml extends ParseLocal {
    * @memberof ParseLocal overwriting
    */
   public static changeSRC(name: string): string {
-    let filename = this.getPath(name);
-    let folder = 'images/' + filename;
+    let folder = 'images/' + name;
     return folder;
   }
-  public static getPath(dir: string): string {
+  public static getFolderPath(dir: string): string {
+    let aux = dir.lastIndexOf('/') + 1;
+    let folder: string = '';
+    if (aux > 0) {
+      folder = dir.substring(0, aux);
+    }
+    return folder;
+  }
+  public static getFilenamePath(dir: string): string {
     let arrayAux = dir.split('/');
     let filename: string = '';
     if (arrayAux.length > 0) {
