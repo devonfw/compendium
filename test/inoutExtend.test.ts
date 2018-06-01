@@ -64,7 +64,7 @@ let listFilesOutput: string[] = []; //to erase in after()
  * The folder test-data/input/input-data1 (source 2)
  * Testing the pdf Output and Merge
  */
-xdescribe('Testing the asciidoc input and the pdf, html, asciidoc Output with good case scenarios', () => {
+describe('Testing the asciidoc input and the pdf, html, asciidoc Output with good case scenarios', () => {
   before(done => {
     //get the index ready
     docconfig = new ConfigFile(pathConfigFile);

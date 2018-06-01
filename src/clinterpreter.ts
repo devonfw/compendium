@@ -1,4 +1,3 @@
-import { COOKIES_TEST, isConfluenceTest } from '../test-data/input/cookieTest';
 import { ConfluenceServiceImpl } from './confluenceService';
 import * as fs from 'fs';
 import {
@@ -27,6 +26,7 @@ import { Utilities } from './utils';
 import chalk from 'chalk';
 import * as shelljs from 'shelljs';
 import * as util from 'util';
+import { ConnectorApi } from '../src/connectorApi';
 
 /**
  * doCompendium
@@ -89,35 +89,39 @@ export async function doCompendium(
         throw new Error(err.message);
       }
       if (source.context === 'capgemini') {
-        //capgemini is from the internal network
-        if (isConfluenceTest) {
-          textinSources[source.reference] = new ConfluenceTextIn(
-            source.source,
-            source.space,
-            COOKIES_TEST,
-          );
-        } else {
-          //need session cookie
-          let cookies: Cookies = [];
-          let confluenceService: ConfluenceService;
-          confluenceService = new ConfluenceServiceImpl();
-          let uri = source.source;
-          try {
-            cookies = await confluenceService.getSessionCookiesByCredentials(
-              uri,
-              credentials,
-            );
-          } catch (error) {
-            throw new Error(error.message);
-          }
-          //proccess with the confluence Text in proccess
-          textinSources[source.reference] = new ConfluenceTextIn(
-            source.source,
-            source.space,
-            cookies,
+        //CONFLUENCE INTERNAL NETWORK
+        //get the cookie session brandNewDayProd with the API
+        let connectorApi: ConnectorApi = new ConnectorApi(
+          credentials.username,
+          credentials.password,
+          '',
+        );
+        let brandCookieValue: string;
+        try {
+          let cookiesResult = await connectorApi.connect();
+          let cookieBrand = cookiesResult[0].toString();
+          let aux1 = cookieBrand.split(';');
+          let aux2 = aux1[0].split('=');
+          brandCookieValue = aux2[1];
+        } catch (error) {
+          throw new Error(
+            'Error: Can not get the capgemini session cookie: ' + error.message,
           );
         }
+        //build the cookie
+        const brandNewDayProdCookie: Cookie = {
+          name: 'brandNewDayProd',
+          value: brandCookieValue,
+        };
+        const COOKIES_INTERNAL: Cookies = [brandNewDayProdCookie];
+        //text in constructor
+        textinSources[source.reference] = new ConfluenceTextIn(
+          source.source,
+          source.space,
+          COOKIES_INTERNAL,
+        );
       } else {
+        //CONFLUENCE EXTERNAL ACCOUNT
         try {
           textinSources[source.reference] = new ConfluenceTextIn(
             source.source,

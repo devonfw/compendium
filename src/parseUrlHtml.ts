@@ -38,7 +38,6 @@ export class ParseUrlHtml extends ParseLocal {
       let filename = this.getFilenamePath(dir);
       let src = folder.concat(filename);
       //download image
-      let content: any;
       try {
         await extrafs.ensureDir(folder);
         await this.inputUrlService.downloadImage(this.baseURL + dir, src);

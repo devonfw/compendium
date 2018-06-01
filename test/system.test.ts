@@ -90,8 +90,8 @@ xdescribe('System01 test doCompendium from confluence murta and asciidoc in loca
     //shelljs.rm('-rf', outputFolder);
   });
 });
-//CONFLUENCE INTERNAL (with cookie or with credentials depending the cookietest.ts true or false)
-xdescribe('System02 test doCompendium from confluence capgemini to asciidoc/html/pdf', () => {
+//CONFLUENCE INTERNAL
+describe('System02 test doCompendium from confluence capgemini to asciidoc/html/pdf', () => {
   before(done => {
     //variables
     outputFile = './test-data/output/system/systemOutInternal';
@@ -105,7 +105,7 @@ xdescribe('System02 test doCompendium from confluence capgemini to asciidoc/html
         done(error);
       });
   });
-  xdescribe('System test', () => {
+  describe('System test', () => {
     it('To asciidoc', done => {
       doCompendium(configFilePathCapgemini, 'asciidoc', outputFile)
         .then(() => {
@@ -116,7 +116,7 @@ xdescribe('System02 test doCompendium from confluence capgemini to asciidoc/html
         });
     });
   });
-  describe('System test', () => {
+  xdescribe('System test', () => {
     it('To html', done => {
       doCompendium(configFilePathCapgemini, 'html', outputFile)
         .then(() => {

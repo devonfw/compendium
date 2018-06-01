@@ -5,6 +5,7 @@ import {
   IndexNode,
   IndexSource,
   DocConfig,
+  Credentials,
 } from './types';
 import { EmitElement } from './emitFunctions';
 import * as fs from 'fs';
@@ -171,5 +172,41 @@ export class Utilities {
       }
     });
     return result;
+  }
+  public static async askInPrompt(): Promise<Credentials> {
+    const prompt = require('prompt');
+    let credentials: Credentials;
+
+    const promise = new Promise<Credentials>((resolve, reject) => {
+      prompt.start();
+
+      prompt.get(
+        [
+          {
+            name: 'username',
+            required: true,
+          },
+          {
+            name: 'password',
+            hidden: true,
+            replace: '*',
+            required: true,
+          },
+        ],
+        (err: any, result: any) => {
+          credentials = {
+            username: result.username,
+            password: result.password,
+          };
+          if (credentials) {
+            resolve(credentials);
+          } else {
+            reject(err.message);
+          }
+        },
+      );
+    });
+
+    return promise;
   }
 }

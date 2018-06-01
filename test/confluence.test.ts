@@ -17,11 +17,13 @@ import { HtmlFileTextOut } from '../src/html';
 import { PdfFileTextOut } from '../src/pdf';
 import { ConfigFile } from '../src/config';
 import { ConnectorApi } from '../src/connectorApi';
+import { Utilities } from '../src/utils';
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as fs from 'fs';
 import * as shelljs from 'shelljs';
 import * as extrafs from 'fs-extra';
+import chalk from 'chalk';
 
 chai.use(chaiAsPromised);
 
@@ -43,10 +45,7 @@ credentials = {
   username: 'murta.sanjuan-ases-external@capgemini.com',
   password: 'Admin1234',
 };
-let credentialsI = {
-  username: '',
-  password: '',
-};
+
 cookies = [
   {
     name: 'brandNewDayProd',
@@ -80,7 +79,7 @@ describe('Confluence Test', () => {
         done(error);
       });
   });
-  xdescribe('Confluence01 Testing the Output and Input of one document', () => {
+  describe('Confluence01 Testing the Output and Input of one document', () => {
     before(done => {
       //json file to see transcript geting ready
       if (fs.existsSync(outputPath01)) {
@@ -153,7 +152,7 @@ describe('Confluence Test', () => {
       // clean fixture
     });
   });
-  xdescribe('Confluence02 Testing the Input and Output of document [13] with png image', () => {
+  describe('Confluence02 Testing the Input and Output of document [13] with png image', () => {
     before(done => {
       //get the index ready
       docconfig = new ConfigFile(pathConfigFile);
@@ -237,8 +236,32 @@ describe('Confluence Test', () => {
 
     after(() => {});
   });
+
+  after(() => {
+    // clean fixture
+    shelljs.rm('-rf', outputFolder);
+  });
+});
+//internal confluence capgemini account
+/* describe('ConfluenceBad01 Testing common fails', () => {
+  before(() => {
+    //setup fixture
+  });
   describe('Testing Connector Api', () => {
-    it('Get the BrandNewDayProd cookie', done => {
+    it('Get the BrandNewDayProd cookie', async done => {
+      let credentialsI = { username: '', password: '' };
+      try {
+        console.log(
+          chalk.bold(
+            `Please enter credentials for source with key '${chalk.green.italic(
+              index1[0][2].reference,
+            )}' (${chalk.blue(index1[0][2].source)})\n`,
+          ),
+        );
+        credentialsI = await Utilities.askInPrompt();
+      } catch (err) {
+        throw new Error(err.message);
+      }
       let connectorApi: ConnectorApi = new ConnectorApi(
         credentialsI.username,
         credentialsI.password,
@@ -258,6 +281,5 @@ describe('Confluence Test', () => {
   });
   after(() => {
     // clean fixture
-    shelljs.rm('-rf', outputFolder);
   });
-});
+}); */

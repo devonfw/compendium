@@ -65,7 +65,7 @@ let listFilesOutput: string[] = []; //to erase in after()
  * Testing Input and Output of the files and the images
  *
  */
-xdescribe('Testing the asciidoc input and the pdf, html, asciidoc Output with good case scenarios', () => {
+describe('Testing the asciidoc input and the pdf, html, asciidoc Output with good case scenarios', () => {
   before(done => {
     //get the index ready
     docconfig = new ConfigFile(pathConfigFile);

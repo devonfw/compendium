@@ -45,37 +45,21 @@ export class ParseConfluence extends ParseLocal {
       } catch (error) {
         console.log(error);
       }
+      //src to download image is like the folder but with the filename
+      let srcAux = 'imageTemp/images/';
+      let filename = this.getPath(dir);
+      let src = srcAux.concat(filename);
 
       //get content json
       let content;
       let error = false;
       try {
-        content = await this.confluenceService.getImage(dir, this.auth);
+        content = await this.confluenceService.getImage(dir, this.auth, src);
       } catch (err) {
         if (err.message) {
           throw new Error(err.message);
         } else {
-          throw new Error(
-            "It isn't possible to get the content from confluence",
-          );
-        }
-      }
-
-      //write image in the folder imageTemp
-      if (content) {
-        let folder = 'imageTemp/images/';
-
-        let filename = this.getPath(dir);
-        let src = folder.concat(filename);
-        try {
-          await extrafs.writeFile(src, content);
-        } catch (err) {
-          if (
-            err.code !== 'ENOENT' &&
-            err.code !== 'ENOTEMPTY' &&
-            err.code !== 'EBUSY'
-          )
-            console.log(err.message);
+          throw new Error("It isn't possible to get the image from confluence");
         }
       }
     }

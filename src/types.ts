@@ -152,11 +152,17 @@ export interface ConfluenceService {
   getContentbyCookies(URL: string, cookie: Cookies): Promise<JSON>;
   getContentbyCredentials(URL: string, credentials: Credentials): Promise<JSON>;
   getContent(URL: string, cookie: Cookies | Credentials): Promise<JSON>;
-  getImage(URL: string, cookie: Cookies | Credentials): Promise<Buffer>;
-  getSessionCookiesByCredentials(
+  getImage(URL: string, auth: Cookies | Credentials, src: string): Promise<any>;
+  downloadImageByCookies(
+    URL: string,
+    cookies: Cookies,
+    src: string,
+  ): Promise<any>;
+  downloadImageByCredentials(
     URL: string,
     credentials: Credentials,
-  ): Promise<Cookies>;
+    src: string,
+  ): Promise<any>;
 }
 
 export interface InputUrlService {

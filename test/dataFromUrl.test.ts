@@ -47,7 +47,7 @@ const outputFolder = 'test-data/output/html/';
 const pathConfigFile = './test-data/confiles/html-url/config.json';
 let listFilesOutput: string[] = []; //to erase in after()
 
-xdescribe('Url-html Input Output one html page', () => {
+describe('Url-html Input Output one html page', () => {
   before(done => {
     //get the index ready
     docconfig = new ConfigFile(pathConfigFile);
