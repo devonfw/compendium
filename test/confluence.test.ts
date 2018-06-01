@@ -16,6 +16,7 @@ import { AsciiDocFileTextOut } from '../src/asciidocOutput';
 import { HtmlFileTextOut } from '../src/html';
 import { PdfFileTextOut } from '../src/pdf';
 import { ConfigFile } from '../src/config';
+import { ConnectorApi } from '../src/connectorApi';
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as fs from 'fs';
@@ -37,9 +38,14 @@ let id_badFormat: string;
 let id_multiplePages: string;
 
 // Default values for ConfluenceTextIn constructor
+//credentials external account
 credentials = {
   username: 'murta.sanjuan-ases-external@capgemini.com',
   password: 'Admin1234',
+};
+let credentialsI = {
+  username: '',
+  password: '',
 };
 cookies = [
   {
@@ -74,7 +80,7 @@ describe('Confluence Test', () => {
         done(error);
       });
   });
-  describe('Confluence01 Testing the Output and Input of one document', () => {
+  xdescribe('Confluence01 Testing the Output and Input of one document', () => {
     before(done => {
       //json file to see transcript geting ready
       if (fs.existsSync(outputPath01)) {
@@ -147,7 +153,7 @@ describe('Confluence Test', () => {
       // clean fixture
     });
   });
-  describe('Confluence02 Testing the Input and Output of document [13] with png image', () => {
+  xdescribe('Confluence02 Testing the Input and Output of document [13] with png image', () => {
     before(done => {
       //get the index ready
       docconfig = new ConfigFile(pathConfigFile);
@@ -230,6 +236,25 @@ describe('Confluence Test', () => {
     });
 
     after(() => {});
+  });
+  describe('Testing Connector Api', () => {
+    it('Get the BrandNewDayProd cookie', done => {
+      let connectorApi: ConnectorApi = new ConnectorApi(
+        credentialsI.username,
+        credentialsI.password,
+        '',
+      );
+      connectorApi
+        .connect()
+        .then(response => {
+          console.log(response);
+
+          done();
+        })
+        .catch(error => {
+          done(error);
+        });
+    });
   });
   after(() => {
     // clean fixture

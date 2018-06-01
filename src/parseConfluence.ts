@@ -5,7 +5,6 @@ import * as fs from 'fs';
 import * as util from 'util';
 import * as extrafs from 'fs-extra';
 import * as shelljs from 'shelljs';
-import * as imagemagick from 'imagemagick';
 
 export class ParseConfluence extends ParseLocal {
   public static auth: Cookies | Credentials;
@@ -61,9 +60,6 @@ export class ParseConfluence extends ParseLocal {
           );
         }
       }
-      //get image size before to include the size in the src
-      /* let imagesize = await this.getImageSize(dir);
-      console.log(imagesize); */
 
       //write image in the folder imageTemp
       if (content) {

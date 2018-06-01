@@ -140,6 +140,11 @@ export interface Cookie {
   name: string;
   value: string;
 }
+export interface CookieRequest {
+  cookie: string;
+  domain: string;
+  path: string;
+}
 
 export type Cookies = Array<Cookie>;
 

@@ -58,7 +58,7 @@ id_multiplePages = 'multiple+pages';
 const outputPath01 = 'test-data/output/confluence/output1.json';
 
 // TEST02: Testing common fails
-describe('ConfluenceBad01 Testing common fails', () => {
+xdescribe('ConfluenceBad01 Testing common fails', () => {
   before(() => {
     //setup fixture
   });
@@ -147,7 +147,7 @@ describe('ConfluenceBad01 Testing common fails', () => {
 
 // TEST03: Processing Data
 const textinConfluence03 = new ConfluenceTextIn(basepath, space, credentials);
-describe('Confluence03 Testing data processing', () => {
+xdescribe('Confluence03 Testing data processing', () => {
   before(() => {
     //setup fixture
   });
