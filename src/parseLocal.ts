@@ -604,6 +604,7 @@ export class ParseLocal {
     try {
       let accessPromisify = util.promisify(fs.stat);
       let stats = await accessPromisify(filename);
+
       return true;
     } catch (e) {
       return false;

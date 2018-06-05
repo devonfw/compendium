@@ -68,7 +68,9 @@ const outputPath01 = 'test-data/output/confluence/output1.json';
 
 // TEST01
 // Should get content from external Murta's confluence account
-describe('Confluence Test', () => {
+//the account has been removed (free trial)
+//to do the test please open an account in confluence an change the credentials
+xdescribe('Confluence Test', () => {
   before(done => {
     extrafs
       .ensureDir(outputFolder)

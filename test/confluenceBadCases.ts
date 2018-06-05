@@ -146,30 +146,16 @@ describe('ConfluenceBad01 Testing common fails', () => {
 });
 
 // TEST03: Processing Data
+//credentials have expired create new account to test this part
 const textinConfluence03 = new ConfluenceTextIn(basepath, space, credentials);
-describe('Confluence03 Testing data processing', () => {
+xdescribe('Confluence03 Testing data processing', () => {
   before(() => {
     //setup fixture
   });
 
   // Input parameters
   describe('ConfluenceTextIn', () => {
-    /* // Bad case I: More than one confluence page at once
-    it('getTranscript should complain when received data contains more than one page at once', done => {
-      textinConfluence03
-        .getTranscript(id_multiplePages)
-        .then(transcript => {
-          done(new Error('Expected method to reject.'));
-        })
-        .catch(error => {
-          expect(error.message).to.include(
-            'Only one Confluence page is allowed at once in this version. Check your request please.',
-          );
-          done();
-        });
-    }); */
-
-    // Bad case II: JSON is not in a proper format
+    // Bad case I: JSON is not in a proper format
     it('getTranscript should complain when received is not in a proper format', done => {
       textinConfluence03
         .getTranscript(id_badFormat)
@@ -190,7 +176,7 @@ describe('Confluence03 Testing data processing', () => {
 
 // TEST04: Auth by cookies is not implemented yet
 const textinConfluence04 = new ConfluenceTextIn(basepath, space, cookies);
-describe('Confluence04 Testing data processing', () => {
+xdescribe('Confluence04 Testing data processing', () => {
   before(() => {
     //setup fixture
   });

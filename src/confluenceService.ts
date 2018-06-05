@@ -134,7 +134,6 @@ export class ConfluenceServiceImpl implements ConfluenceService {
     //if the authoritazion are cookies
     if ((auth as Cookies)[0]) {
       return await this.downloadImageByCookies(URL, auth as Cookies, src);
-      //if the auth are Credentials
     } else if ((auth as Credentials).username) {
       return await this.downloadImageByCredentials(
         URL,
@@ -158,6 +157,7 @@ export class ConfluenceServiceImpl implements ConfluenceService {
         .get(URL)
         .set('Cookie', serializedCookies)
         .pipe(file);
+
       file.on('finish', () => {
         resolve();
       });

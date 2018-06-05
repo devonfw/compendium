@@ -45,6 +45,7 @@ export async function doCompendium(
   let fileOutput: TextOut;
   let merger: Merger;
   let index;
+  let COOKIES_INTERNAL: Cookies = [];
 
   docconfig = new ConfigFile(configFile);
   try {
@@ -74,46 +75,54 @@ export async function doCompendium(
     if (source.source_type === 'asciidoc') {
       textinSources[source.reference] = new AsciiDocFileTextIn(source.source);
     } else if (source.source_type === 'confluence') {
-      //need credentials first
-      let credentials: Credentials;
-      try {
-        console.log(
-          chalk.bold(
-            `Please enter credentials for source with key '${chalk.green.italic(
-              source.reference,
-            )}' (${chalk.blue(source.source)})\n`,
-          ),
-        );
-        credentials = await askInPrompt();
-      } catch (err) {
-        throw new Error(err.message);
-      }
       if (source.context === 'capgemini') {
         //CONFLUENCE INTERNAL NETWORK
-        //get the cookie session brandNewDayProd with the API
-        let connectorApi: ConnectorApi = new ConnectorApi(
-          credentials.username,
-          credentials.password,
-          '',
-        );
-        let brandCookieValue: string;
-        try {
-          let cookiesResult = await connectorApi.connect();
-          let cookieBrand = cookiesResult[0].toString();
-          let aux1 = cookieBrand.split(';');
-          let aux2 = aux1[0].split('=');
-          brandCookieValue = aux2[1];
-        } catch (error) {
-          throw new Error(
-            'Error: Can not get the capgemini session cookie: ' + error.message,
+        //get the cookie session brandNewDayProd with the API only if does not exist yet
+        if (
+          COOKIES_INTERNAL.length === 0 ||
+          COOKIES_INTERNAL[0].name !== 'brandNewDayProd' ||
+          !COOKIES_INTERNAL[0].value ||
+          COOKIES_INTERNAL[0].value === ''
+        ) {
+          //need credentials first
+          let credentials: Credentials;
+          try {
+            console.log(
+              chalk.bold(
+                `Please enter credentials for source with key '${chalk.green.italic(
+                  source.reference,
+                )}' (${chalk.blue(source.source)})\n`,
+              ),
+            );
+            credentials = await askInPrompt();
+          } catch (err) {
+            throw new Error(err.message);
+          }
+          let connectorApi: ConnectorApi = new ConnectorApi(
+            credentials.username,
+            credentials.password,
+            '',
           );
+          let brandCookieValue: string;
+          try {
+            let cookiesResult = await connectorApi.connect();
+            let cookieBrand = cookiesResult[0].toString();
+            let aux1 = cookieBrand.split(';');
+            let aux2 = aux1[0].split('=');
+            brandCookieValue = aux2[1];
+          } catch (error) {
+            throw new Error(
+              'Error: Can not get the capgemini session cookie: ' +
+                error.message,
+            );
+          }
+          //build the cookie
+          const brandNewDayProdCookie: Cookie = {
+            name: 'brandNewDayProd',
+            value: brandCookieValue,
+          };
+          COOKIES_INTERNAL.push(brandNewDayProdCookie);
         }
-        //build the cookie
-        const brandNewDayProdCookie: Cookie = {
-          name: 'brandNewDayProd',
-          value: brandCookieValue,
-        };
-        const COOKIES_INTERNAL: Cookies = [brandNewDayProdCookie];
         //text in constructor
         textinSources[source.reference] = new ConfluenceTextIn(
           source.source,
@@ -122,6 +131,20 @@ export async function doCompendium(
         );
       } else {
         //CONFLUENCE EXTERNAL ACCOUNT
+        //need credentials first
+        let credentials: Credentials;
+        try {
+          console.log(
+            chalk.bold(
+              `Please enter credentials for source with key '${chalk.green.italic(
+                source.reference,
+              )}' (${chalk.blue(source.source)})\n`,
+            ),
+          );
+          credentials = await askInPrompt();
+        } catch (err) {
+          throw new Error(err.message);
+        }
         try {
           textinSources[source.reference] = new ConfluenceTextIn(
             source.source,
@@ -170,7 +193,7 @@ export async function doCompendium(
       }
     }
   }
-
+  //create folder output
   if (output.split('/').length > 1) {
     const myOutput = output.replace(output.split('/').splice(-1, 1)[0], '');
     try {
@@ -181,7 +204,7 @@ export async function doCompendium(
       }
     }
   }
-
+  //get the transcript
   merger = new MergerImpl();
   try {
     await merger.merge(textinSources, index, fileOutput);
