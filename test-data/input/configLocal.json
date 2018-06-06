@@ -1,0 +1,64 @@
+{
+  "sources": [
+    {
+      "reference": "project1",
+      "source_type": "asciidoc",
+      "source": "./test-data/input/input-data1"
+    },
+    {
+      "reference": "project2",
+      "source_type": "asciidoc",
+      "source": "./test-data/input/input-data2"
+    }
+  ],
+  "documents": [
+    {
+      "reference": "project1",
+      "document": "manual"
+    },
+    {
+      "reference": "project2",
+      "document": "brownfox2"
+    },
+    {
+      "reference": "project2",
+      "document": "paragraph1"
+    },
+    {
+      "reference": "project2",
+      "document": "paragraph2"
+    },
+    {
+      "reference": "project2",
+      "document": "image"
+    },
+    {
+      "reference": "project2",
+      "document": "tableList"
+    },
+    {
+      "reference": "project1",
+      "document": "code"
+    },
+    {
+      "reference": "project1",
+      "document": "image"
+    },
+    {
+      "reference": "project1",
+      "document": "link"
+    },
+    {
+      "reference": "project1",
+      "document": "cross"
+    },
+    {
+      "reference": "project1",
+      "document": "ol"
+    },
+    {
+      "reference": "project1",
+      "document": "admonitions"
+    }
+  ]
+}

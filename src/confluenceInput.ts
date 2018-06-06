@@ -140,7 +140,7 @@ export class ConfluenceTextIn implements TextIn {
     if (error) {
       throw new Error("It isn't possible to get transcript from " + url);
     }
-    //copy images and wait until finishes
+    //copy images at the end
     if (ParseConfluence.arrayImagesSrc.length > 0) {
       for (const src of ParseConfluence.arrayImagesSrc) {
         await ParseConfluence.copyImage(src);
@@ -154,7 +154,6 @@ export class ConfluenceTextIn implements TextIn {
    * @private
    * @param {JSON} content
    * @returns {string}
-   * @memberof ConfluenceTextIn
    */
   private processDataFromConfluence(content: JSON): string {
     let htmlContent;
@@ -208,7 +207,6 @@ export class ConfluenceTextIn implements TextIn {
    * @private
    * @param {string} title
    * @returns {string}
-   * @memberof ConfluenceTextIn
    */
   private createURIbyTitle(title: string): string {
     let outputURI = '';
@@ -230,7 +228,6 @@ export class ConfluenceTextIn implements TextIn {
    * @private
    * @param {string} title
    * @returns {string}
-   * @memberof ConfluenceTextIn
    */
   private createURLbyTitle(title: string): string {
     let outputURL = '';
@@ -246,6 +243,8 @@ export class ConfluenceTextIn implements TextIn {
   public supportsExport(): boolean {
     return false;
   }
+  //to find and list all the links of this title
+  //return a string array with all the links
   public async getIndexList(title: string): Promise<string[]> {
     let arrayResult: string[] = [];
     return arrayResult;

@@ -16,8 +16,8 @@ import {
 } from './types';
 import { AsciiDocFileTextIn } from './asciidocInput';
 import { AsciiDocFileTextOut } from './asciidocOutput';
-import { HtmlFileTextOut } from './html';
-import { PdfFileTextOut } from './pdf';
+import { HtmlFileTextOut } from './htmlOutput';
+import { PdfFileTextOut } from './pdfOutput';
 import { MergerImpl } from './merger';
 import { ConfigFile } from './config';
 import { ConfluenceTextIn } from './confluenceInput';
@@ -72,56 +72,22 @@ export async function doCompendium(
 
   const textinSources: TextInSources = {};
   for (const source of index[0]) {
+    //ASCIIDOC type --------------------------------------------------------------
     if (source.source_type === 'asciidoc') {
       textinSources[source.reference] = new AsciiDocFileTextIn(source.source);
+      //CONFLUENCE type -----------------------------------------------------------
     } else if (source.source_type === 'confluence') {
       if (source.context === 'capgemini') {
         //CONFLUENCE INTERNAL NETWORK
         //get the cookie session brandNewDayProd with the API only if does not exist yet
+        //this is because the cookie give you access to all the internal sources
         if (
           COOKIES_INTERNAL.length === 0 ||
           COOKIES_INTERNAL[0].name !== 'brandNewDayProd' ||
           !COOKIES_INTERNAL[0].value ||
           COOKIES_INTERNAL[0].value === ''
         ) {
-          //need credentials first
-          let credentials: Credentials;
-          try {
-            console.log(
-              chalk.bold(
-                `Please enter credentials for source with key '${chalk.green.italic(
-                  source.reference,
-                )}' (${chalk.blue(source.source)})\n`,
-              ),
-            );
-            credentials = await askInPrompt();
-          } catch (err) {
-            throw new Error(err.message);
-          }
-          let connectorApi: ConnectorApi = new ConnectorApi(
-            credentials.username,
-            credentials.password,
-            '',
-          );
-          let brandCookieValue: string;
-          try {
-            let cookiesResult = await connectorApi.connect();
-            let cookieBrand = cookiesResult[0].toString();
-            let aux1 = cookieBrand.split(';');
-            let aux2 = aux1[0].split('=');
-            brandCookieValue = aux2[1];
-          } catch (error) {
-            throw new Error(
-              'Error: Can not get the capgemini session cookie: ' +
-                error.message,
-            );
-          }
-          //build the cookie
-          const brandNewDayProdCookie: Cookie = {
-            name: 'brandNewDayProd',
-            value: brandCookieValue,
-          };
-          COOKIES_INTERNAL.push(brandNewDayProdCookie);
+          COOKIES_INTERNAL.push(await getSessionCookieByConnectorApi(source));
         }
         //text in constructor
         textinSources[source.reference] = new ConfluenceTextIn(
@@ -145,6 +111,7 @@ export async function doCompendium(
         } catch (err) {
           throw new Error(err.message);
         }
+        //text in constructor
         try {
           textinSources[source.reference] = new ConfluenceTextIn(
             source.source,
@@ -155,26 +122,27 @@ export async function doCompendium(
           throw new Error(err.message);
         }
       }
+      //URL-HTML type -------------------------------------------------------------------
     } else if (source.source_type === 'url-html') {
       textinSources[source.reference] = new InputUrlTextIn(source.source);
     } else {
       throw new Error('Unknown TextInSource');
     }
+    //document_is_index -------------------------------------------------------------
     //Check if the source has a document_is_index true
-    //if not exists position -1, if exists position of its array
+    //if not exists position -1, if exists position >=0
     let documentIsIndexPosition: number = Utilities.findDocumentIsIndex(
       index[1],
       source.reference,
     );
     if (documentIsIndexPosition >= 0) {
-      //Index exists but check if source type supports it
+      //Index exists but only go ahead if source type supports it
       if (textinSources[source.reference].supportsExport()) {
         let arrayTitles = await textinSources[source.reference].getIndexList(
           index[1][documentIsIndexPosition].document,
         );
         if (arrayTitles.length > 0) {
-          index[1];
-          //save the list inside the index
+          //save the list inside the index for future document get Transcript reading
           for (let title of arrayTitles) {
             index[1].push({
               reference: source.reference,
@@ -193,7 +161,7 @@ export async function doCompendium(
       }
     }
   }
-  //create folder output
+  //create folder output if necessary
   if (output.split('/').length > 1) {
     const myOutput = output.replace(output.split('/').splice(-1, 1)[0], '');
     try {
@@ -204,7 +172,7 @@ export async function doCompendium(
       }
     }
   }
-  //get the transcript
+  //get the transcript of all the documents and sources
   merger = new MergerImpl();
   try {
     await merger.merge(textinSources, index, fileOutput);
@@ -260,7 +228,7 @@ export async function askInPrompt(): Promise<Credentials> {
  * dirExists
  * Check if the directory introduce exist
  * @param {string} filename
- * @returns
+ * @returns boolean
  */
 async function dirExists(filename: string) {
   try {
@@ -270,4 +238,49 @@ async function dirExists(filename: string) {
   } catch (e) {
     return false;
   }
+}
+/*
+* get the session cookie of the internal network SSO
+* The brandNewDayProd cookie is a door gate for confluence sources
+*/
+async function getSessionCookieByConnectorApi(
+  source: IndexSource,
+): Promise<Cookie> {
+  //need credentials first
+  let credentials: Credentials;
+  try {
+    console.log(
+      chalk.bold(
+        `Please enter credentials for source with key '${chalk.green.italic(
+          source.reference,
+        )}' (${chalk.blue(source.source)})\n`,
+      ),
+    );
+    credentials = await askInPrompt();
+  } catch (err) {
+    throw new Error(err.message);
+  }
+  let connectorApi: ConnectorApi = new ConnectorApi(
+    credentials.username,
+    credentials.password,
+    '',
+  );
+  let brandCookieValue: string;
+  try {
+    let cookiesResult = await connectorApi.connect();
+    let cookieBrand = cookiesResult[0].toString();
+    let aux1 = cookieBrand.split(';');
+    let aux2 = aux1[0].split('=');
+    brandCookieValue = aux2[1];
+  } catch (error) {
+    throw new Error(
+      'Error: Can not get the capgemini session cookie: ' + error.message,
+    );
+  }
+  //build the cookie
+  const brandNewDayProdCookie: Cookie = {
+    name: 'brandNewDayProd',
+    value: brandCookieValue,
+  };
+  return brandNewDayProdCookie;
 }

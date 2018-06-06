@@ -10,8 +10,8 @@ import {
 } from '../src/types';
 import { ConfluenceTextIn } from '../src/confluenceInput';
 import { AsciiDocFileTextOut } from '../src/asciidocOutput';
-import { HtmlFileTextOut } from '../src/html';
-import { PdfFileTextOut } from '../src/pdf';
+import { HtmlFileTextOut } from '../src/htmlOutput';
+import { PdfFileTextOut } from '../src/pdfOutput';
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as fs from 'fs';

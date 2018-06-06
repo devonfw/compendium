@@ -31,8 +31,8 @@ import { ConfigFile } from '../src/config';
 import { EmitElement } from '../src/emitFunctions';
 import { AsciiDocFileTextIn } from '../src/asciidocInput';
 import { AsciiDocFileTextOut } from '../src/asciidocOutput';
-import { HtmlFileTextOut } from '../src/html';
-import { PdfFileTextOut } from '../src/pdf';
+import { HtmlFileTextOut } from '../src/htmlOutput';
+import { PdfFileTextOut } from '../src/pdfOutput';
 import { MergerImpl } from '../src/merger';
 import { resolve } from 'url';
 

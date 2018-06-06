@@ -10,7 +10,6 @@ import * as fs from 'fs';
 import * as util from 'util';
 import * as extrafs from 'fs-extra';
 import * as shelljs from 'shelljs';
-import * as imagemagick from 'imagemagick';
 
 export class ParseUrlHtml extends ParseLocal {
   public static inputUrlService: InputUrlService;

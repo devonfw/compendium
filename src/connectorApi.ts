@@ -4,6 +4,9 @@ import { CookieJar, Cookie } from 'tough-cookie';
 /**
  * @author msanjuan
  * Api to access capgemini SSO with Credentials
+ *  @param username  @param password @param host
+ * the main method connect() @return session cookie brandNewDayProd
+ * that give you access to confluence internal sites among others
  * translated from Java conector project @author pajimene
  */
 
@@ -24,6 +27,18 @@ export class ConnectorApi {
   }
 
   //API METHOD
+  /**
+   * unique public method
+   * does the main function of this Api
+   * Basically the steps are:
+   * -first request to get a couple of cookies
+   * -first request body => to get the parameters for the second request
+   * -second request, with the specific url and the cookies and params from 1st request,
+   *    we get the brandNewDay session cookie inside the request.headers[set-cookie]
+   *
+   * @returns {Promise<string>}
+   * @memberof ConnectorApi
+   */
   public async connect(): Promise<string> {
     //first request
     let body: string;
@@ -75,6 +90,13 @@ export class ConnectorApi {
   }
 
   //FIRST REQUEST
+  /**
+   * specific url and header authorization
+   *
+   * @private
+   * @returns {Promise<string>}
+   * @memberof ConnectorApi
+   */
   private firstRequest(): Promise<string> {
     let jar = request.jar();
     //options
@@ -108,6 +130,14 @@ export class ConnectorApi {
   }
 
   //SECOND REQUEST
+  /**
+   * specific @param url ,postdata @param params and @param cookies
+   *
+   * @private
+   * @param {*} params
+   * @returns {Promise<string>}
+   * @memberof ConnectorApi
+   */
   private secondRequest(params: any): Promise<string> {
     //url
     let url: string = 'https://signincorp.capgemini.com/opensso/UI/Login';
@@ -180,7 +210,7 @@ export class ConnectorApi {
     });
   }
 
-  //auxiliar method of First Request
+  //auxiliar method of First Request to proccess the params depending of the body
   private extractValueFromTag(html: string, tag: string): string {
     const tagIndex = html.indexOf('name="' + tag + '"');
     if (tagIndex <= 0) return 'null';

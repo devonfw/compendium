@@ -6,7 +6,7 @@ import {
   Index,
   Transcript,
 } from './types';
-import { PdfFileTextOut } from './pdf';
+import { PdfFileTextOut } from './pdfOutput';
 
 export class MergerImpl implements Merger {
   /**
@@ -23,6 +23,7 @@ export class MergerImpl implements Merger {
     index: Index,
     textout: TextOut,
   ): Promise<void> {
+    //get the IR all the transcripts
     const transcripts: Array<Transcript> = [];
     for (const node of index[1]) {
       if (textinSources[node.reference]) {
@@ -41,6 +42,7 @@ export class MergerImpl implements Merger {
         throw new Error(error_msg);
       }
     }
+    //generate the output of all the transcript
     try {
       await textout.generate(transcripts);
     } catch (err) {

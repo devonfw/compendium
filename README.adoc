@@ -25,6 +25,25 @@ A Command line client using 5.6.0 version. NPM is the package manager for Javasc
 * link:http://yargs.js.org/[Yargs] +
 Command line tool using 5.0 version. Yargs is a node.js library, and help us build an interactive command line tool by parsing arguments and implementing new enhanced interface.
 
+=== Other VSCode extensions and node modules
+
+* link:https://marketplace.visualstudio.com/items?itemName=joaompinto.asciidoctor-vscode[AsciiDoc VSCode extension] +
+An extension that provides live preview, syntax highlighting and symbols for the AsciiDoc format. The preview uses Asciidoctor.js.
+Toggle Preview - ctrl+shift+v (Mac: cmd+shift+v)
+
+* link:https://www.npmjs.com/[NPM] +
+Node-Modules:
+** request, make http node request easier.
+** superagent, make http request with cookies easier.
+** extra-fs, a fyle-system module that works with promises and async/await.
+** util, an easy way to convert callback functions in promises.
+** chai and mocha, for unit testing.
+** cheerio, parses markup and provides an API for traversing/manipulating the resulting data structure. We have use it in the url-html input as an easy way to find link tags.
+** prompt, command-line prompt for node.js
+** shelljs, is a portable implementation of Unix shell commands on top of the Node.js API. 
+** html-parse, an HTML/XML parser that doesn't require valid HTML/XML. It's also meant to act as a sanitizer.
+** html-to-pdf, a Node wrapper around a Java HTML to PDF converter.
+
 
 == Operating mode
 
@@ -35,16 +54,16 @@ At final, we can see a scheme to know what is the operation depending on the inp
 
 
 ==== Asciidoc input
-image::../images/AsciidocInput.PNG[ASCIIDOC INPUT]
+image::./images/AsciidocInput.PNG[ASCIIDOC INPUT]
 
 ==== Confluence input
-image::../images/ConfluenceInput.PNG[CONFLUENCE INPUT]
+image::./images/ConfluenceInput.PNG[CONFLUENCE INPUT]
 
 ==== Asciidoc output
-image::../images/AsciidocOutput.PNG[ASCIIDOC OUTPUT]
+image::./images/AsciidocOutput.PNG[ASCIIDOC OUTPUT]
 
 ==== HTML output
-image::../images/HTMLOutput.PNG[HTML OUTPUT]
+image::./images/HTMLOutput.PNG[HTML OUTPUT]
 
 
 == Compendium processing
@@ -53,7 +72,7 @@ Compendium can be installed using `npm install` command in the terminal. +
 Open a terminal and type : 
 
     $ npm install
-    $ npm run build 
+    $ npm install -g ts-node
 
 == Usage 
 
@@ -100,6 +119,83 @@ On the other hand, we need to define the documents, as to the sources, we can ha
 * document: It's the file name or name/id project (i.e examples.adoc).
 * section: It's the section that you want to extract. If you want to extract all the content in the document you should leave this argument blank, but if you want to extract different sections, you should write in an array. (i.e [h1, h3])
 
+To read from confluence internal network we need to add this arguments to the source part:
+* context: capgemini
+* space: space key of the project, all the urls of the project have this letters.
+   example: (https://adcenter.pl.s2-eu.capgemini.com/confluence/display/HD/2.+Objectives ) 
+            space=> HD
+
+
+
 IMPORTANT: You can't write the same reference, each reference should be unique. And if you want to extract Confluence or Jira information you need to introduce your credentials to get the information.
 
 Reference can be made to asciidoc files, jira issues and confluence pages. You can see an example link:http://gitlab-val.es.capgemini.com/gitlab/ADCenter/compendium/blob/master/test-data/input/config.json[here].
+
+===== Types of Inputs available
+
+* Asciidoc documents: 
+** source_type: asciidoc  (reads directly from local .adoc documents)
+** source: Local Path.
+
+* Confluence pages:
+** source_type: confluence 
+** source: base url of confluence account
+** context: capgemini (internal network) or external(private confluence account)
+** space: JQ (project space key)
+
+* Html pages directly from a website:
+** source_type: url-html  
+** source: url 
+* In the url-html type the document part have an optional attribute: (document is an index, where we have to extract all the links from. And include them in the output file, so that we download all the pages from a site). The document has to be unique and consider the following:
+** document: index url
+** document_is_index: true or false (to indicate if we have to read an index)
+
+===== Types of Outputs available
+
+* Pdf 
+* Html
+* Asciidoc
+
+
+==== Examples within the project folder (test-data)
+
+===== Local asciidoc files and external confluence account
+
+Config file with a combination of a couple of documents from a confluence external account and 
+several asciidoc documents from local source (within this folder)
+Please introduce new confluence external account source and documents to test them
+This are the commands and you find the config.json file example:
+[source]
+$ ts-node src/compendium.ts -f test-data/input/configMix.json --html out/out
+$ ts-node src/compendium.ts -f test-data/input/configMix.json --pdf out/out
+$ ts-node src/compendium.ts -f test-data/input/configMix.json --asciidoc out/out
+
+===== Local asciidoc files only
+
+This are the command and you can find the config.json enclosed:
+[source]
+$ ts-node src/compendium.ts -f test-data/input/configLocal.json --html out/out
+
+===== Url html type
+
+Config file with several urls from handbook, config.json file example, the command:
+[source]
+$ ts-node src/compendium.ts -f test-data/confiles/html-url/config.json --html out/out
+
+===== Url html type with document_is_index true
+
+Config file with a document_is_index true and a unique url document pointing at the handbook source.Have a look at the config.json file example, the command:
+[source]
+$ ts-node src/compendium.ts -f test-data/confiles/html-url/configAllIndex.json --html out/out
+
+===== Internal Confluence source and documents
+
+Config file with an example of internal capgemini confluence source and several documents, the command: (enter active credentials of the ad-center confluence )
+[source]
+$ ts-node src/compendium.ts -f test-data/input/confluence/configCapgemini.json --asciidoc out/out
+
+== UML
+
+image::./images/compendiumDiagram/compendiumDiagram.png[USAGE]
+
+NOTE: Edit the diagram in: http://www.umlet.com/umletino/umletino.html (Import the xml document enclosed in the diagram folder)

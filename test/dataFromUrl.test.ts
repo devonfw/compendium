@@ -24,7 +24,7 @@ import * as chaiAsPromised from 'chai-as-promised';
 import * as fs from 'fs';
 import * as shelljs from 'shelljs';
 import { ParseLocal } from '../src/parseLocal';
-import { HtmlFileTextOut } from '../src/html';
+import { HtmlFileTextOut } from '../src/htmlOutput';
 
 chai.use(chaiAsPromised);
 

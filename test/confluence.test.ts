@@ -13,8 +13,8 @@ import {
 } from '../src/types';
 import { ConfluenceTextIn } from '../src/confluenceInput';
 import { AsciiDocFileTextOut } from '../src/asciidocOutput';
-import { HtmlFileTextOut } from '../src/html';
-import { PdfFileTextOut } from '../src/pdf';
+import { HtmlFileTextOut } from '../src/htmlOutput';
+import { PdfFileTextOut } from '../src/pdfOutput';
 import { ConfigFile } from '../src/config';
 import { ConnectorApi } from '../src/connectorApi';
 import { Utilities } from '../src/utils';
