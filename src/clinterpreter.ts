@@ -27,6 +27,7 @@ import chalk from 'chalk';
 import * as shelljs from 'shelljs';
 import * as util from 'util';
 import { ConnectorApi } from '../src/connectorApi';
+import * as extrafs from 'fs-extra';
 
 /**
  * doCompendium
@@ -163,9 +164,11 @@ export async function doCompendium(
   }
   //create folder output if necessary
   if (output.split('/').length > 1) {
-    const myOutput = output.replace(output.split('/').splice(-1, 1)[0], '');
+    let aux = output.split('/');
+    let aux1 = aux.splice(0, aux.length - 1);
+    const myOutput = aux1.join('/');
     try {
-      shelljs.mkdir('-p', myOutput);
+      await extrafs.ensureDir(myOutput);
     } catch (err) {
       if (err.code !== 'EEXIST') {
         throw err;
@@ -243,7 +246,7 @@ async function dirExists(filename: string) {
 * get the session cookie of the internal network SSO
 * The brandNewDayProd cookie is a door gate for confluence sources
 */
-async function getSessionCookieByConnectorApi(
+export async function getSessionCookieByConnectorApi(
   source: IndexSource,
 ): Promise<Cookie> {
   //need credentials first
@@ -267,7 +270,9 @@ async function getSessionCookieByConnectorApi(
   );
   let brandCookieValue: string;
   try {
+    //get the cookie
     let cookiesResult = await connectorApi.connect();
+    //format the cookie into our interface Cookie
     let cookieBrand = cookiesResult[0].toString();
     let aux1 = cookieBrand.split(';');
     let aux2 = aux1[0].split('=');

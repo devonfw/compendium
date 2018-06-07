@@ -136,7 +136,7 @@ describe('Url-html Input Output one html page', () => {
   });
 });
 //___________________________All links from Index_____________________________________________
-xdescribe('Url-html all Index Handbook Input', () => {
+describe('Url-html all Index Handbook Input', () => {
   before(done => {
     //get the index ready
     let configFilePath = './test-data/confiles/html-url/configAllIndex.json';

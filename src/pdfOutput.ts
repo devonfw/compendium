@@ -41,7 +41,8 @@ export class PdfFileTextOut implements TextOut {
     } catch (err) {
       throw err;
     }
-    const outputString: Array<string> = [];
+
+    let outputString: Array<string> = [];
     outputString.push(':toc: macro\ntoc::[]\n\n');
     if (data.length < 1) {
       throw new Error('No Text instances passed');
@@ -76,10 +77,70 @@ export class PdfFileTextOut implements TextOut {
       const dochtml = this.asciidoctor.convert(outputString.join(''), {
         attributes: { showtitle: true, doctype: 'book' },
       });
-      const docWithStyle =
-        `<!DOCTYPE html>
+      //add css style
+      let docWithStyle = this.addStyle(dochtml);
+
+      //pdf only works in the project folder
+      const fileName = this.getNameOfFileOnly();
+      try {
+        await extrafs.writeFile(fileName + '.html', docWithStyle, 'utf8');
+      } catch (err) {
+        throw err;
+      }
+      //pdf module
+      var htmlTo = require('htmlto');
+
+      var options = {
+        pathTohtml: fileName + '.html',
+        pathTopdf: this.outputFile + '.pdf',
+        paperSize: {
+          format: 'A4',
+          orientation: 'portrait',
+          margin: '1.5cm',
+        },
+      };
+
+      htmlTo.pdf(options, async (error: any, success: any) => {
+        if (error) {
+          console.log(error);
+        }
+        if (success) {
+          //we move the path to the user output path
+          try {
+            extrafs.unlink(fileName + '.html');
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      });
+    }
+    this.done = true;
+  }
+  /**
+   * moveTheImages
+   * Move the images and remove the folder
+   * @public
+   * @returns {string}
+   * @memberof PdfFileTextOut
+   */
+  public getNameOfFileOnly(): string {
+    const arrayDir = this.outputFile.split('/');
+    let result = this.outputFile;
+    if (arrayDir.length > 1) {
+      result = arrayDir[arrayDir.length - 1];
+    }
+    return result;
+  }
+  /**
+   *
+   * adds the style into the html doc
+   */
+  public addStyle(dochtml: string): string {
+    let docWithStyle =
+      `<!DOCTYPE html>
                 <html>
                 <head>
+                <title>Output</title>
                 <style>
                 table {
                     font-family: arial, sans-serif;
@@ -104,54 +165,13 @@ export class PdfFileTextOut implements TextOut {
                 </head>
                 <body>
                 ` +
-        dochtml +
-        `
+      dochtml +
+      `
                 </body>
                 </html>`;
-      //pdf only works in the project folder
-      const fileName = this.getNameOfFileOnly();
-      const htmlToPdf = require('html-to-pdf');
-      htmlToPdf.setInputEncoding('UTF-8');
-      htmlToPdf.setOutputEncoding('UTF-8');
-      try {
-        htmlToPdf.convertHTMLString(
-          docWithStyle,
-          fileName + '.pdf',
-          async (error: any, success: any) => {
-            if (error) {
-              console.log(error);
-            }
-            if (success) {
-              //we move the path to the user output path
-              try {
-                await this.createPdfInRightFolder(fileName);
-              } catch (error) {
-                console.log(error);
-              }
-            }
-          },
-        );
-      } catch (error) {
-        console.log(error + ' can not create pdf in the project folder');
-      }
-    }
-    this.done = true;
+    return docWithStyle;
   }
-  /**
-   * moveTheImages
-   * Move the images and remove the folder
-   * @public
-   * @returns {string}
-   * @memberof PdfFileTextOut
-   */
-  public getNameOfFileOnly(): string {
-    const arrayDir = this.outputFile.split('/');
-    let result = this.outputFile;
-    if (arrayDir.length > 1) {
-      result = arrayDir[arrayDir.length - 1];
-    }
-    return result;
-  }
+
   /**
    * moveTheImages
    * Move the images and remove the folder

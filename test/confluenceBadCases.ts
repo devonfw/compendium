@@ -173,23 +173,3 @@ xdescribe('Confluence03 Testing data processing', () => {
     // clean fixture
   });
 });
-
-// TEST04: Auth by cookies is not implemented yet
-const textinConfluence04 = new ConfluenceTextIn(basepath, space, cookies);
-xdescribe('Confluence04 Testing data processing', () => {
-  before(() => {
-    //setup fixture
-  });
-
-  // Bad auth
-  describe('ConfluenceTextIn', () => {
-    // Auth by cookies
-    it('getTranscript should complain when trying to authenticate by cookies: Not implemented', done => {
-      done();
-    });
-  });
-
-  after(() => {
-    // clean fixture
-  });
-});

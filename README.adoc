@@ -4,8 +4,8 @@ toc::[]
 
 = COMPENDIUM
 
-Compendium is a processor for generating, unifying and converting different sources like AsciiDoc files, Jira and Confluence in different formats.
-We can select all the content or only parts of it and generate an AsciiDoc, HTML, PDF or multiple file.
+Compendium is a processor for generating, unifying and converting different sources like AsciiDoc files, Confluence and html websites in different formats.
+We can select all the content or only parts of it and generate an AsciiDoc, HTML or PDF.
 
 == Technologies
 This project uses different technologies. Here is a list of all of them:
