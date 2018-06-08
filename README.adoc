@@ -42,7 +42,7 @@ Node-Modules:
 ** prompt, command-line prompt for node.js
 ** shelljs, is a portable implementation of Unix shell commands on top of the Node.js API. 
 ** html-parse, an HTML/XML parser that doesn't require valid HTML/XML. It's also meant to act as a sanitizer.
-** html-to-pdf, a Node wrapper around a Java HTML to PDF converter.
+** htmlto, a Node module to convert HTML to PDF.
 
 
 == Operating mode

@@ -15,14 +15,16 @@
   },
   "private": true,
   "dependencies": {
+    "@types/showdown": "^1.7.4",
     "asciidoctor.js": "^1.5.6-preview.4",
     "html-parse": "0.0.4",
-    "html-to-pdf": "^0.1.11",
     "htmlto": "^1.1.2",
     "npm": "^6.0.1",
     "prompt": "^1.0.0",
     "shelljs": "^0.8.1",
+    "showdown": "^1.8.6",
     "ts-node": "^6.1.0",
+    "turndown": "^4.0.2",
     "typescript": "^2.9.1",
     "yargs": "^11.0.0"
   },

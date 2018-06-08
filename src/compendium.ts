@@ -19,7 +19,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat;
 (async () => {
   const cli = yargs
     .usage(
-      'Usage:\n$0 [-f|-j] <config file | base URL> [--asciidoc|--html|--pdf] <output file>\nor\n$0 [-f|-j] <config file | base URL> <--multiple> files',
+      'Usage:\n$0 [-f|-j] <config file | base URL> [--asciidoc|--html|--pdf | --markdown] <output file>\nor\n$0 [-f|-j] <config file | base URL> <--multiple> files',
     )
     .example(
       '$0 -f config.json --html out',
@@ -30,6 +30,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat;
     .describe('asciidoc', 'Output type: asciidoc file')
     .describe('html', 'Output type: Html file')
     .describe('pdf', 'Output type: PDF file')
+    .describe('markdown', 'Output type: Markdown file')
     .describe('multiple', 'Create multiple output files')
     .nargs('f', 1)
     .nargs('j', 1)
@@ -37,6 +38,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat;
     .nargs('html', 1)
     .nargs('asciidoc', 1)
     .nargs('pdf', 1)
+    .nargs('markdown', 1)
     .help('h')
     .alias('h', 'help')
     .alias('v', 'version').argv;
@@ -67,6 +69,9 @@ let configFile, outputFile, multiple, outputFormat, inputFormat;
       } else if (cli.asciidoc) {
         outputFormat = 'asciidoc';
         outputFile = cli.asciidoc;
+      } else if (cli.markdown) {
+        outputFormat = 'markdown';
+        outputFile = cli.markdown;
       } else if (cli._.length === 1) {
         outputFormat = 'asciidoc';
         outputFile = cli._[0];

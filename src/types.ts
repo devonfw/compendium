@@ -3,7 +3,12 @@ export type ScriptType = 'super' | 'sub' | 'normal';
 
 export type ElementType = 'title' | 'h1' | 'h2' | 'h3' | 'h4';
 
-export type TextInSource = 'asciidoc' | 'jira' | 'confluence' | 'url-html';
+export type TextInSource =
+  | 'asciidoc'
+  | 'jira'
+  | 'confluence'
+  | 'url-html'
+  | 'markdown';
 
 export interface TextInSources {
   [key: string]: TextIn;

@@ -16,6 +16,8 @@ import {
 } from './types';
 import { AsciiDocFileTextIn } from './asciidocInput';
 import { AsciiDocFileTextOut } from './asciidocOutput';
+import { MarkdownFileTextOut } from './markdownOutput';
+import { MarkdownTextIn } from './markdownInput';
 import { HtmlFileTextOut } from './htmlOutput';
 import { PdfFileTextOut } from './pdfOutput';
 import { MergerImpl } from './merger';
@@ -66,6 +68,8 @@ export async function doCompendium(
     fileOutput = new HtmlFileTextOut(output);
   } else if (format === 'pdf') {
     fileOutput = new PdfFileTextOut(output);
+  } else if (format === 'markdown') {
+    fileOutput = new MarkdownFileTextOut(output);
   } else {
     const msg = "Format '" + format + "' is not implemented";
     throw new Error(msg);
@@ -77,6 +81,8 @@ export async function doCompendium(
     if (source.source_type === 'asciidoc') {
       textinSources[source.reference] = new AsciiDocFileTextIn(source.source);
       //CONFLUENCE type -----------------------------------------------------------
+    } else if (source.source_type === 'markdown') {
+      textinSources[source.reference] = new MarkdownTextIn(source.source);
     } else if (source.source_type === 'confluence') {
       if (source.context === 'capgemini') {
         //CONFLUENCE INTERNAL NETWORK
@@ -162,7 +168,7 @@ export async function doCompendium(
       }
     }
   }
-  //create folder output if necessary
+  //create folder output if necessary ----------------------------------------------------------
   if (output.split('/').length > 1) {
     let aux = output.split('/');
     let aux1 = aux.splice(0, aux.length - 1);
@@ -175,7 +181,7 @@ export async function doCompendium(
       }
     }
   }
-  //get the transcript of all the documents and sources
+  //get the transcript of all the documents and sources -----------------------------------
   merger = new MergerImpl();
   try {
     await merger.merge(textinSources, index, fileOutput);

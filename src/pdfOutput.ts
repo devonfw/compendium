@@ -15,7 +15,6 @@ import {
 import { EmitElement } from './emitFunctions';
 import { Utilities } from './utils';
 import * as fs from 'fs';
-import { emit } from 'cluster';
 import * as shelljs from 'shelljs';
 import * as util from 'util';
 import * as extrafs from 'fs-extra';
@@ -172,27 +171,6 @@ export class PdfFileTextOut implements TextOut {
     return docWithStyle;
   }
 
-  /**
-   * moveTheImages
-   * Move the images and remove the folder
-   * @public
-   * @returns {boolean}
-   * @memberof PdfFileTextOut
-   */
-  public async createPdfInRightFolder(filename: string): Promise<void> {
-    try {
-      let copyPromisify = util.promisify(fs.copyFile);
-      await copyPromisify(filename + '.pdf', this.outputFile + '.pdf');
-    } catch (e) {
-      throw e;
-    }
-    try {
-      let unlinkPromisify = util.promisify(fs.unlink);
-      await unlinkPromisify(filename + '.pdf');
-    } catch (e) {
-      throw e;
-    }
-  }
   /**
    * moveTheImages
    * Move the images and remove the folder
