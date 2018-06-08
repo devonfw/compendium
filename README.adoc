@@ -4,8 +4,14 @@ toc::[]
 
 = COMPENDIUM
 
-Compendium is a processor for generating, unifying and converting different sources like AsciiDoc files, Confluence and html websites in different formats.
+Compendium is a processor for generating, unifying and converting different sources like AsciiDoc files, Markdown files, Confluence and html websites in different formats.
 We can select all the content or only parts of it and generate an AsciiDoc, HTML or PDF.
+
+== Tags covered in the IR (Itermediate Representation)
+
+h1, h2, h3, h4, h5, p, a, img, table, ul, ol, code, br.
+Inside a list: ul, ol, p, div, a, code.
+Inside a table: p, img, table, span, ul, ol, a, code, div.
 
 == Technologies
 This project uses different technologies. Here is a list of all of them:
@@ -34,7 +40,6 @@ Toggle Preview - ctrl+shift+v (Mac: cmd+shift+v)
 * link:https://www.npmjs.com/[NPM] +
 Node-Modules:
 ** request, make http node request easier.
-** superagent, make http request with cookies easier.
 ** extra-fs, a fyle-system module that works with promises and async/await.
 ** util, an easy way to convert callback functions in promises.
 ** chai and mocha, for unit testing.
@@ -43,6 +48,8 @@ Node-Modules:
 ** shelljs, is a portable implementation of Unix shell commands on top of the Node.js API. 
 ** html-parse, an HTML/XML parser that doesn't require valid HTML/XML. It's also meant to act as a sanitizer.
 ** htmlto, a Node module to convert HTML to PDF.
+** turndown, a Node module to convert HTML to Markdown.
+** showdown, a Node module to convert Markdown to HTML.
 
 
 == Operating mode
@@ -88,19 +95,18 @@ You should see the information about the Compendium version printed in the termi
 The `compendium` command allows you to invoke Compendium from the command line. For a correct usage you need to introduce five arguments.
 
 [source]
-node compendium.js [-f] <config file | base URL> [--asciidoc|--html|--pdf] <output file>
-or
-node compendium.js [-f] <config file | base URL> <--multiple> files
+node compendium.js [-f] <config file> [--asciidoc|--html|--pdf | --markdown] <output file>
+
 Options:
   --version   Show version number
   -f          Input type: JSON Config file (This is by default)
   --asciidoc  Output type: asciidoc file
   --html      Output type: Html file
   --pdf       Output type: PDF file
-  --multiple  Create multiple output files
+  --markdown  Output type: MD file
   -h, --help  Show help
 
-Depending of the input type, you can use Compendium in different ways, since within this file you can do as much as asciidoc files, jira issues and confluence pages. 
+Depending of the input type, you can use Compendium in different ways, since within this file you can do as much as asciidoc files, html urls and confluence pages. 
 
 
 ==== JSON Config file
@@ -137,6 +143,10 @@ Reference can be made to asciidoc files, jira issues and confluence pages. You c
 ** source_type: asciidoc  (reads directly from local .adoc documents)
 ** source: Local Path.
 
+* Markdown documents: 
+** source_type: markdown  (reads directly from local .md documents)
+** source: Local Path.
+
 * Confluence pages:
 ** source_type: confluence 
 ** source: base url of confluence account
@@ -155,9 +165,10 @@ Reference can be made to asciidoc files, jira issues and confluence pages. You c
 * Pdf 
 * Html
 * Asciidoc
+* Markdown
 
 
-==== Examples within the project folder (test-data)
+==== Execution examples (mocks within the project folder test-data)
 
 ===== Local asciidoc files and external confluence account
 
@@ -193,6 +204,13 @@ $ ts-node src/compendium.ts -f test-data/confiles/html-url/configAllIndex.json -
 Config file with an example of internal capgemini confluence source and several documents, the command: (enter active credentials of the ad-center confluence )
 [source]
 $ ts-node src/compendium.ts -f test-data/input/confluence/configCapgemini.json --asciidoc out/out
+
+===== Markdown type
+Config file with an example of local markdown documents, extension .md.
+Command:
+[source]
+$ ts-node src/compendium.ts -f test-data/input/markdown/configLocal.json --html out/out
+
 
 == UML
 

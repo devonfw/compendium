@@ -31,9 +31,10 @@ export class MarkdownFileTextOut implements TextOut {
   /**
    * generate
    * Create the final file parsing the different elements that the input files have
+   * .md extension
    * @param {Array<Transcript>} data
    * @returns {Promise<void>}
-   * @memberof HtmlFileTextOut
+   * @memberof MarkdownFileTextOut
    */
   public async generate(data: Array<Transcript>): Promise<void> {
     try {

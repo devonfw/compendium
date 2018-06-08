@@ -151,7 +151,7 @@ describe('Url-html all Index Handbook Input', () => {
         done(error);
       });
   });
-  describe('Get titles list from an index', () => {
+  describe('Input', () => {
     it('index handbook page', done => {
       //constructor
       textinSources[index1[0][0].reference] = new InputUrlTextIn(
@@ -191,5 +191,14 @@ describe('Url-html all Index Handbook Input', () => {
         });
     });
   });
-  after(() => {});
+  after(() => {
+    try {
+      //delete all output files
+      shelljs.rm(listFilesOutput);
+      shelljs.rm('-rf', outputFolder.concat('images'));
+      shelljs.rm('-rf', outputFolder);
+    } catch (error) {
+      throw error;
+    }
+  });
 });
