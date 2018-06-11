@@ -123,7 +123,7 @@ On the other hand, we need to define the documents, as to the sources, we can ha
 
 * reference: It's a reference, it refers sources reference.
 * document: It's the file name or name/id project (i.e examples.adoc).
-* section: It's the section that you want to extract. If you want to extract all the content in the document you should leave this argument blank, but if you want to extract different sections, you should write in an array. (i.e [h1, h3])
+* sections: It's the section that you want to extract. If you want to extract all the content in the document you should leave this argument blank, but if you want to extract different sections, you should write in an array. (i.e sections: [h1, h3])
 
 To read from confluence internal network we need to add this arguments to the source part:
 * context: capgemini
@@ -168,44 +168,42 @@ Reference can be made to asciidoc files, jira issues and confluence pages. You c
 * Markdown
 
 
-==== Execution examples (mocks within the project folder test-data)
+==== Config File examples (mocks within the project folder test-data)
 
-===== Local asciidoc files and external confluence account
+===== Example of Config File with diferent sources
 
-Config file with a combination of a couple of documents from a confluence external account and 
-several asciidoc documents from local source (within this folder)
-Please introduce new confluence external account source and documents to test them
-This are the commands and you find the config.json file example:
-[source]
+Config file example with confluence and local asciidoc and markdown files:
+test-data/input/configMix.json 
+Command:
 $ ts-node src/compendium.ts -f test-data/input/configMix.json --html out/out
-$ ts-node src/compendium.ts -f test-data/input/configMix.json --pdf out/out
-$ ts-node src/compendium.ts -f test-data/input/configMix.json --asciidoc out/out
 
-===== Local asciidoc files only
+===== Local asciidoc Input - Diferent Output types
 
 This are the command and you can find the config.json enclosed:
 [source]
 $ ts-node src/compendium.ts -f test-data/input/configLocal.json --html out/out
+$ ts-node src/compendium.ts -f test-data/input/configLocal.json --pdf out/out
+$ ts-node src/compendium.ts -f test-data/input/configLocal.json --asciidoc out/out
 
-===== Url html type
+===== Url html type Input - Html Output
 
 Config file with several urls from handbook, config.json file example, the command:
 [source]
 $ ts-node src/compendium.ts -f test-data/confiles/html-url/config.json --html out/out
 
-===== Url html type with document_is_index true
+===== Url html type with document_is_index true - Html Output
 
 Config file with a document_is_index true and a unique url document pointing at the handbook source.Have a look at the config.json file example, the command:
 [source]
 $ ts-node src/compendium.ts -f test-data/confiles/html-url/configAllIndex.json --html out/out
 
-===== Internal Confluence source and documents
+===== Internal Confluence Input - Asciidoc Output
 
 Config file with an example of internal capgemini confluence source and several documents, the command: (enter active credentials of the ad-center confluence )
 [source]
 $ ts-node src/compendium.ts -f test-data/input/confluence/configCapgemini.json --asciidoc out/out
 
-===== Markdown type
+===== Markdown type Input/Output
 Config file with an example of local markdown documents, extension .md.
 Command:
 [source]

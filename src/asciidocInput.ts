@@ -74,15 +74,19 @@ export class AsciiDocFileTextIn implements TextIn {
     }
     const tree = this.htmlparse.parse(dochtml);
     const transcript: Transcript = { segments: [] };
-    const end: Array<TextSegment> = [];
+    let end: Array<TextSegment> = [];
     //new instance static variables
     ParseLocal.base = this.base;
     ParseLocal.arrayImagesSrc = [];
     for (const branch of tree) {
-      const temp = await ParseLocal.recursive(branch, sections);
+      const temp = await ParseLocal.recursive(branch);
       for (const final of temp) {
         end.push(final);
       }
+    }
+    //apply the filter
+    if (sections !== undefined) {
+      end = ParseLocal.applyFilter(end, sections);
     }
     transcript.segments = end;
     //validate images before copying

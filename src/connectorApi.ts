@@ -47,8 +47,6 @@ export class ConnectorApi {
     } catch (error) {
       throw error;
     }
-    console.log('Second Request OK');
-
     //params for the second request
     let objectForm = [
       { name: 'IDToken0', value: '' },
@@ -110,7 +108,6 @@ export class ConnectorApi {
           'Negotiate TlRMTVNTUAABAAAAl4II4gAAAAAAAAAAAAAAAAAAAAAGAbEdAAAADw==',
       },
     };
-    console.log('Executing first Request...');
     //request
     return new Promise<string>((resolve, reject) => {
       request.get(options, (error, response, body) => {
@@ -158,7 +155,6 @@ export class ConnectorApi {
       return cookie1;
     });
 
-    console.log('Executing second Request...');
     //request
     return new Promise<any>((resolve, reject) => {
       request(

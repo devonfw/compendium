@@ -59,7 +59,7 @@ export class InputUrlTextIn implements TextIn {
     sections?: string[],
   ): Promise<Transcript> {
     const transcript: Transcript = { segments: [] };
-    const end: Array<TextSegment> = [];
+    let end: Array<TextSegment> = [];
 
     let url = this.baseURL;
 
@@ -97,6 +97,10 @@ export class InputUrlTextIn implements TextIn {
         for (const final of temp) {
           end.push(final);
         }
+      }
+      //apply the filter
+      if (sections !== undefined) {
+        end = ParseUrlHtml.applyFilter(end, sections);
       }
       transcript.segments = end;
       //prepare the images to copy

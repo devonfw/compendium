@@ -4,7 +4,6 @@ import {
   TextOut,
   RichText,
   RichString,
-  Cookies,
   Transcript,
   TextSegment,
   Index,
@@ -34,24 +33,15 @@ const should = chai.should();
 let basepath: string;
 let space: string;
 let credentials: Credentials;
-let cookies: Cookies;
 let id: string;
 let id_badFormat: string;
 let id_multiplePages: string;
 
-// Default values for ConfluenceTextIn constructor
 //credentials external account
 credentials = {
   username: 'murta.sanjuan-ases-external@capgemini.com',
   password: 'Admin1234',
 };
-
-cookies = [
-  {
-    name: 'brandNewDayProd',
-    value: 'abcd',
-  },
-];
 
 let docconfig: ConfigFile;
 let index1: Index;
@@ -66,10 +56,10 @@ const pathConfigFile = './test-data/input/config.json';
 // Output -> To see transcript in a file (Optional)
 const outputPath01 = 'test-data/output/confluence/output1.json';
 
-// TEST01
-// Should get content from external Murta's confluence account
+// TEST CONFLUENCE EXTERNAL ACCOUNT WITH CREDENTIALS
+// this unit test worked successfuly
 //the account has been removed (free trial)
-//to do the test please open an account in confluence an change the credentials
+//I left them in case another account is set up to use them as a guide
 xdescribe('Confluence Test', () => {
   before(done => {
     extrafs

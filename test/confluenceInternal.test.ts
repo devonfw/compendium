@@ -12,6 +12,8 @@ import {
   Paragraph,
   Cookie,
   List,
+  TextElement,
+  Table,
 } from '../src/types';
 import {
   doCompendium,
@@ -122,7 +124,7 @@ describe('ConfluenceInternal01 Internal Capgemini account', () => {
       });
     });
     describe('TextIn with cookies', () => {
-      it('Text in with cookies', done => {
+      it('Text in paragraph', done => {
         textinConfluence01[index1[0][1].reference] = new ConfluenceTextIn(
           index1[0][1].source,
           index1[0][1].space,
@@ -131,15 +133,34 @@ describe('ConfluenceInternal01 Internal Capgemini account', () => {
         textinConfluence01[index1[1][2].reference]
           .getTranscript(index1[1][2].document)
           .then(transcriptObject => {
-            //save the transcript for other test
-            transcripts = [];
-            transcripts.push(transcriptObject);
-            transcript = transcripts[0];
             //testing de IR
-            let paragraph1 = (transcript.segments[0] as Paragraph)
+            let paragraph1 = (transcriptObject.segments[0] as Paragraph)
               .text[0] as RichString;
             expect(paragraph1.text).to.include(
               'The objectives of the project are:',
+            );
+            done();
+          })
+          .catch(error => {
+            done(error);
+          });
+      });
+    });
+    describe('TextIn with sections', () => {
+      it('sections', done => {
+        textinConfluence01[index1[0][0].reference] = new ConfluenceTextIn(
+          index1[0][0].source,
+          index1[0][0].space,
+          cookieArray,
+        );
+        textinConfluence01[index1[1][0].reference]
+          .getTranscript(index1[1][0].document, index1[1][0].sections)
+          .then(transcriptObject => {
+            let paragraph1 = (transcriptObject.segments[0] as TextElement)
+              .text[0] as RichString;
+            expect(paragraph1.text).to.include('Epic 2. Consult the queue');
+            expect((transcriptObject.segments[7] as Table).kind).equals(
+              'table',
             );
             done();
           })

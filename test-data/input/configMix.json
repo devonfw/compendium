@@ -1,0 +1,47 @@
+{
+  "sources": [
+    {
+      "reference": "project1",
+      "source_type": "asciidoc",
+      "source": "./test-data/input/input-data1"
+    },
+    {
+      "reference": "project2",
+      "source_type": "markdown",
+      "source": "./test-data/input/markdown"
+    },
+    {
+      "reference": "confluence1",
+      "source_type": "confluence",
+      "source": "https://adcenter.pl.s2-eu.capgemini.com/confluence/",
+      "space": "HD",
+      "context": "capgemini"
+    }
+  ],
+  "documents": [
+    {
+      "reference": "project1",
+      "document": "image"
+    },
+    {
+      "reference": "project1",
+      "document": "ol"
+    },
+    {
+      "reference": "project2",
+      "document": "markdown-sample"
+    },
+    {
+      "reference": "confluence1",
+      "document": "Hot+Desking"
+    },
+    {
+      "reference": "confluence1",
+      "document": "2.+Objectives"
+    },
+    {
+      "reference": "confluence1",
+      "document": "6.+Entity+relationship+diagram"
+    }
+  ]
+}

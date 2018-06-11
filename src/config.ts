@@ -66,7 +66,7 @@ export class ConfigFile implements DocConfig {
           node.sections !== '' &&
           node.sections !== undefined
         ) {
-          if (node.sections.isArray()) {
+          if (node.sections.length) {
             indexNode.sections = node.sections;
           } else {
             console.log(

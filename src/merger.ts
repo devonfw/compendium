@@ -29,7 +29,10 @@ export class MergerImpl implements Merger {
       if (textinSources[node.reference]) {
         try {
           transcripts.push(
-            await textinSources[node.reference].getTranscript(node.document),
+            await textinSources[node.reference].getTranscript(
+              node.document,
+              node.sections,
+            ),
           );
         } catch (err) {
           throw new Error(err.message);

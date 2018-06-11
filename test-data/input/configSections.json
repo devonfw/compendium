@@ -1,39 +1,38 @@
 {
   "sources": [
     {
-      "reference": "confluence2",
-      "source_type": "confluence",
-      "source": "https://adcenter.pl.s2-eu.capgemini.com/confluence/",
-      "space": "JQ",
-      "context": "capgemini"
-    },
-    {
       "reference": "confluence1",
       "source_type": "confluence",
       "source": "https://adcenter.pl.s2-eu.capgemini.com/confluence/",
       "space": "HD",
       "context": "capgemini"
+    },
+    {
+      "reference": "confluence2",
+      "source_type": "confluence",
+      "source": "https://adcenter.pl.s2-eu.capgemini.com/confluence/",
+      "space": "JQ",
+      "context": "capgemini"
     }
   ],
   "documents": [
     {
-      "reference": "confluence2",
-      "document": "Jump+the+queue+Home",
-      "sections": [
-        "Epic 2. Consult the queue"
-      ]
-    },
-    {
       "reference": "confluence1",
-      "document": "Hot+Desking"
+      "document": "Hot+Desking",
+      "sections": [
+        "Roadmap"
+      ]
     },
     {
       "reference": "confluence1",
       "document": "2.+Objectives"
     },
     {
-      "reference": "confluence1",
-      "document": "4.+User+Stories"
+      "reference": "confluence2",
+      "document": "Jump+the+queue+Home",
+      "sections": [
+        "Epic 2. Consult the queue"
+      ]
     }
   ]
 }

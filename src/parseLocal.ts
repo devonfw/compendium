@@ -37,15 +37,16 @@ export class ParseLocal {
   }
 
   /**
-   * recursive
+   *
    * Read the elements on the tree recursively since find a known node
+   *
    * @param {*} node
    * @param {string[]} [filter]
    * @returns {Array<TextSegment>}
    * @memberof AsciiDocFileTextIn
    */
-  public static recursive(node: any, filter?: string[]): Array<TextSegment> {
-    const result: Array<TextSegment> = [];
+  public static recursive(node: any): Array<TextSegment> {
+    let result: Array<TextSegment> = [];
     let out: TextSegment;
     if (node.children) {
       if (node.name === 'h1') {
@@ -84,98 +85,72 @@ export class ParseLocal {
         };
         result.push(out);
       }
-      if (filter !== [] && filter !== null && filter !== undefined) {
-        let sectionFound = false;
-        for (const section of filter) {
-          if (node.children[0].data === section) {
-            sectionFound = true;
-          }
+      if (node.name === 'p') {
+        out = { kind: 'paragraph', text: this.paragraphs(node.children) };
+        result.push(out);
+      } else if (node.name === 'a') {
+        out = {
+          kind: 'link',
+          ref: node.attribs.href,
+          text: this.linkContent(node.children),
+        };
+        result.push(out);
+      } else if (node.name === 'img') {
+        this.arrayImagesSrc.push(node.attribs.src);
+        const img: InlineImage = {
+          kind: 'inlineimage',
+          img: this.changeSRC(node.attribs.src),
+          title: node.attribs.alt,
+        };
+        result.push(img);
+      } else if (node.name === 'table') {
+        out = { kind: 'table', content: this.table(node.children) };
+        result.push(out);
+      } else if (node.name === 'ul') {
+        out = {
+          kind: 'list',
+          ordered: false,
+          elements: this.list(node.children),
+        };
+        result.push(out);
+      } else if (node.name === 'ol') {
+        out = {
+          kind: 'list',
+          ordered: true,
+          elements: this.list(node.children),
+        };
+        result.push(out);
+      } else if (node.name === 'code') {
+        out = { kind: 'code', content: node.children[0].data };
+        if (node.attribs['data-lang']) {
+          out.language = node.attribs['data-lang'];
         }
-        if (sectionFound) {
-          result.pop();
-          const inter = this.recursive(node.parent);
+        result.push(out);
+      } else if (node.name === 'br') {
+        const attrs: TextAttributes = {
+          strong: false,
+          cursive: false,
+          underline: false,
+          script: 'normal',
+        };
+        const br: RichString = { text: '\n', attrs };
+        out = { kind: 'paragraph', text: [br] };
+        result.push(out);
+      } else if (node.name === 'div' && node.attribs.class === 'content') {
+        out = { kind: 'paragraph', text: this.paragraphs(node.children) };
+        result.push(out);
+      } else {
+        for (const child of node.children) {
+          const inter = this.recursive(child);
           if (inter && inter.length > 0) {
             for (const temp of inter) {
               result.push(temp);
             }
           }
-        } else {
-          for (const child of node.children) {
-            const inter = this.recursive(child, filter);
-            if (inter && inter.length > 0) {
-              for (const temp of inter) {
-                result.push(temp);
-              }
-            }
-          }
-        }
-      } else {
-        if (node.name === 'p') {
-          out = { kind: 'paragraph', text: this.paragraphs(node.children) };
-          result.push(out);
-        } else if (node.name === 'a') {
-          out = {
-            kind: 'link',
-            ref: node.attribs.href,
-            text: this.linkContent(node.children),
-          };
-          result.push(out);
-        } else if (node.name === 'img') {
-          this.arrayImagesSrc.push(node.attribs.src);
-          const img: InlineImage = {
-            kind: 'inlineimage',
-            img: this.changeSRC(node.attribs.src),
-            title: node.attribs.alt,
-          };
-          result.push(img);
-        } else if (node.name === 'table') {
-          out = { kind: 'table', content: this.table(node.children) };
-          result.push(out);
-        } else if (node.name === 'ul') {
-          out = {
-            kind: 'list',
-            ordered: false,
-            elements: this.list(node.children),
-          };
-          result.push(out);
-        } else if (node.name === 'ol') {
-          out = {
-            kind: 'list',
-            ordered: true,
-            elements: this.list(node.children),
-          };
-          result.push(out);
-        } else if (node.name === 'code') {
-          out = { kind: 'code', content: node.children[0].data };
-          if (node.attribs['data-lang']) {
-            out.language = node.attribs['data-lang'];
-          }
-          result.push(out);
-        } else if (node.name === 'br') {
-          const attrs: TextAttributes = {
-            strong: false,
-            cursive: false,
-            underline: false,
-            script: 'normal',
-          };
-          const br: RichString = { text: '\n', attrs };
-          out = { kind: 'paragraph', text: [br] };
-          result.push(out);
-        } else if (node.name === 'div' && node.attribs.class === 'content') {
-          out = { kind: 'paragraph', text: this.paragraphs(node.children) };
-          result.push(out);
-        } else {
-          for (const child of node.children) {
-            const inter = this.recursive(child);
-            if (inter && inter.length > 0) {
-              for (const temp of inter) {
-                result.push(temp);
-              }
-            }
-          }
         }
       }
     }
+
     return result;
   }
   /**
@@ -638,5 +613,47 @@ export class ParseLocal {
     });
 
     this.arrayImagesSrc = result;
+  }
+  public static applyFilter(
+    allResults: TextSegment[],
+    filter: string[],
+  ): TextSegment[] {
+    let result: TextSegment[] = [];
+    filter.forEach(textFilter => {
+      let found = false;
+      let titleLevel: string = '';
+      allResults.forEach(itemIR => {
+        if (!found) {
+          //filter only titles
+          if (itemIR.kind === 'textelement') {
+            //filter found
+            if ((itemIR.text[0] as RichString).text === textFilter) {
+              found = true;
+              titleLevel = itemIR.element;
+              result = result.concat(itemIR);
+            }
+          }
+        } else {
+          //found true include everything until the next title of the same level
+          if (
+            itemIR.kind === 'textelement' &&
+            this.isHigherTitle(itemIR.element, titleLevel)
+          ) {
+            found = false;
+          } else {
+            result = result.concat(itemIR);
+          }
+        }
+      });
+    });
+
+    return result;
+  }
+  //comparing two tags titles if is lower true and higher false
+  public static isHigherTitle(current: string, reference: string): boolean {
+    if (current === 'title') current = 'h0';
+    if (reference === 'title') reference = 'h0';
+    if (current <= reference) return true;
+    else return false;
   }
 }
