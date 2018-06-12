@@ -148,7 +148,7 @@ describe('ConfluenceBad01 Testing common fails', () => {
 // TEST03: Processing Data
 //credentials have expired create new account to test this part
 const textinConfluence03 = new ConfluenceTextIn(basepath, space, credentials);
-xdescribe('Confluence03 Testing data processing', () => {
+describe('ConfluenceBad02 Testing data processing', () => {
   before(() => {
     //setup fixture
   });
@@ -163,7 +163,9 @@ xdescribe('Confluence03 Testing data processing', () => {
           done(new Error('Expected method to reject.'));
         })
         .catch(error => {
-          expect(error.message).to.include('Confluence page request is empty');
+          expect(error.message).to.include(
+            "It isn't possible to get the content from confluence",
+          );
           done();
         });
     });

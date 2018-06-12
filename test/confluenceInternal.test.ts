@@ -134,7 +134,7 @@ describe('ConfluenceInternal01 Internal Capgemini account', () => {
           .getTranscript(index1[1][2].document)
           .then(transcriptObject => {
             //testing de IR
-            let paragraph1 = (transcriptObject.segments[0] as Paragraph)
+            let paragraph1 = (transcriptObject.segments[1] as Paragraph)
               .text[0] as RichString;
             expect(paragraph1.text).to.include(
               'The objectives of the project are:',
@@ -156,10 +156,10 @@ describe('ConfluenceInternal01 Internal Capgemini account', () => {
         textinConfluence01[index1[1][0].reference]
           .getTranscript(index1[1][0].document, index1[1][0].sections)
           .then(transcriptObject => {
-            let paragraph1 = (transcriptObject.segments[0] as TextElement)
+            let paragraph1 = (transcriptObject.segments[1] as TextElement)
               .text[0] as RichString;
             expect(paragraph1.text).to.include('Epic 2. Consult the queue');
-            expect((transcriptObject.segments[7] as Table).kind).equals(
+            expect((transcriptObject.segments[8] as Table).kind).equals(
               'table',
             );
             done();

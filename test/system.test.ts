@@ -27,7 +27,7 @@ const should = chai.should();
 let credentials: Credentials;
 
 const outputFolder = 'test-data/output/system/';
-const configFilePath = './test-data/input/config.json';
+const configFilePath = './test-data/input/configLocal.json';
 const configFilePathCapgemini =
   './test-data/input/confluence/configCapgemini.json';
 
@@ -37,7 +37,7 @@ let inputFormat: string;
 
 //SYSTEM DO COMPENDIUM TEST
 //CONFLUENCE EXTERNAL
-xdescribe('System01 test doCompendium from confluence murta and asciidoc in local to asciidoc/html/pdf', () => {
+describe('System01 test doCompendium from confluence murta and asciidoc in local to asciidoc/html/pdf', () => {
   before(done => {
     //variables
     outputFile = './test-data/output/system/systemOut';
@@ -51,31 +51,9 @@ xdescribe('System01 test doCompendium from confluence murta and asciidoc in loca
         done(error);
       });
   });
-  xdescribe('System test', () => {
-    it('To asciidoc', done => {
-      doCompendium(configFilePath, 'asciidoc', outputFile)
-        .then(() => {
-          done();
-        })
-        .catch(error => {
-          done(error);
-        });
-    });
-  });
   describe('System test', () => {
-    it('To html', done => {
-      doCompendium(configFilePath, 'html', outputFile)
-        .then(() => {
-          done();
-        })
-        .catch(error => {
-          done(error);
-        });
-    });
-  });
-  xdescribe('System test', () => {
-    it('To pdf', done => {
-      doCompendium(configFilePath, 'pdf', './test-data/output/systemOut')
+    it('To asciidoc', done => {
+      doCompendium(configFilePath, outputFormat, outputFile)
         .then(() => {
           done();
         })
@@ -91,11 +69,11 @@ xdescribe('System01 test doCompendium from confluence murta and asciidoc in loca
   });
 });
 //CONFLUENCE INTERNAL
-xdescribe('System02 test doCompendium from confluence capgemini to asciidoc/html/pdf', () => {
+describe('System02 test doCompendium from confluence capgemini to asciidoc/html/pdf', () => {
   before(done => {
     //variables
     outputFile = './test-data/output/system/systemOutInternal';
-    outputFormat = 'asciidoc';
+    outputFormat = 'html';
     extrafs
       .ensureDir(outputFolder)
       .then(() => {
@@ -107,33 +85,7 @@ xdescribe('System02 test doCompendium from confluence capgemini to asciidoc/html
   });
   describe('System test', () => {
     it('To asciidoc', done => {
-      doCompendium(configFilePathCapgemini, 'asciidoc', outputFile)
-        .then(() => {
-          done();
-        })
-        .catch(error => {
-          done(error);
-        });
-    });
-  });
-  xdescribe('System test', () => {
-    it('To html', done => {
-      doCompendium(configFilePathCapgemini, 'html', outputFile)
-        .then(() => {
-          done();
-        })
-        .catch(error => {
-          done(error);
-        });
-    });
-  });
-  xdescribe('System test', () => {
-    it('To pdf', done => {
-      doCompendium(
-        configFilePathCapgemini,
-        'pdf',
-        './test-data/output/systemOut',
-      )
+      doCompendium(configFilePathCapgemini, outputFormat, outputFile)
         .then(() => {
           done();
         })

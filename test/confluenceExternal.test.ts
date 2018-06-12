@@ -60,7 +60,7 @@ const outputPath01 = 'test-data/output/confluence/output1.json';
 // this unit test worked successfuly
 //the account has been removed (free trial)
 //I left them in case another account is set up to use them as a guide
-xdescribe('Confluence Test', () => {
+/* xdescribe('Confluence Test', () => {
   before(done => {
     extrafs
       .ensureDir(outputFolder)
@@ -233,4 +233,4 @@ xdescribe('Confluence Test', () => {
     // clean fixture
     shelljs.rm('-rf', outputFolder);
   });
-});
+}); */

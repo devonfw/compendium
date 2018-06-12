@@ -130,6 +130,9 @@ export class ConfluenceTextIn implements TextIn {
           if (sections !== undefined) {
             end = ParseConfluence.applyFilter(end, sections);
           }
+          //add title of the concluence page
+          end.unshift(this.addTitlePage(title));
+          //save the final result
           transcript.segments = end;
         } else {
           error = true;
@@ -252,5 +255,21 @@ export class ConfluenceTextIn implements TextIn {
   public async getIndexList(title: string): Promise<string[]> {
     let arrayResult: string[] = [];
     return arrayResult;
+  }
+  //add title of the page in confluence otherwise it is messy
+  public addTitlePage(title: string): TextElement {
+    let titleAux1 = title.split('+');
+    let titleAux2 = titleAux1.join(' ');
+    let richStringAux: RichString = {
+      attrs: { strong: true, script: 'normal' },
+      text: titleAux2,
+    };
+    let richTextAux: RichText = [richStringAux];
+    let titleObject1: TextElement = {
+      kind: 'textelement',
+      element: 'title',
+      text: richTextAux,
+    };
+    return titleObject1;
   }
 }
