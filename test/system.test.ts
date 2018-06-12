@@ -36,8 +36,8 @@ let outputFormat: string;
 let inputFormat: string;
 
 //SYSTEM DO COMPENDIUM TEST
-//CONFLUENCE EXTERNAL
-describe('System01 test doCompendium from confluence murta and asciidoc in local to asciidoc/html/pdf', () => {
+//LOCAL FILES
+describe('System01 test doCompendium from asciidoc in local to asciidoc', () => {
   before(done => {
     //variables
     outputFile = './test-data/output/system/systemOut';
@@ -69,7 +69,7 @@ describe('System01 test doCompendium from confluence murta and asciidoc in local
   });
 });
 //CONFLUENCE INTERNAL
-describe('System02 test doCompendium from confluence capgemini to asciidoc/html/pdf', () => {
+describe('System02 test doCompendium from confluence capgemini to html', () => {
   before(done => {
     //variables
     outputFile = './test-data/output/system/systemOutInternal';
