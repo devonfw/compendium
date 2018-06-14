@@ -75,6 +75,7 @@ image::./images/HTMLOutput.PNG[HTML OUTPUT]
 
 == Compendium processing
 
+Get the enviroment ready:
 First download node and npm from: https://nodejs.org/en/
 
 Open a terminal and type :
@@ -82,6 +83,7 @@ Open a terminal and type :
     $ npm install -g ts-node
     $ npm i typescript -g
     
+
     $ npm i @types/node --save/dev
     $ npm install
 
@@ -99,7 +101,9 @@ You should see the information about the Compendium version printed in the termi
 The `compendium` command allows you to invoke Compendium from the command line. For a correct usage you need to introduce five arguments.
 
 [source]
-node compendium.js -f <config file> [--asciidoc|--html|--pdf | --markdown] <output file>
+
+ts-node compendium.ts -f <config file> [--asciidoc|--html|--pdf | --markdown] <output file>
+
 
 Options:
   --version   Show version number
