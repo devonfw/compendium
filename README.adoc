@@ -75,22 +75,22 @@ image::./images/HTMLOutput.PNG[HTML OUTPUT]
 
 == Compendium processing
 
+Get the enviroment ready:
 First download node and npm from: https://nodejs.org/en/
+    $ npm install -g ts-node
+    $ npm i typescript -g
 
 Compendium can be installed using `npm install` command in the terminal. +
 Open a terminal and type :
 
-    $ npm install -g ts-node
-    $ npm i typescript --save/dev
     $ npm i @types/node --save/dev
-    
     $ npm install
 
 == Usage 
 
 If you could install successfully Compendium, the command line interface (CLI) will be available in your PATH. To verify this, you can run the following in your terminal: 
 
-    $ node compendium.js --version 
+    $ ts-node compendium.ts --version 
 
 You should see the information about the Compendium version printed in the terminal. +
 `0.0.9` 
@@ -100,7 +100,7 @@ You should see the information about the Compendium version printed in the termi
 The `compendium` command allows you to invoke Compendium from the command line. For a correct usage you need to introduce five arguments.
 
 [source]
-node compendium.js [-f] <config file> [--asciidoc|--html|--pdf | --markdown] <output file>
+ts-node compendium.ts -f <config file> [--asciidoc|--html|--pdf | --markdown] <output file>
 
 Options:
   --version   Show version number
