@@ -5,7 +5,7 @@ toc::[]
 = COMPENDIUM
 
 Compendium is a processor for generating, unifying and converting different sources like AsciiDoc files, Markdown files, Confluence and html websites in different formats.
-We can select all the content or only parts of it and generate an AsciiDoc, HTML or PDF.
+We can select all the content or only parts of it and generate an AsciiDoc, Markdown, HTML or PDF.
 
 == Tags covered in the IR (Itermediate Representation)
 
@@ -133,9 +133,8 @@ To read from confluence internal network we need to add this arguments to the so
 
 
 
-IMPORTANT: You can't write the same reference, each reference should be unique. And if you want to extract Confluence or Jira information you need to introduce your credentials to get the information.
+IMPORTANT: You can't write the same reference, each reference should be unique. And if you want to extract Confluence information you need to introduce your credentials to get the information.
 
-Reference can be made to asciidoc files, jira issues and confluence pages. You can see an example link:http://gitlab-val.es.capgemini.com/gitlab/ADCenter/compendium/blob/master/test-data/input/config.json[here].
 
 ===== Types of Inputs available
 
@@ -158,7 +157,7 @@ Reference can be made to asciidoc files, jira issues and confluence pages. You c
 ** source: url 
 * In the url-html type the document part have an optional attribute: (document is an index, where we have to extract all the links from. And include them in the output file, so that we download all the pages from a site). The document has to be unique and consider the following:
 ** document: index url
-** document_is_index: true or false (to indicate if we have to read an index)
+** is_index: true or false (to indicate if we have to read an index)
 
 ===== Types of Outputs available
 
@@ -191,9 +190,9 @@ Config file with several urls from handbook, config.json file example, the comma
 [source]
 $ ts-node src/compendium.ts -f test-data/confiles/html-url/config.json --html out/out
 
-===== Url html type with document_is_index true - Html Output
+===== Url html type with is_index true - Html Output
 
-Config file with a document_is_index true and a unique url document pointing at the handbook source.Have a look at the config.json file example, the command:
+Config file with a is_index true and a unique url document pointing at the handbook source.Have a look at the config.json file example, the command:
 [source]
 $ ts-node src/compendium.ts -f test-data/confiles/html-url/configAllIndex.json --html out/out
 
@@ -214,4 +213,3 @@ $ ts-node src/compendium.ts -f test-data/input/markdown/configLocal.json --html 
 
 image::./images/compendiumDiagram/compendiumDiagram.png[USAGE]
 
-NOTE: Edit the diagram in: http://www.umlet.com/umletino/umletino.html (Import the xml document enclosed in the diagram folder)

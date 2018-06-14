@@ -10,7 +10,7 @@
     {
       "reference": "handbook",
       "document": "index",
-      "document_is_index": "true"
+      "is_index": "true"
     }
   ]
 }

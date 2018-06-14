@@ -48,17 +48,10 @@
       "reference": "project1",
       "document": "link"
     },
-    {
-      "reference": "project1",
-      "document": "cross"
-    },
+
     {
       "reference": "project1",
       "document": "ol"
-    },
-    {
-      "reference": "project1",
-      "document": "admonitions"
     }
   ]
 }

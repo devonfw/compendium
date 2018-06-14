@@ -100,7 +100,7 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with BAD
     });
     it('Duplicated document when is index source true', done => {
       const errorMessageResult =
-        'Error duplicated document: When document_is_index=true the document must be unique';
+        'Error duplicated document: When is_index=true the document must be unique';
       docconfig = new ConfigFile(badConfigFolder + 'configAllIndexBad.json');
       docconfig
         .getIndex()

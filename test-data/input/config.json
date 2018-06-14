@@ -63,10 +63,7 @@
       "reference": "project1",
       "document": "ol"
     },
-    {
-      "reference": "project1",
-      "document": "admonitions"
-    },
+
     {
       "reference": "confluence1",
       "document": "What+is+asciidoctor"

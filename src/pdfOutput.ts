@@ -82,7 +82,7 @@ export class PdfFileTextOut implements TextOut {
       //pdf only works in the project folder
       const fileName = this.getNameOfFileOnly();
       try {
-        await extrafs.writeFile(fileName + '.html', docWithStyle, 'utf8');
+        await extrafs.writeFile(fileName + '.html', docWithStyle);
       } catch (err) {
         throw err;
       }

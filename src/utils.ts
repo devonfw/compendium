@@ -156,7 +156,7 @@ export class Utilities {
 
     return duplicate;
   }
-  //if document_is_index exists return the position of the document inside the index
+  //if is_index exists return the position of the document inside the index
   public static findDocumentIsIndex(
     index: IndexNode[],
     sourceRef: string,
@@ -166,8 +166,8 @@ export class Utilities {
     index.map((node, index) => {
       if (
         node.reference === sourceRef &&
-        node.document_is_index &&
-        node.document_is_index === 'true'
+        node.is_index &&
+        node.is_index === 'true'
       ) {
         result = index;
       }

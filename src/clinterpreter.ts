@@ -135,8 +135,8 @@ export async function doCompendium(
     } else {
       throw new Error('Unknown TextInSource');
     }
-    //document_is_index -------------------------------------------------------------
-    //Check if the source has a document_is_index true
+    //is_index -------------------------------------------------------------
+    //Check if the source has a is_index true
     //if not exists position -1, if exists position >=0
     let documentIsIndexPosition: number = Utilities.findDocumentIsIndex(
       index[1],

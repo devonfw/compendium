@@ -86,8 +86,8 @@ describe('Testing the asciidoc input and the pdf, html, asciidoc Output with goo
       assert.isArray(index1[0], 'Souces must be an array');
       assert.isArray(index1[1], 'Documents must be an array');
 
-      expect(index1[0]).have.lengthOf(3, 'There are two sources');
-      expect(index1[1]).have.lengthOf(15, 'There are 12 documents');
+      expect(index1[0]).have.lengthOf(3, 'There are three sources');
+      expect(index1[1]).have.lengthOf(14, 'There are 14 documents');
 
       expect(index1[0][0].reference).equals('project1');
       expect(index1[0][0].source_type).equals('asciidoc');
