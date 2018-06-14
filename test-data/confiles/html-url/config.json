@@ -9,8 +9,8 @@
   "documents": [
     {
       "reference": "handbook",
-      "document": "Service-Portfolio_4326220"
-    },
-    { "reference": "handbook", "document": "DevOps_4328546" }
+      "document": "Introduction_4326184",
+      "sections": ["Attributes", "Value Proposition"]
+    }
   ]
 }

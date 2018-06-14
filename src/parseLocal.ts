@@ -190,62 +190,81 @@ export class ParseLocal {
     let out: RichText | List | Paragraph | Link | Code;
     for (const li of node) {
       if (li.name === 'li') {
-        for (const child of li.children)
-          if (child.type === 'text' && child.data !== '\n') {
-            out = this.paragraphs([child]);
-            result.push(out);
-          } else if (child.name === 'ul') {
-            out = {
-              kind: 'list',
-              ordered: false,
-              elements: this.list(child.children),
-            };
-            result.push(out);
-          } else if (child.name === 'ol') {
-            out = {
-              kind: 'list',
-              ordered: true,
-              elements: this.list(child.children),
-            };
-            result.push(out);
-          } else if (child.name === 'p') {
-            out = { kind: 'paragraph', text: this.paragraphs(child.children) };
-            result.push(out);
-          } else if (child.name === 'div') {
-            for (const element of child.children) {
-              if (element.name === 'ol') {
-                out = {
-                  kind: 'list',
-                  ordered: true,
-                  elements: this.list(element.children),
-                };
-                result.push(out);
-              } else if (element.name === 'ul') {
-                out = {
-                  kind: 'list',
-                  ordered: false,
-                  elements: this.list(element.children),
-                };
-                result.push(out);
+        //in case the <p> is missing it will take it as <p>
+        if (
+          li.children[0].name === 'strong' ||
+          li.children[0].name === 'cursive' ||
+          li.children[0].name === 'uniderline' ||
+          li.children[0].name === 'span'
+        ) {
+          out = {
+            kind: 'paragraph',
+            text: this.paragraphs(li.children),
+          };
+          result.push(out);
+        } else {
+          //inside is different of a <p>
+          for (const child of li.children) {
+            if (child.type === 'text' && child.data !== '\n') {
+              out = this.paragraphs([child]);
+              result.push(out);
+            } else if (child.name === 'ul') {
+              out = {
+                kind: 'list',
+                ordered: false,
+                elements: this.list(child.children),
+              };
+              result.push(out);
+            } else if (child.name === 'ol') {
+              out = {
+                kind: 'list',
+                ordered: true,
+                elements: this.list(child.children),
+              };
+              result.push(out);
+            } else if (child.name === 'p') {
+              out = {
+                kind: 'paragraph',
+                text: this.paragraphs(child.children),
+              };
+              result.push(out);
+            } else if (child.name === 'div') {
+              for (const element of child.children) {
+                if (element.name === 'ol') {
+                  out = {
+                    kind: 'list',
+                    ordered: true,
+                    elements: this.list(element.children),
+                  };
+                  result.push(out);
+                } else if (element.name === 'ul') {
+                  out = {
+                    kind: 'list',
+                    ordered: false,
+                    elements: this.list(element.children),
+                  };
+                  result.push(out);
+                }
               }
+            } else if (child.name === 'a') {
+              out = {
+                kind: 'link',
+                ref: child.attribs.href,
+                text: this.linkContent(child.children),
+              };
+              result.push(out);
+            } else if (child.name === 'code') {
+              out = { kind: 'code', content: child.children[0].data };
+              if (child.attribs['data-lang']) {
+                out.language = child.attribs['data-lang'];
+              }
+              result.push(out);
+            } else if (!child.data) {
+              out = this.paragraphs(child.children);
+              result.push(out);
             }
-          } else if (child.name === 'a') {
-            out = {
-              kind: 'link',
-              ref: child.attribs.href,
-              text: this.linkContent(child.children),
-            };
-            result.push(out);
-          } else if (child.name === 'code') {
-            out = { kind: 'code', content: child.children[0].data };
-            if (child.attribs['data-lang']) {
-              out.language = child.attribs['data-lang'];
-            }
-            result.push(out);
-          } else if (!child.data) {
-            out = this.paragraphs(child.children);
-            result.push(out);
           }
+        }
       }
     }
     return result;

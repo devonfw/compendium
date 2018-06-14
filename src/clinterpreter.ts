@@ -148,8 +148,16 @@ export async function doCompendium(
         let arrayTitles = await textinSources[source.reference].getIndexList(
           index[1][documentIsIndexPosition].document,
         );
+
         if (arrayTitles.length > 0) {
+          //delete the index page as we dont need it any more
           //save the list inside the index for future document get Transcript reading
+          index[1][documentIsIndexPosition] = {
+            reference: source.reference,
+            document: arrayTitles[0],
+          };
+          arrayTitles.shift();
+
           for (let title of arrayTitles) {
             index[1].push({
               reference: source.reference,

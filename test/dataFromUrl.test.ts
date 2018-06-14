@@ -73,7 +73,9 @@ describe('Url-html Input Output one html page', () => {
         .then(transcriptObject => {
           let paragraph = transcriptObject.segments[5] as Paragraph;
           let richS = paragraph.text[0] as RichString;
-          expect(richS.text).includes('Production Yard');
+          expect(richS.text).includes(
+            'The focus of the AD Center is to deliver digital adaptive Applications based on distributed',
+          );
           done();
         })
         .catch(error => {
@@ -116,7 +118,9 @@ describe('Url-html Input Output one html page', () => {
               'utf8',
             );
             let outputArray = outputResult.split('\n');
-            expect(outputArray[90]).includes('Production Yard');
+            expect(outputArray[91]).includes(
+              'Innovative software development with state of the art technology',
+            );
             done();
           })
           .catch(error => {

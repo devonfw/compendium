@@ -25,7 +25,7 @@ export class MergerImpl implements Merger {
   ): Promise<void> {
     //get the IR all the transcripts
     const transcripts: Array<Transcript> = [];
-    index[1].shift(); //the index page to be excluded
+
     for (const node of index[1]) {
       if (textinSources[node.reference]) {
         try {
