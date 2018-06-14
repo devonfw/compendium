@@ -1,16 +1,16 @@
 {
   "name": "@oasp/compendium",
   "version": "0.9.0",
-  "main": "compendium.js",
+  "main": "compendium.ts",
   "bin": {
-    "compendium": "./out/src/compendium.js"
+    "compendium": "./src/compendium.ts"
   },
   "scripts": {
-    "start": "node ./out/src/compendium",
-    "compendium": "node ./out/src/compendium",
-    "eb": "yarn && yarn build && node ./out/src/app",
+    "start": "node ./src/compendium",
+    "compendium": "node ./src/compendium",
+    "eb": "yarn && yarn build && node ./src/app",
     "build": "tsc",
-    "debug": "npm run build && node --inspect out/src/app.js",
+    "debug": "npm run build && node --inspect src/app.js",
     "test": "mocha --opts mocha.opts"
   },
   "private": true,

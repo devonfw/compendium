@@ -55,9 +55,6 @@ Node-Modules:
 == Operating mode
 
 For the definition of the programming interfaces have been developed for both the inputs and the outputs. +
-Thus, when adding new features is much easier, since we only have to implement the necessary classes and the interface. +
-On the other hand, tests have been carried out, which verify that the operation of the code is correct and in case of failure we quickly know where our problem lies.
-At final, we can see a scheme to know what is the operation depending on the input or output parameters.
 
 
 ==== Asciidoc input
@@ -84,8 +81,9 @@ Open a terminal and type :
     $ npm i typescript -g
     
 
-    $ npm i @types/node --save/dev
     $ npm install
+    $ npm i @types/node --save/dev
+    
 
 == Usage 
 
@@ -95,6 +93,7 @@ If you could install successfully Compendium, the command line interface (CLI) w
 
 You should see the information about the Compendium version printed in the terminal. +
 `0.0.9` 
+NOTE: see troubleshooting if experimenting errors
 
 === Command line interface (CLI)
 
@@ -216,8 +215,14 @@ Command:
 [source]
 $ ts-node src/compendium.ts -f test-data/input/markdown/configLocal.json --html out/out
 
+== Troubleshooting
+
+Error: 'node' is not recognized
+	$ npm install phantomjs-prebuilt@2.1.16 --ignore-scripts
 
 == UML
 
 image::./images/compendiumDiagram/compendiumDiagram.png[USAGE]
+
+
 

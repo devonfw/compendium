@@ -19,7 +19,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat;
 (async () => {
   const cli = yargs
     .usage(
-      'Usage:\n$0 [-f|-j] <config file | base URL> [--asciidoc|--html|--pdf | --markdown] <output file>\nor\n$0 [-f|-j] <config file | base URL> <--multiple> files',
+      'Usage:\n$0 -f <config file> [--asciidoc|--html|--pdf | --markdown] <output file>',
     )
     .example(
       '$0 -f config.json --html out',
@@ -31,7 +31,6 @@ let configFile, outputFile, multiple, outputFormat, inputFormat;
     .describe('html', 'Output type: Html file')
     .describe('pdf', 'Output type: PDF file')
     .describe('markdown', 'Output type: Markdown file')
-    .describe('multiple', 'Create multiple output files')
     .nargs('f', 1)
     .nargs('j', 1)
     .nargs('c', 1)
@@ -75,10 +74,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat;
       } else if (cli._.length === 1) {
         outputFormat = 'asciidoc';
         outputFile = cli._[0];
-      } else if (cli.multiple) {
-        multiple = true;
-        outputFile = cli.multiple;
-      } else {
+      }  else {
         console.error('Incorrect output definition, see --help for usage info');
       }
 
@@ -101,9 +97,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat;
         } catch (e) {
           console.error(chalk.red(e.message));
         }
-      } else if (multiple) {
-        console.log('Not implemented yet');
-      } else {
+      }  else {
         console.error('Found extra parameters: ' + cli._);
       }
     } else if (inputFormat === 'jira') {
