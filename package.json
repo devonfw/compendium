@@ -20,6 +20,7 @@
     "html-parse": "0.0.4",
     "htmlto": "^1.1.2",
     "npm": "^6.0.1",
+    "phantom": "^4.0.12",
     "prompt": "^1.0.0",
     "shelljs": "^0.8.1",
     "showdown": "^1.8.6",

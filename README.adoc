@@ -45,10 +45,7 @@ Open a terminal and in the project folder type :
 
     $ npm install -g ts-node
     $ npm i typescript -g
-    
-
     $ npm install --ignore-scripts
-    $ npm i @types/node --save/dev
 
 
 === VSCode extensions
@@ -82,10 +79,14 @@ Node-Modules:
 
 If you could installed Compendium successfuly run the following command in your terminal: 
 
-    $ ts-node compendium.ts --version 
+    $ ts-node src/compendium.ts --version 
 
 You should see the information about the Compendium version printed in the terminal. +
-`0.0.9` 
+`0.9.0` 
+
+Run the test to check Compendium works correctly: 
+
+    $ npm test 
 
 NOTE: see troubleshooting if experimenting errors
 
@@ -95,17 +96,19 @@ The `compendium` command allows you to invoke Compendium from the command line. 
 
 [source]
 
-ts-node compendium.ts -f <config file> [--asciidoc|--html|--pdf | --markdown] <output file>
+$ ts-node compendium.ts -f <config file> [--asciidoc|--html|--pdf | --markdown] <output file>
 
 
 Options:
-  --version   Show version number
-  -f          Input type: JSON Config file (This is by default)
-  --asciidoc  Output type: asciidoc file
-  --html      Output type: Html file
-  --pdf       Output type: PDF file
-  --markdown  Output type: MD file
-  -h, --help  Show help
+
+[source]
+--version   Show version number
+-f          Input type: JSON Config file (config file path)
+--asciidoc  Output type: asciidoc file
+--html      Output type: Html file
+--pdf       Output type: PDF file
+--markdown  Output type: MD file
+-h, --help  Show help
 
 Depending of the input type, you can use Compendium in different ways, since within this file you can do as much as asciidoc files, html urls and confluence pages. 
 
@@ -206,9 +209,7 @@ $ ts-node src/compendium.ts -f test-data/confiles/html-url/configAllIndex.json -
 
 == Troubleshooting
 
-Error message, 'node' is not recognized, depending on the module run command:
-[source]
-$ npm install <phantomjs-prebuilt@2.1.16> --ignore-scripts --save
+There are no known errors yet.
 
 == UML
 

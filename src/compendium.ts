@@ -22,10 +22,10 @@ let configFile, outputFile, multiple, outputFormat, inputFormat;
       'Usage:\n$0 -f <config file> [--asciidoc|--html|--pdf | --markdown] <output file>',
     )
     .example(
-      '$0 -f config.json --html out',
-      'Use a config file in current directory and write the result in file out.html',
+      'ts-node src/compendium.ts - f test-data/confiles/html-url/config.json --html out/out',
+      'config file path for the input sources and html output type',
     )
-    .describe('f', 'Input type: JSON Config file (default)')
+    .describe('f', 'Input type: JSON Config file (config file path)')
     .describe('j', 'Input type: Jira Base URL')
     .describe('asciidoc', 'Output type: asciidoc file')
     .describe('html', 'Output type: Html file')
@@ -74,7 +74,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat;
       } else if (cli._.length === 1) {
         outputFormat = 'asciidoc';
         outputFile = cli._[0];
-      }  else {
+      } else {
         console.error('Incorrect output definition, see --help for usage info');
       }
 
@@ -97,7 +97,7 @@ let configFile, outputFile, multiple, outputFormat, inputFormat;
         } catch (e) {
           console.error(chalk.red(e.message));
         }
-      }  else {
+      } else {
         console.error('Found extra parameters: ' + cli._);
       }
     } else if (inputFormat === 'jira') {
