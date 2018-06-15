@@ -1,6 +1,6 @@
 # Example Markdown
 
-## H2
+## H1
 
 ### H3
 

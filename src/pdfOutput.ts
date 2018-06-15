@@ -82,11 +82,13 @@ export class PdfFileTextOut implements TextOut {
       //pdf only works in the project folder
       const fileName = this.getNameOfFileOnly();
       try {
-        await extrafs.writeFile(fileName + '.html', docWithStyle);
+        await extrafs.writeFile(fileName + '.html', docWithStyle, 'utf8');
       } catch (err) {
         throw err;
       }
       //pdf module
+      //NOTE: there is a problem with the utf8, the module html-to-pdf works fine but not with big pdfs
+      //this is pending issue
       var htmlTo = require('htmlto');
 
       var options = {

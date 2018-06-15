@@ -45,6 +45,7 @@
     "cheerio": "^1.0.0-rc.2",
     "escape-html": "^1.0.3",
     "fs-extra": "^5.0.0",
+    "html-pdf": "^2.2.0",
     "mocha": "^4.1.0",
     "nodemon": "^1.14.7",
     "request": "^2.87.0",
