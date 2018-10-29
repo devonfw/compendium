@@ -1,94 +1,213 @@
-import { TextInSource, TextInSources, Index, IndexNode, IndexSource, DocConfig } from './types';
-import { TextInMock, TextOutMock } from './mocks/impl';
+import {
+  TextInSource,
+  TextInSources,
+  Index,
+  IndexNode,
+  IndexSource,
+  DocConfig,
+  Credentials,
+} from './types';
 import { EmitElement } from './emitFunctions';
 import * as fs from 'fs';
-import * as ncp from 'ncp';
 import * as shelljs from 'shelljs';
 
 export class Utilities {
+  public static outputFile: any;
+  public configPath: string;
 
-   public static outputFile: any;
-    public configPath: string;
-
-    public constructor(config: string) {
-        this.configPath = config;
-    }
-    /**
-     * checkSourceValuesJSON
-     * Check if the values in the JSON are correct, if somethig is wrong show an error
-     * @public
-     * @param {*} sourceJSON
-     * @returns {boolean}
-     * @memberof ConfigFile
-     */
-    public static checkSourceValuesJSON(sourceJSON: any): boolean {
+  public constructor(config: string) {
+    this.configPath = config;
+  }
+  /**
+   * checkSourceValuesJSON
+   * Check if the values in the JSON are correct, if somethig is wrong show an error
+   * @public
+   * @param {*} sourceJSON
+   * @returns {boolean}
+   * @memberof ConfigFile
+   */
+  public static checkSourceValuesJSON(sourceJSON: any): boolean {
     let valid = true;
-    if (sourceJSON.key && sourceJSON.key !== '' && sourceJSON.kind && (sourceJSON.kind === 'asciidoc' || sourceJSON.kind === 'confluence')) {
-        if (sourceJSON.kind === 'confluence') {
-            if (sourceJSON.space && sourceJSON.space !== '' && sourceJSON.context) {
-                valid = true;
-            } else {
-                valid = false;
-            }
+    if (
+      sourceJSON.reference &&
+      sourceJSON.reference !== '' &&
+      sourceJSON.source_type &&
+      (sourceJSON.source_type === 'asciidoc' ||
+        sourceJSON.source_type === 'url-html' ||
+        sourceJSON.source_type === 'markdown' ||
+        sourceJSON.source_type === 'confluence')
+    ) {
+      if (sourceJSON.source_type === 'confluence') {
+        if (sourceJSON.space && sourceJSON.space !== '' && sourceJSON.context) {
+          valid = true;
+        } else {
+          valid = false;
         }
+      }
     } else {
-        valid = false;
+      valid = false;
     }
     return valid;
-}
-    /**
-     * checkNodeValuesJSON
-     * check if the information on the nodes is correct
-     * @public
-     * @param {*} nodeJSON
-     * @returns {boolean}
-     * @memberof ConfigFile
-     */
-    public static checkNodeValuesJSON(nodeJSON: any): boolean {
-    if (nodeJSON.key && nodeJSON.key !== '' && nodeJSON.index && nodeJSON.index !== '') {
-        return true;
+  }
+  /**
+   * checkNodeValuesJSON
+   * check if the information on the nodes is correct
+   * @public
+   * @param {*} nodeJSON
+   * @returns {boolean}
+   * @memberof ConfigFile
+   */
+  public static checkNodeValuesJSON(nodeJSON: any): boolean {
+    if (
+      nodeJSON.reference &&
+      nodeJSON.reference !== '' &&
+      nodeJSON.document &&
+      nodeJSON.document !== ''
+    ) {
+      return true;
     } else {
-        return false;
+      return false;
     }
-}
-    /**
-     * checkDuplicateKeys
-     * Check if configfile has keys duplicated, in this case show an error
-     * @public
-     * @param {IndexSource[]} indexSources
-     * @returns {boolean}
-     * @memberof ConfigFile
-     */
-    public static checkDuplicateKeys(indexSources: IndexSource[]): boolean {
+  }
+  /**
+   * checkDuplicateReferences
+   * Check if configfile has references duplicated, in this case show an error
+   * @public
+   * @param {IndexSource[]} indexSources
+   * @returns {boolean}
+   * @memberof ConfigFile
+   */
+  public static checkDuplicateReferences(indexSources: IndexSource[]): boolean {
     let duplicate = false;
     const source: any = {};
-    indexSources.map((item) => {
-        const key = item.key;
-        if (key in source) {
-            duplicate = true;
-        }
-        else {
-            source[key] = item;
-        }
+    indexSources.map(item => {
+      const ref = item.reference;
+      if (ref in source) {
+        duplicate = true;
+      } else {
+        source[ref] = item;
+      }
     });
     return duplicate;
-}
-    /**
-     * getKindByKey
-     * create a relation with kind and key
-     * @public
-     * @param {IndexSource[]} indexSources
-     * @param {string} key
-     * @returns {string}
-     * @memberof ConfigFile
-     */
-    public static getKindByKey(indexSources: IndexSource[], key: string): string {
-    let kind = '';
+  }
+  /**
+   * checkDocumentsRefConsistency
+   * Check if configfile has references in the files that don´t exist in the source, in this case show an error
+   * True for wrong reference found
+   * @public
+   * @param {IndexSource[]} indexSources
+   * @returns {boolean}
+   * @memberof ConfigFile
+   */
+  public static checkDocumentsRefConsistency(index: Index): boolean {
+    const indexSources: IndexSource[] = index[0] as IndexSource[];
+    const indexNodes: IndexNode[] = index[1] as IndexNode[];
+    //create array with all the reference from sources
+    let sourceRefs: string[] = indexSources.map(item => item.reference);
+    let match = true;
+    indexNodes.map(item => {
+      const ref = item.reference;
+      let number = sourceRefs.indexOf(ref);
+      if (number < 0) match = false; //this reference don`t has its match in the sources array
+    });
+
+    return match;
+  }
+
+  /**
+   * getSourceTypeByRef
+   * create a relation with source_type and reference
+   * @public
+   * @param {IndexSource[]} indexSources
+   * @param {string} reference
+   * @returns {string}
+   * @memberof ConfigFile
+   */
+  public static getSourceTypeByRef(
+    indexSources: IndexSource[],
+    reference: string,
+  ): string {
+    let source_type = '';
     for (const source of indexSources) {
-        if (source.key === key) {
-            kind = source.kind;
-        }
+      if (source.reference === reference) {
+        source_type = source.source_type;
+      }
     }
-    return kind;
-    }
+    return source_type;
+  }
+  //Document Nodes
+  //when document is an index source must be a unique reference
+  //return true if is unique and false if is not
+  public static checkNodeDocumentIsUnique(
+    reference: string,
+    indexNodes: IndexNode[],
+  ): boolean {
+    //array only references
+    let arrayReferences = indexNodes.map(node => node.reference);
+    let duplicate = true;
+    const source: string[] = [];
+    arrayReferences.map(ref => {
+      if (source.indexOf(ref) >= 0) {
+        duplicate = false;
+      } else {
+        source.push(ref);
+      }
+    });
+
+    return duplicate;
+  }
+  //if is_index exists return the position of the document inside the index
+  public static findDocumentIsIndex(
+    index: IndexNode[],
+    sourceRef: string,
+  ): number {
+    let result: number = -1;
+    //find
+    index.map((node, index) => {
+      if (
+        node.reference === sourceRef &&
+        node.is_index &&
+        node.is_index === 'true'
+      ) {
+        result = index;
+      }
+    });
+    return result;
+  }
+  public static async askInPrompt(): Promise<Credentials> {
+    const prompt = require('prompt');
+    let credentials: Credentials;
+
+    const promise = new Promise<Credentials>((resolve, reject) => {
+      prompt.start();
+
+      prompt.get(
+        [
+          {
+            name: 'username',
+            required: true,
+          },
+          {
+            name: 'password',
+            hidden: true,
+            replace: '*',
+            required: true,
+          },
+        ],
+        (err: any, result: any) => {
+          credentials = {
+            username: result.username,
+            password: result.password,
+          };
+          if (credentials) {
+            resolve(credentials);
+          } else {
+            reject(err.message);
+          }
+        },
+      );
+    });
+
+    return promise;
+  }
 }

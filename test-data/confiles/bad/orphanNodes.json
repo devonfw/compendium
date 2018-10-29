@@ -1,24 +1,24 @@
 {
-    "sources": [
-        {
-            "key": "input-data1",
-            "kind": "asciidoc",
-            "source": "C:/Projects/Compendium/Compendium/src/mocks/input-data1"
-        },
-        {
-            "key": "input-data2",
-            "kind": "asciidoc",
-            "source": "C:/Projects/Compendium/Compendium/src/mocks/input-data1"
-        }
-    ],
-    "nodes": [
-        {
-            "key": "input-data1",
-            "index": "brownfox.adoc"
-        },
-        {
-            "key": "input-data3",
-            "index": "example1.adoc"
-        }
-    ]
+  "sources": [
+    {
+      "reference": "input-data1",
+      "source_type": "asciidoc",
+      "source": "./brown/input-data1"
+    },
+    {
+      "reference": "input-data2",
+      "source_type": "asciidoc",
+      "source": "./brown/input-data2"
+    }
+  ],
+  "documents": [
+    {
+      "reference": "input-data1",
+      "document": "manual"
+    },
+    {
+      "reference": "input-data3",
+      "document": "brownfox2"
+    }
+  ]
 }

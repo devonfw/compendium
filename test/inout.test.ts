@@ -1,309 +1,417 @@
+import * as chai from 'chai';
+import * as fs from 'fs';
+import * as shelljs from 'shelljs';
+import * as util from 'util';
+import * as extrafs from 'fs-extra';
 
-import * as config from '../src/config';
-import { DocConfig, TextOut, TextIn, Merger, Index, IndexSource, IndexNode, TextInSources, RichString } from '../src/types';
+import { doCompendium, askInPrompt } from '../src/clinterpreter';
+import {
+  Transcript,
+  TextInSources,
+  Index,
+  RichString,
+  TextElement,
+  TextSegment,
+  Paragraph,
+  InlineImage,
+  RichText,
+  Link,
+  TableSegment,
+  Table,
+  TableBody,
+  Row,
+  Cell,
+  List,
+  Code,
+  IndexSource,
+  IndexNode,
+  TextOut,
+} from '../src/types';
+import { ConfigFile } from '../src/config';
+import { EmitElement } from '../src/emitFunctions';
 import { AsciiDocFileTextIn } from '../src/asciidocInput';
 import { AsciiDocFileTextOut } from '../src/asciidocOutput';
-import { HtmlFileTextOut } from '../src/html';
-import * as fs from 'fs';
-import * as chai from 'chai';
-import { ConfigFile } from '../src/config';
+import { HtmlFileTextOut } from '../src/htmlOutput';
+import { PdfFileTextOut } from '../src/pdfOutput';
 import { MergerImpl } from '../src/merger';
-import * as chaiAsPromised from 'chai-as-promised';
-import { TextInMock } from '../src/mocks/impl';
-
-// tslint:disable-next-line:no-var-requires
-chai.use(require('chai-fs'));
-chai.use(chaiAsPromised);
+import { resolve } from 'url';
 
 const expect = chai.expect;
 const assert = chai.assert;
 
-let merger: Merger;
-let textin: TextIn;
-let textinAsciidoc: TextIn;
-let textinAsciidoc1: TextIn;
-let textoutAsciidoc1: TextOut;
-let textoutHtml1: TextOut;
+//VARIABLES------------------------------------------
+let docconfig: ConfigFile;
+let index1: Index;
+const textinSources: TextInSources = {};
+let transcripts: Array<Transcript> = [];
+let outputResult: string;
+let outputArray: string[];
+let transcript: Transcript = { segments: [] };
+const segments1: Array<TextSegment> = [];
+transcript.segments = segments1;
 
-const inputPath1 = 'src/mocks/input-data1';
-const inputPath2 = 'src/mocks/input-data2';
-const outputPath1 = 'test-data/output/result';
+//paths only test
+let pathImage: string = './test-data/input/images/fox.png';
+const pathImageSunset: string = './test-data/input/images/sunset.jpg';
+const pathConfigFile = './test-data/input/config.json';
+const pathAdoc1 = './test-data/input/brownfox2.adoc';
+const pathAdoc2 = './test-data/input/manual.adoc';
+const outputFolder = 'test-data/output/';
+let listFilesOutput: string[] = []; //to erase in after()
 
-merger = new MergerImpl();
-textin = new TextInMock('');
-textinAsciidoc1 = new AsciiDocFileTextIn(inputPath1);
-textinAsciidoc = new AsciiDocFileTextIn(inputPath2);
-textoutAsciidoc1 = new AsciiDocFileTextOut(outputPath1);
-textoutHtml1 = new HtmlFileTextOut(outputPath1);
+/**
+ * Files .adoc in the config file that contains many generic asciidoc features
+ * The folder test-data/input/input-data2 (source 1)
+ * Testing Input and Output of the files and the images
+ *
+ */
+describe('Testing the asciidoc input and the pdf, html, asciidoc Output with good case scenarios', () => {
+  before(done => {
+    //get the index ready
+    docconfig = new ConfigFile(pathConfigFile);
+    docconfig
+      .getIndex()
+      .then(index => {
+        index1 = index;
+        done();
+      })
+      .catch(error => {
+        done(error);
+      });
+  });
+  //-------------------------CONFIG FILE----------------------------------------------------------------------------------
+  describe('Testing Config File function', () => {
+    it('Should show', done => {
+      assert.isArray(index1, 'Index must be an array');
+      assert.isArray(index1[0], 'Souces must be an array');
+      assert.isArray(index1[1], 'Documents must be an array');
 
-xdescribe('Testing the Input of Text and doc generation', () => {
-    before(() => {
-        //setup fixture
+      expect(index1[0]).have.lengthOf(3, 'There are three sources');
+      expect(index1[1]).have.lengthOf(14, 'There are 14 documents');
+
+      expect(index1[0][0].reference).equals('project1');
+      expect(index1[0][0].source_type).equals('asciidoc');
+      expect(index1[0][0].source).equals('./test-data/input/input-data1');
+
+      expect(index1[0][1].reference).equals('project2');
+      expect(index1[0][1].source_type).equals('asciidoc');
+      expect(index1[0][1].source).equals('./test-data/input/input-data2');
+
+      expect(index1[1][0].reference).equals('project1');
+      expect(index1[1][0].document).equals('manual');
+
+      expect(index1[1][1].reference).equals('project2');
+      expect(index1[1][1].document).equals('brownfox2');
+
+      done();
     });
-
-    describe('TextIn', () => {
-        it('should return the Transcript from the external source', (done) => {
-            textin.getTranscript('test-data/brownfox.adoc').then((transcript) => {
-                const h1 = transcript.segments[0];
-                const p = transcript.segments[1];
-                if (h1.kind === 'textelement') {
-                    const richText = h1.text[0];
-                    if ((richText as RichString)) {
-                        const richString = (richText as RichString);
-                        expect(richString.text).equals('The fox');
-                        done();
-                    } else {
-                        done(new Error('Expected RichString, received InlineImage'));
-                    }
-                } else {
-                    done(new Error('Not a valid h1 element'));
-                }
-            }).catch((error) => {
-                done(error);
-            });
+  });
+  //-------PARAGRAPH 1---------------------------------------------------------------------------------------------
+  describe('Testing h2 and h3 with bold and cursive, paragraph1.adoc in input-data2', () => {
+    before(done => {
+      textinSources[index1[0][1].reference] = new AsciiDocFileTextIn(
+        index1[0][1].source,
+      );
+      textinSources[index1[1][2].reference]
+        .getTranscript(index1[1][2].document)
+        .then(transcriptObject => {
+          transcripts = [];
+          transcripts.push(transcriptObject);
+          transcript = transcripts[0];
+          done();
+        })
+        .catch(error => {
+          done(error);
         });
     });
-
-    after(() => {
-        // clean fixture
+    it('Input', done => {
+      //test h2
+      const h2: TextSegment = transcript.segments[0];
+      const h2richString = ((h2 as TextElement).text[0] as RichString).text;
+      expect(h2richString).equals('The fox');
+      //test h3 with bold and cursive
+      const h3: TextSegment = transcript.segments[1];
+      const h3richString = ((h3 as TextElement).text[0] as RichString).text;
+      expect(h3richString).equals('The ');
+      const h3bold = ((h3 as TextElement).text[1] as RichString).text;
+      expect(h3bold).equals('real ');
+      const h3cursive = ((h3 as TextElement).text[2] as RichString).text;
+      expect(h3cursive).equals('fox');
+      done();
     });
-});
-
-describe('Testing the Asciidoc Input and Output stream and the file creation ', () => {
-    before(async () => {
-        const transcript = await textinAsciidoc.getTranscript('brownfox2.adoc');
-        const arrayTranscript = [];
-        arrayTranscript.push(transcript);
-        await textoutAsciidoc1.generate(arrayTranscript);
+    it('Output adoc', done => {
+      let out: AsciiDocFileTextOut = new AsciiDocFileTextOut(
+        outputFolder + 'paragraph1',
+      );
+      out.generate(transcripts).then(() => {
+        try {
+          listFilesOutput.push(outputFolder + 'paragraph1.adoc');
+          //read the output file
+          outputResult = fs.readFileSync(
+            outputFolder + 'paragraph1.adoc',
+            'utf8',
+          );
+          outputArray = [];
+          outputArray = outputResult.split('\n');
+          expect(outputArray[3]).equals('== The fox');
+          done();
+        } catch (error) {
+          done(error);
+        }
+      });
     });
-
-    describe('AsciidocFileTextOut', () => {
-        it('should show the content of the output file', (done) => {
-            try {
-                if (fs.existsSync(outputPath1 + '.adoc')) {
-                    done();
-                } else {
-                    done(new Error('File was not created'));
-                }
-            } catch (error) {
-                done(error);
-            }
+  });
+  //-------------IMAGE WITH LINK------------------------------------------------
+  describe('Testing link and image, image.adoc in input-data2', () => {
+    before(done => {
+      //get the Transcript IO ready
+      transcripts = [];
+      textinSources[index1[0][1].reference] = new AsciiDocFileTextIn(
+        index1[0][1].source,
+      );
+      textinSources[index1[1][4].reference]
+        .getTranscript(index1[1][4].document)
+        .then(transcriptObject => {
+          transcripts.push(transcriptObject);
+          transcript = transcripts[0];
+          done();
+        })
+        .catch(error => {
+          done(error);
         });
     });
-
-    after(() => {
-        // clean fixture
-    });
-});
-
-describe('Testing if Asciidoc Output is the expected ', () => {
-    before(async () => {
-        const transcript = await textinAsciidoc.getTranscript('brownfox2.adoc');
-        const arrayTranscript = [];
-        arrayTranscript.push(transcript);
-        await textoutAsciidoc1.generate(arrayTranscript);
+    it('Input', done => {
+      const imageLine = transcript.segments[0];
+      const link = (imageLine as Paragraph).text[1];
+      expect((link as Link).ref).equals('http://www.google.com');
+      const image = (link as Link).text as InlineImage;
+      expect(image.img).equals('images/fox.png');
+      expect(image.title).equals('Red Fox');
+      done();
     });
 
-    describe('AsciidocFileTextOut', () => {
-        it('should compare the 2 rich texts', (done) => {
-            try {
-                if (fs.existsSync(outputPath1 + '.adoc')) {
-
-                    const outputStream = fs.readFileSync(outputPath1 + '.adoc', 'utf8');
-                    const outputArray = outputStream.split('\n');
-                    if (outputArray) {
-                        expect(outputArray[9]).equals('The ~quick~ *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#');
-                        done();
-                    } else {
-                        done(new Error('Incorrect content'));
-                    }
-                } else {
-                    done(new Error('File was not created'));
-                }
-            } catch (error) {
-                done(error);
-            }
-        });
-    });
-    describe('AsciidocFileTextOut', () => {
-        it('should compare the table output', done => {
-            try {
-                if (fs.existsSync(outputPath1 + '.adoc')) {
-                    const outputStream = fs.readFileSync(outputPath1 + '.adoc', 'utf8');
-                    const outputArray = outputStream.split('\n');
-                    if (outputArray) {
-                        expect(outputArray[16]).equals('| 4 | Item 4 | link:http://www.google.es[Google] ');
-                        done();
-                    } else {
-                        done(new Error('Incorrect content'));
-                    }
-                } else {
-                    done(new Error('File was not created'));
-                }
-            } catch (error) {
-                done(error);
-            }
-        });
-    });
-
-    after(() => {
-        // clean fixture
-    });
-});
-
-describe('Testing if HTML Output is the expected ', () => {
-    before(async () => {
-        const transcript = await textinAsciidoc.getTranscript('brownfox2.adoc');
-        const arrayTranscript = [];
-        arrayTranscript.push(transcript);
-        await textoutHtml1.generate(arrayTranscript);
-    });
-
-    describe('HTMLFileTextOut', () => {
-        it('should compare the 2 strings', done => {
-            try {
-                if (fs.existsSync(outputPath1 + '.html')) {
-                    const outputStream = fs.readFileSync(outputPath1 + '.html', 'utf8');
-                    const outputArray = outputStream.split('\n');
-                    if (outputArray) {
-                        expect(outputArray[51]).equals('<p>The <sub>quick</sub> <strong>brown fox</strong> <strong><em>jumps</em></strong> <strong>over</strong> the lazy <span class="underline">dog.</span></p>');
-                        done();
-                    } else {
-                        done(new Error('Incorrect content'));
-                    }
-                } else {
-                    done(new Error('File was not created'));
-                }
-            } catch (error) {
-                done(error);
-            }
-        });
-    });
-    after(() => {
-        // clean fixture
-    });
-});
-
-describe('Testing the Html Output stream and the file creation ', () => {
-    before(async () => {
-        const transcript = await textinAsciidoc.getTranscript('brownfox2.adoc');
-        const arrayTranscript = [];
-        arrayTranscript.push(transcript);
-        await textoutHtml1.generate(arrayTranscript);
-    });
-
-    describe('HtmlFileTextOut', () => {
-        it('should show the content of the output file', (done) => {
-            try {
-                if (expect(fs.existsSync(outputPath1 + '.html'))) {
-                    done();
-                } else {
-                    done(new Error('File was not created'));
-                }
-            } catch (error) {
-                done(error);
-            }
-        });
-    });
-
-    after(() => {
-        // clean fixture
-    });
-});
-
-describe('Testing the merge of two files ', () => {
-    before(() => {
-    });
-
-    describe('Merge', () => {
-        it('should combine 2 asciidoc in one', (done) => {
-
-            const sources: IndexSource[] = [{
-                key: 'input-data1',
-                kind: 'asciidoc',
-                source: 'src/mocks/input-data1',
+    it('Output adoc', done => {
+      let out: AsciiDocFileTextOut = new AsciiDocFileTextOut(
+        outputFolder + 'image',
+      );
+      out.generate(transcripts).then(() => {
+        try {
+          listFilesOutput.push(outputFolder + 'image.adoc');
+          //read the output file
+          outputResult = fs.readFileSync(outputFolder + 'image.adoc', 'utf8');
+          outputArray = [];
+          outputArray = outputResult.split('\n');
+          //the image output
+          expect(outputArray[3].trim()).equals(
+            'image:images/fox.png[Red Fox, link="http://www.google.com"]',
+          );
+          //image file inside the right folder
+          /* EmitElement.dirExists(outputFolder + '/images/fox.png').then(
+            isFile => {
+              expect(isFile).to.be.true;
+              done();
             },
-            {
-                key: 'input-data2',
-                kind: 'asciidoc',
-                source: 'src/mocks/input-data2',
-            }];
+          ); */
+          done();
+        } catch (error) {
+          done(error);
+        }
+      });
+    });
 
-            const nodes: IndexNode[] = [{
-                key: 'input-data1',
-                index: 'brownfox.adoc',
-            },
-            {
-                key: 'input-data2',
-                index: 'brownfox2.adoc',
-                sections: [''],
-            }];
-
-            const index: Index = [sources, nodes];
-
-            const textinsources: TextInSources = {};
-
-            textinsources['input-data1'] = new AsciiDocFileTextIn('src/mocks/input-data1');
-            textinsources['input-data2'] = new AsciiDocFileTextIn('src/mocks/input-data2');
-
-            const merger1 = new MergerImpl();
-            const textoutMerger: TextOut = new AsciiDocFileTextOut('test-data/output/mergerResult');
-
-            merger1.merge(textinsources, index, textoutMerger).then(() => {
-
-                if (expect(fs.existsSync('test-data/output/mergerResult.adoc'))) {
-                    done();
-                } else {
-                    done(new Error('Files haven\'t been merged'));
-                }
-
-            }).catch((error) => {
-                done(error);
-            });
+    it('Output html', done => {
+      let out: HtmlFileTextOut = new HtmlFileTextOut(outputFolder + 'image');
+      out.generate(transcripts).then(() => {
+        try {
+          listFilesOutput.push(outputFolder + 'image.html');
+          //read the output file
+          outputResult = fs.readFileSync(outputFolder + 'image.html', 'utf8');
+          outputArray = [];
+          outputArray = outputResult.split('\n');
+          //image
+          expect(outputArray[30]).equals(
+            '<p><span class="image"><a class="image" href="http://www.google.com"><img src="images/fox.png" alt="Red Fox"></a></span></p>',
+          );
+          done();
+        } catch (error) {
+          done(error);
+        }
+      });
+    });
+  });
+  //-------------------PARAGRAPH2------------------------------------------------
+  describe('Testing p, sub and span, paragraph2.adoc in input-data2', () => {
+    before(done => {
+      //get the Transcript IO ready
+      transcripts = [];
+      textinSources[index1[0][1].reference] = new AsciiDocFileTextIn(
+        index1[0][1].source,
+      );
+      textinSources[index1[1][3].reference]
+        .getTranscript(index1[1][3].document)
+        .then(transcriptObject => {
+          transcripts.push(transcriptObject);
+          transcript = transcripts[0];
+          done();
+        })
+        .catch(error => {
+          done(error);
         });
     });
-
-    after(() => {
-        // clean fixture
+    it('Input', done => {
+      const p: TextSegment = transcript.segments[0];
+      const prichString = ((p as TextElement).text[0] as RichString).text;
+      expect(prichString).equals('The ');
+      const psub = ((p as TextElement).text[1] as RichString).text;
+      expect(psub).equals('quick');
+      const pspan = ((p as TextElement).text[6] as RichString).text;
+      expect(pspan).equals('dog.');
+      done();
     });
-});
-
-describe('Testing the IR', () => {
-    before(() => {
-
+    it('Output adoc', done => {
+      let out: AsciiDocFileTextOut = new AsciiDocFileTextOut(
+        outputFolder + 'paragraph2',
+      );
+      out.generate(transcripts).then(() => {
+        try {
+          listFilesOutput.push(outputFolder + 'paragraph2.adoc');
+          //read the output file
+          outputResult = fs.readFileSync(
+            outputFolder + 'paragraph2.adoc',
+            'utf8',
+          );
+          outputArray = [];
+          outputArray = outputResult.split('\n');
+          expect(outputArray[3]).equals(
+            'The ~quick~ *brown fox* *_jumps_* *over* the lazy [.underline]#dog.#',
+          );
+          done();
+        } catch (error) {
+          done(error);
+        }
+      });
     });
-
-    describe('IR', () => {
-        it('should return the Transcript from the external source', (done) => {
-            textinAsciidoc1.getTranscript('brownfox.adoc').then((transcript) => {
-                const h2 = transcript.segments[2];
-                const p = transcript.segments[3];
-                if (h2.kind === 'textelement' && p.kind === 'paragraph') {
-                    const richText = h2.text[0];
-                    if ((richText as RichString)) {
-                        const richString = (richText as RichString);
-                        expect(richString.text).equals('The cat');
-                    } else {
-                        done(new Error('Expected RichString, received InlineImage'));
-                    }
-                    const richText2 = p.text[1];
-                    if ((richText2 as RichString)) {
-                        const richString2 = (richText2 as RichString);
-                        expect(richString2.attrs.strong).equals(true);
-                        done();
-                    } else {
-                        done(new Error('Expected RichString, received Table'));
-                    }
-                } else {
-                    done(new Error('Not a valid h2 element'));
-                }
-            }).catch((error) => {
-                done(error);
-            });
+    it('Output html', done => {
+      let out: HtmlFileTextOut = new HtmlFileTextOut(
+        outputFolder + 'paragraph2',
+      );
+      out.generate(transcripts).then(() => {
+        try {
+          listFilesOutput.push(outputFolder + 'paragraph2.html');
+          //read the output file
+          outputResult = fs.readFileSync(
+            outputFolder + 'paragraph2.html',
+            'utf8',
+          );
+          outputArray = [];
+          outputArray = outputResult.split('\n');
+          expect(outputArray[30]).equals(
+            '<p>The <sub>quick</sub> <strong>brown fox</strong> <strong><em>jumps</em></strong> <strong>over</strong> the lazy <span class="underline">dog.</span></p>',
+          );
+          done();
+        } catch (error) {
+          done(error);
+        }
+      });
+    });
+  });
+  //---------------TABLE WITH LIST AND CODE-----------------------------------------------
+  describe('Testing Table and List inside, tableList.adoc in input-data2', () => {
+    before(done => {
+      //get the Transcript IO ready
+      transcripts = [];
+      textinSources[index1[0][1].reference] = new AsciiDocFileTextIn(
+        index1[0][1].source,
+      );
+      textinSources[index1[1][5].reference]
+        .getTranscript(index1[1][5].document)
+        .then(transcriptObject => {
+          transcripts.push(transcriptObject);
+          transcript = transcripts[0];
+          done();
+        })
+        .catch(error => {
+          done(error);
         });
     });
-
-    after(() => {
-        // clean fixture
+    it('Input', done => {
+      //test table column width
+      const tableObject1: TextSegment = transcript.segments[0];
+      const tableObject2 = ((tableObject1 as TableSegment) as Table).content;
+      expect(tableObject2.colgroup[0].style).equals('width: 33.3333%;');
+      //test table cell paragraph tex
+      const tableRow1 = tableObject2.body[5] as Row;
+      const cell1 = (tableRow1[0] as Cell).cell[0] as Paragraph;
+      const cell1Text = cell1.text[0] as RichString;
+      expect(cell1Text.text).equals('footer 1');
+      //test table cell list
+      const cellList = (tableRow1[2] as Cell).cell[0] as List;
+      const cellListNested1 = cellList.elements[2] as List;
+      const cellListNested2 = cellListNested1.elements[2] as List;
+      const textCellNested2 = (cellListNested2.elements[1] as Paragraph)
+        .text[0];
+      expect((textCellNested2 as RichString).text).equals('anidadaotravez2');
+      done();
     });
+    it('Output adoc', done => {
+      let out: AsciiDocFileTextOut = new AsciiDocFileTextOut(
+        outputFolder + 'table',
+      );
+      out.generate(transcripts).then(() => {
+        try {
+          listFilesOutput.push(outputFolder + 'table.adoc');
+          //read the output file
+          outputResult = fs.readFileSync(outputFolder + 'table.adoc', 'utf8');
+          outputArray = [];
+          outputArray = outputResult.split('\n');
+          //table
+          expect(outputArray[8]).equals(
+            '| 4 | Item 4 | link:http://www.google.es[Google] ',
+          );
+          //list inside table
+          expect(outputArray[13]).equals('*** anidadaotravez1');
+          done();
+        } catch (error) {
+          done(error);
+        }
+      });
+    });
+    it('Output html', done => {
+      let out: HtmlFileTextOut = new HtmlFileTextOut(outputFolder + 'table');
+      out.generate(transcripts).then(() => {
+        try {
+          listFilesOutput.push(outputFolder + 'table.html');
+          //read the output file
+          outputResult = fs.readFileSync(outputFolder + 'table.html', 'utf8');
+          outputArray = [];
+          outputArray = outputResult.split('\n');
+          //style
+          expect(outputArray[20].trim()).equals('width:20%;');
+          //list
+          expect(outputArray[84].trim()).equals('<p>anidadaotravez2</p>');
+          //table
+          expect(outputArray[57]).equals(
+            '<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>',
+          );
+          //link inside a table cell
+          expect(outputArray[59]).equals(
+            '<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.google.es">Google</a></p></td>',
+          );
+          done();
+        } catch (error) {
+          done(error);
+        }
+      });
+    });
+  });
+
+  after(() => {
+    try {
+      //delete all output files
+      shelljs.rm(listFilesOutput);
+      shelljs.rm('-rf', outputFolder.concat('images'));
+    } catch (error) {
+      throw error;
+    }
+  });
 });

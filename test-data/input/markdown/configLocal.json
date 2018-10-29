@@ -1,0 +1,15 @@
+{
+  "sources": [
+    {
+      "reference": "project1",
+      "source_type": "markdown",
+      "source": "./test-data/input/markdown"
+    }
+  ],
+  "documents": [
+    {
+      "reference": "project1",
+      "document": "markdown-sample"
+    }
+  ]
+}

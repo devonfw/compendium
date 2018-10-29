@@ -1,0 +1,8 @@
+[start=4]
+. Install the gem locally (at the moment it has not been publish to rubygem)
+.. Clone the github repository locally `git clone https://github.com/gscheibel/asciidoctor-confluence.git`
+.. Built it `gem build asciidoctor-confluence.gemspec`
+.. Install it `gem install ./asciidoctor-confluence.{version}.gem`
+.. To check it has been done correctly `asciidoctor-confluence -v` should display `asciidoctor-confluence: {version}`
+. Have a Confluence instance
+.. If you don't have a Confluence server, you can use a Docker container (e.i.: https://registry.hub.docker.com/u/cptactionhank/atlassian-confluence/), the option requires therefore an Atlassian account so it can generate a trial licence key.

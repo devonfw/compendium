@@ -1,0 +1,6 @@
+:sourcedir: java
+
+[source,java]
+----
+Scanner s = new Scanner( new File("scores.dat") );
+----

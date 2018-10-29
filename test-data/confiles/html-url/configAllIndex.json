@@ -1,0 +1,16 @@
+{
+  "sources": [
+    {
+      "reference": "handbook",
+      "source_type": "url-html",
+      "source": "http://adcenter.capgemini.com/handbook/"
+    }
+  ],
+  "documents": [
+    {
+      "reference": "handbook",
+      "document": "index",
+      "is_index": "true"
+    }
+  ]
+}

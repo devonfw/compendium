@@ -1,0 +1,1 @@
+image::images/sunset.jpg[scaledwidth=75%]
