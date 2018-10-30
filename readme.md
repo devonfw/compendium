@@ -98,7 +98,7 @@ In this section the main compilation and merging process is described:
 
 ![MainCompilationProcess](images/diagramsDrawio/CompilationFlow.png)
 
-## FRONTEND PROCESS
+## Compiler - FRONTEND
 1. **Lexical** Analysis:
     - The sequences of characters from the input files are tokenized in the Scanner or **Tokenization** process.
     - **_TextIn_** objects transform the input source code to an HTML tokenized code using [**_Asciidoctor.js_**](https://asciidoctor.org) for the AsciiDoc files or [**_Showdown.js_**](http://showdownjs.com/) for the Markdown files. Confluence data is recovered via JSON and can be transcoded directly. Obviously, HTML files are already tokenized.
@@ -109,3 +109,9 @@ In this section the main compilation and merging process is described:
     - The **_`Array<TextSegment>`_** is iterated through filtering functions that remove the unwanted information.
       
 At this point we have parsed all the input information and filtered it. We have an `Array<TextSegment>` with all the pieces of information from the source files.
+
+## Compiler - MIDDLE END
+4. **Intermediate Code Generation**:
+    - The **_`Array<TextSegment>`_** that we generated on the previous steps is now used to create **_Transcript_** objects that will contain all the *TextSegments* information.
+    - Our **_Transcript_** elements are an intermediate representation of the input source data that makes easier to work with them to generate the output file.
+    
