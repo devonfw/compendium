@@ -73,3 +73,5 @@ out/
 ##################################
 
 src/data-collector/
+
+package-lock.json
