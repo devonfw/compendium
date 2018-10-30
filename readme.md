@@ -94,14 +94,15 @@ In this part of the configuration file define the sources of the input files, th
 # COMPENDIUM Main Workflow
 Compendium works like a merger and compiler. It gets pieces of information from different sources and formats, merges them into a single file and generate an output file with the desired output format (PDF, HTML, AsciiDoc or Markdown). 
 
-In this section the main compilation process is described:
+In this section the main compilation and merging process is described:
 
 ![MainCompilationProcess](images/diagramsDrawio/CompilationFlow.png)
 
+## FRONTEND PROCESS
 1. **Lexical** Analysis:
     - The sequences of characters from the input files are tokenized in the Scanner or **Tokenization** process.
-    - **_TextIn_** objects transform the input source code to an HTML tokenized code using **_Asciidoctor.js_** for the AsciiDoc files or **_Showdown.js_** for the Markdown files. Confluence data is recovered via JSON and can be parsed directly. Obviously, HTML files are already tokenized in HTML.
+    - **_TextIn_** objects transform the input source code to an HTML tokenized code using [**_Asciidoctor.js_**](https://asciidoctor.org) for the AsciiDoc files or [**_Showdown.js_**](http://showdownjs.com/) for the Markdown files. Confluence data is recovered via JSON and can be transcoded directly. Obviously, HTML files are already tokenized.
 2. **Syntax** Analysis:
-    - The HTML tokenized code is *parsed* to a Parse Tree in the **Parsing** or Hierarchical process.
-    - **_TextIn_** objects 
+    - The HTML tokenized code is *parsed* to a Parse Tree in the **Parsing** or Hierarchical Analysis process.
+    - **_TextIn_** objects parse XML (HTML) code using [html-parser](https://www.npmjs.com/package/html-parser) generating a **Tree datastructure** that represents the content. **_TextIn_** objects then go through all of the branches of the parsed *Tree* returning **_`Array<TextSegment>`_** elements that will be used to generate the **_Transcript_** objects.
     
