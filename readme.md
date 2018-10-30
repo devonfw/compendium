@@ -105,4 +105,7 @@ In this section the main compilation and merging process is described:
 2. **Syntax** Analysis:
     - The HTML tokenized code is *parsed* to a Parse Tree in the **Parsing** or Hierarchical Analysis process.
     - **_TextIn_** objects parse XML (HTML) code using [html-parser](https://www.npmjs.com/package/html-parser) generating a **Tree datastructure** that represents the content. **_TextIn_** objects then go through all of the branches of the parsed *Tree* returning **_`Array<TextSegment>`_** elements that will be used to generate the **_Transcript_** objects.
-    
+3. **Semantic** Analysis:
+    - The **_`Array<TextSegment>`_** is iterated through filtering functions that remove the unwanted information.
+      
+At this point we have parsed all the input information and filtered it. We have an `Array<TextSegment>` with all the pieces of information from the source files.
