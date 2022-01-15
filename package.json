@@ -22,7 +22,7 @@
     "npm": "^6.0.1",
     "phantom": "^4.0.12",
     "prompt": "^1.0.0",
-    "shelljs": "^0.8.1",
+    "shelljs": "^0.8.5",
     "showdown": "^1.8.6",
     "ts-node": "^6.1.0",
     "turndown": "^4.0.2",
